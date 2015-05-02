@@ -19,4 +19,11 @@ public class MathematicalOpetationsTest {
         assertEquals(100,mathematicalOperations.binaryPlus(64,36));
     }
 
+    @Test
+    public void testBinaryMinus(){
+        assertEquals(3,mathematicalOperations.binaryMinus(7,4));
+        assertEquals(-7,mathematicalOperations.binaryMinus(-2,5));
+        assertEquals(0,mathematicalOperations.binaryMinus(5,5));
+    }
+
 }

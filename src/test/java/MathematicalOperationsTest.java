@@ -3,7 +3,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class MathematicalOpetationsTest {
+public class MathematicalOperationsTest {
 
     static MathematicalOperations mathematicalOperations;
 
@@ -13,7 +13,7 @@ public class MathematicalOpetationsTest {
     }
 
     @Test
-    public void testBinarPlus() {
+    public void testBinaryPlus() {
         assertEquals(5,mathematicalOperations.binaryPlus(3,2));
         assertEquals(0,mathematicalOperations.binaryPlus(-3,3));
         assertEquals(100,mathematicalOperations.binaryPlus(64,36));

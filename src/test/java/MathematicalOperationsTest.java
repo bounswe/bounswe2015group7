@@ -93,5 +93,24 @@ public class MathematicalOperationsTest {
         assertEquals(false,mathematicalOperations.negation(true));
         assertEquals(true,mathematicalOperations.negation(false));
     }
+    
+    /**
+     * Performs a valid factorial.
+     * @result The factorial is performed without error.
+     */
+    @Test
+    public void testFactorial() {
+    	assertEquals(1, mathematicalOperations.factorial(0));
+    	assertEquals(1, mathematicalOperations.factorial(1));
+    	assertEquals(5040, mathematicalOperations.factorial(7));
+    }
+    /**
+     * Performs an unvalid factorial.
+     * @result The undefined factorial exception.
+     */
+    @Test(expected = ArithmeticException.class)
+    public void testNegativeFactorial(){
+        assertEquals(0,mathematicalOperations.factorial(-1));
+    }
 
 }

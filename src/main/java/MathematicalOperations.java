@@ -11,4 +11,8 @@ public class MathematicalOperations {
     public int binaryMinus(int x, int y) {
         return x-y;
     }
+
+    public int times(int x, int y){ // returns x*y;
+    	return x*y;
+    }
 }

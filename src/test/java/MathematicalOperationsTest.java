@@ -38,4 +38,11 @@ public class MathematicalOperationsTest {
         assertEquals(2,mathematicalOperations.divide(6,3));
         assertEquals(-4,mathematicalOperations.divide(-1024,256));
     }
+ @Test
+    public void testPower(){
+        assertEquals(8,mathematicalOperations.power(2,3));
+        assertEquals(1,mathematicalOperations.power(10,0));
+        assertEquals(0.000001,mathematicalOperations.power(10,-6));
+    }
+
 }

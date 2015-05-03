@@ -19,21 +19,19 @@ public class MathematicalOperations {
         return x/y;
     }
 
-     public double power (double x, int y){// returns x^y
-       double result=1;
-
-       if(y==0){
-        return 1;
-       }
-       if(y<0){
-        x=1/x;
-       }
-
-        for(int i=0; i<y; i++){
-            result = result*x;
+    double power(double x, int n){
+        if(n==0)
+            return 1;
+        
+        if(n<0){
+            x = 1.0/x;
+            n = -n;
         }
-
-        return result;
+        double ret = power(x,n/2);
+        ret = ret * ret;
+        if(n%2!=0)
+            ret = ret * x;
+        return ret;
     }
     
     public float inverseDivide(int x, int y){

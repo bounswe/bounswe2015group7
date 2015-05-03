@@ -45,4 +45,8 @@ public class MathematicalOperations {
         }
         return (float)(y)/(float)(x);
     }
+    
+    public int remainder(int x, int y) {
+    	return x % y;
+    }
 }

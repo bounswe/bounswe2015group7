@@ -69,4 +69,19 @@ public class MathematicalOperationsTest {
     	assertEquals(0, mathematicalOperations.remainder(7, 12));
     	assertEquals(2, mathematicalOperations.remainder(9, 7));
     }
+
+    @Test
+    public void unaryPlus() {
+    	assertEquals(79,mathematicalOperations.unaryPlus(79));
+        assertEquals(0,mathematicalOperations.unaryPlus(0));
+        assertEquals(-17,mathematicalOperations.unaryPlus(-17));
+    }
+    
+    @Test
+    public void unaryMinus(){
+    	assertEquals(-547,mathematicalOperations.unaryMinus(547));
+        assertEquals(0,mathematicalOperations.unaryMinus(0));
+        assertEquals(757,mathematicalOperations.unaryMinus(-757));
+    }
+
 }

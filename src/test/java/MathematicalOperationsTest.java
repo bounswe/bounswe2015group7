@@ -19,6 +19,11 @@ public class MathematicalOperationsTest {
         assertEquals(100,mathematicalOperations.binaryPlus(64,36));
     }
 
+
+    /**
+     * Performs a valid subtraction.
+     * @result The subtraction is performed without error.
+     */
     @Test
     public void testBinaryMinus(){
         assertEquals(3,mathematicalOperations.binaryMinus(7,4));

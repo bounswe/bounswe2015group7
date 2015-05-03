@@ -8,6 +8,12 @@ public class MathematicalOperations {
         return x+y;
     }
 
+    /**
+     * Performs integer subtraction operation
+     * @param x The minuend
+     * @param y The subtrahend
+     * @return The difference
+     */
     public int binaryMinus(int x, int y) {
         return x-y;
     }

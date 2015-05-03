@@ -46,9 +46,9 @@ public class MathematicalOperationsTest {
     
  @Test
     public void testPower(){
-        assertEquals(8,mathematicalOperations.power(2,3));
-        assertEquals(1,mathematicalOperations.power(10,0));
-        assertEquals(0.000001,mathematicalOperations.power(10,-6));
+        assertEquals(8,mathematicalOperations.power(2,3),0.00000001);
+        assertEquals(1,mathematicalOperations.power(10,0),0.00000001);
+        assertEquals(0.000001,mathematicalOperations.power(10,-6),0.00000001);
     }
 
     @Test

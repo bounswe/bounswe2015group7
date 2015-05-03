@@ -45,4 +45,12 @@ public class MathematicalOperationsTest {
         assertEquals(0.000001,mathematicalOperations.power(10,-6));
     }
 
+    @Test
+    public void testInverseDivide(){
+        assertEquals(8,mathematicalOperations.inverseDivide(1, 31));
+        assertEquals(1,mathematicalOperations.inverseDivide(0,10));
+        assertEquals(0.000001,mathematicalOperations.inverseDivide(10,-6));
+    }
+    
+    
 }

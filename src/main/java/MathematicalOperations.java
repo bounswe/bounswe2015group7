@@ -15,8 +15,11 @@ public class MathematicalOperations {
     public int times(int x, int y){ // returns x*y;
     	return x*y;
     }
-    public int divide (int x, int y){// returns x/y
-        return x/y;
+    public float divide (int x, int y){// returns x/y as a float
+        if(y == 0){
+            throw new ArithmeticException("divided by 0");
+        }
+        return (float)(x)/(float)(y);
     }
 
     double power(double x, int n){

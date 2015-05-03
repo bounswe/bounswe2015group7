@@ -32,12 +32,18 @@ public class MathematicalOperationsTest {
         assertEquals(0,mathematicalOperations.times(-123,0));
     }
     
+    private static final double DELTA = 1e-5;
     @Test
     public void testDivide(){
-        assertEquals(81,mathematicalOperations.divide(324,4));
-        assertEquals(2,mathematicalOperations.divide(6,3));
-        assertEquals(-4,mathematicalOperations.divide(-1024,256));
+        assertEquals(46.142857,mathematicalOperations.divide(323,7), DELTA);
+        assertEquals(2,mathematicalOperations.divide(4,2),DELTA);
+        assertEquals(-4,mathematicalOperations.divide(-1024,256),DELTA);
     }
+    @Test(expected = ArithmeticException.class)
+    public void testDivideByZero(){
+        assertEquals(2,mathematicalOperations.divide(4,0), DELTA);
+    }
+    
  @Test
     public void testPower(){
         assertEquals(8,mathematicalOperations.power(2,3));

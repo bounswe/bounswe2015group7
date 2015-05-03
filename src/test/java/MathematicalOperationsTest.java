@@ -27,8 +27,8 @@ public class MathematicalOperationsTest {
     }
     @Test
     public void testTimes(){
-    	assertEquals(21,mathematicalOperations.binaryMinus(7,3));
-        assertEquals(-18,mathematicalOperations.binaryMinus(-6,3));
-        assertEquals(0,mathematicalOperations.binaryMinus(-123,0));
+    	assertEquals(21,mathematicalOperations.times(7,3));
+        assertEquals(-18,mathematicalOperations.times(-6,3));
+        assertEquals(0,mathematicalOperations.times(-123,0));
     }
 }

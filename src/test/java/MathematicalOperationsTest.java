@@ -66,7 +66,7 @@ public class MathematicalOperationsTest {
     @Test
     public void testRemainder() {
     	assertEquals(0, mathematicalOperations.remainder(45, 15));
-    	assertEquals(0, mathematicalOperations.remainder(7, 12));
+    	assertEquals(7, mathematicalOperations.remainder(7, 12));
     	assertEquals(2, mathematicalOperations.remainder(9, 7));
     }
 

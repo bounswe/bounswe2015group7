@@ -40,7 +40,9 @@ public class MathematicalOperations {
     public float inverseDivide(int x, int y){
         //returns y/x
         
-        return y/x;
-    
+        if(x == 0){
+            throw new ArithmeticException("divided by 0");
+        }
+        return (float)(y)/(float)(x);
     }
 }

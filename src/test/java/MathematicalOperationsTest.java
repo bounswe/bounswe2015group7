@@ -53,9 +53,14 @@ public class MathematicalOperationsTest {
 
     @Test
     public void testInverseDivide(){
-        assertEquals(8,mathematicalOperations.inverseDivide(1, 31));
-        assertEquals(1,mathematicalOperations.inverseDivide(0,10));
-        assertEquals(0.000001,mathematicalOperations.inverseDivide(10,-6));
+        assertEquals(46.142857,mathematicalOperations.inverseDivide(7, 323), DELTA);
+        assertEquals(2,mathematicalOperations.inverseDivide(2, 4),DELTA);
+        assertEquals(-4,mathematicalOperations.inverseDivide(256, -1024),DELTA);
+        
+    }
+    @Test(expected = ArithmeticException.class)
+    public void testInverseDivideByZero(){
+        assertEquals(2,mathematicalOperations.inverseDivide(0, 4), DELTA);
     }
     
     

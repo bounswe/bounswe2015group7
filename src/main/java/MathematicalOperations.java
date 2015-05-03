@@ -35,4 +35,11 @@ public class MathematicalOperations {
 
         return result;
     }
+    
+    public float inverseDivide(int x, int y){
+        //returns y/x
+        
+        return y/x;
+    
+    }
 }

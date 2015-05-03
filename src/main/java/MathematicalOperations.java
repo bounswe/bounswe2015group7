@@ -49,4 +49,12 @@ public class MathematicalOperations {
     public int remainder(int x, int y) {
     	return x % y;
     }
+
+    public int unaryPlus(int x) {
+    	return x;
+    }
+
+    public int unaryMinus(int x) {
+    	return -x;
+    }
 }

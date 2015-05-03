@@ -57,4 +57,11 @@ public class MathematicalOperations {
     public int unaryMinus(int x) {
     	return -x;
     }
+    public boolean negation(boolean x) {
+        if(x == true){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

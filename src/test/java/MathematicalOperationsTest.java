@@ -83,5 +83,10 @@ public class MathematicalOperationsTest {
         assertEquals(0,mathematicalOperations.unaryMinus(0));
         assertEquals(757,mathematicalOperations.unaryMinus(-757));
     }
+    @Test
+    public void negation(){
+        assertEquals(false,mathematicalOperations.negation(true));
+        assertEquals(true,mathematicalOperations.negation(false));
+    }
 
 }

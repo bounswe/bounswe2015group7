@@ -71,6 +71,11 @@ public class MathematicalOperations {
         }
     }
     
+    /**
+     * Performs factorial operation
+     * @param x The number to factorize
+     * @return The factorial of x
+     */
     public int factorial(int x){
         if(x<0){
             throw new ArithmeticException("Undefined factorial");

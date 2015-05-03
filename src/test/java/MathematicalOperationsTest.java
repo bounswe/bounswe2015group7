@@ -31,4 +31,11 @@ public class MathematicalOperationsTest {
         assertEquals(-18,mathematicalOperations.times(-6,3));
         assertEquals(0,mathematicalOperations.times(-123,0));
     }
+    
+    @Test
+    public void testDivide(){
+        assertEquals(81,mathematicalOperations.divide(324,4));
+        assertEquals(2,mathematicalOperations.divide(6,3));
+        assertEquals(-4,mathematicalOperations.divide(-1024,256));
+    }
 }

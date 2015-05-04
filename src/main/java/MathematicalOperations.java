@@ -85,4 +85,13 @@ public class MathematicalOperations {
             return factorial(x-1)*x;
         }
     }
+    /**
+     * Takes the absolute value of an integer and returns the result
+     * Added by Mustafa Feyzioglu
+     */
+    public static int absolute(int a) {
+        if(a<0) a = (a * -1);
+        return a;
+    }
+
 }

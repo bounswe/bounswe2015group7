@@ -14,9 +14,9 @@ public class MathematicalOperationsTest {
 
     @Test
     public void testBinaryPlus() {
-        assertEquals(5,mathematicalOperations.binaryPlus(3,2));
-        assertEquals(0,mathematicalOperations.binaryPlus(-3,3));
-        assertEquals(100,mathematicalOperations.binaryPlus(64,36));
+        assertEquals(5,mathematicalOperations.binaryPlus(3, 2));
+        assertEquals(0,mathematicalOperations.binaryPlus(-3, 3));
+        assertEquals(100,mathematicalOperations.binaryPlus(64, 36));
     }
 
 
@@ -26,15 +26,15 @@ public class MathematicalOperationsTest {
      */
     @Test
     public void testBinaryMinus(){
-        assertEquals(3,mathematicalOperations.binaryMinus(7,4));
-        assertEquals(-7,mathematicalOperations.binaryMinus(-2,5));
-        assertEquals(0,mathematicalOperations.binaryMinus(5,5));
+        assertEquals(3,mathematicalOperations.binaryMinus(7, 4));
+        assertEquals(-7,mathematicalOperations.binaryMinus(-2, 5));
+        assertEquals(0,mathematicalOperations.binaryMinus(5, 5));
     }
     @Test
     public void testTimes(){
-    	assertEquals(21,mathematicalOperations.times(7,3));
-        assertEquals(-18,mathematicalOperations.times(-6,3));
-        assertEquals(0,mathematicalOperations.times(-123,0));
+    	assertEquals(21,mathematicalOperations.times(7, 3));
+        assertEquals(-18,mathematicalOperations.times(-6, 3));
+        assertEquals(0,mathematicalOperations.times(-123, 0));
     }
     
     private static final double DELTA = 1e-5;
@@ -46,14 +46,14 @@ public class MathematicalOperationsTest {
     }
     @Test(expected = ArithmeticException.class)
     public void testDivideByZero(){
-        assertEquals(2,mathematicalOperations.divide(4,0), DELTA);
+        assertEquals(2,mathematicalOperations.divide(4, 0), DELTA);
     }
     
  @Test
     public void testPower(){
-        assertEquals(8,mathematicalOperations.power(2,3),0.00000001);
-        assertEquals(1,mathematicalOperations.power(10,0),0.00000001);
-        assertEquals(0.000001,mathematicalOperations.power(10,-6),0.00000001);
+        assertEquals(8,mathematicalOperations.power(2, 3),0.00000001);
+        assertEquals(1,mathematicalOperations.power(10, 0),0.00000001);
+        assertEquals(0.000001,mathematicalOperations.power(10, -6),0.00000001);
     }
 
     @Test
@@ -88,6 +88,15 @@ public class MathematicalOperationsTest {
         assertEquals(0,mathematicalOperations.unaryMinus(0));
         assertEquals(757,mathematicalOperations.unaryMinus(-757));
     }
+
+    @Test // Added by Mustafa Feyzioglu
+    public void testAbsolute() throws Exception {
+        assertEquals("Absolute value of -4 must equal to 4",4,MathematicalOperations.absolute(-4));
+        assertEquals("Absolute value of 15 must equal to 15",15,MathematicalOperations.absolute(15));
+    }
+
+
+
     @Test
     public void negation(){
         assertEquals(false,mathematicalOperations.negation(true));

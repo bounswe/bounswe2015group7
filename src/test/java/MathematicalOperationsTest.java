@@ -73,6 +73,12 @@ public class MathematicalOperationsTest {
     	assertEquals(0, mathematicalOperations.remainder(45, 15));
     	assertEquals(7, mathematicalOperations.remainder(7, 12));
     	assertEquals(2, mathematicalOperations.remainder(9, 7));
+    	assertEquals(2, mathematicalOperations.remainder(10, -4));
+    	assertEquals(-3, mathematicalOperations.remainder(-11, 8));
+    }
+    @Test(expected = ArithmeticException.class)
+    public void testRemainderOfZero(){
+        assertEquals(2,mathematicalOperations.remainder(4, 0), DELTA);
     }
 
     @Test

@@ -53,6 +53,9 @@ public class MathematicalOperations {
     }
     
     public int remainder(int x, int y) {
+    	if(y == 0) {
+    		throw new ArithmeticException("divided by 0");
+    	}
     	return x % y;
     }
 

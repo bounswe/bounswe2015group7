@@ -21,6 +21,16 @@ public class MathematicalOperations {
     public int times(int x, int y){ // returns x*y;
     	return x*y;
     }
+
+
+    /**
+     * Performs division operation
+     * @param x dividend
+     * @param y divisor
+     * @return division of x and y (x/y)
+     * Implemented by Emre Miraç Paksoy
+     *
+     */
     public float divide (int x, int y){// returns x/y as a float
         if(y == 0){
             throw new ArithmeticException("divided by 0");
@@ -42,7 +52,7 @@ public class MathematicalOperations {
             ret = ret * x;
         return ret;
     }
-    
+
     public float inverseDivide(int x, int y){
         //returns y/x
         

@@ -36,7 +36,11 @@ public class MathematicalOperationsTest {
         assertEquals(-18,mathematicalOperations.times(-6, 3));
         assertEquals(0,mathematicalOperations.times(-123, 0));
     }
-    
+
+    /**
+     * Tests a valid division operations
+     * The result would be division of two input variables
+     */
     private static final double DELTA = 1e-5;
     @Test
     public void testDivide(){
@@ -44,6 +48,11 @@ public class MathematicalOperationsTest {
         assertEquals(2,mathematicalOperations.divide(4,2),DELTA);
         assertEquals(-4,mathematicalOperations.divide(-1024,256),DELTA);
     }
+
+    /**
+     * Tests an unvalid division operation (divided by zero)
+     * The system should throw ArithmeticException
+     */
     @Test(expected = ArithmeticException.class)
     public void testDivideByZero(){
         assertEquals(2,mathematicalOperations.divide(4, 0), DELTA);

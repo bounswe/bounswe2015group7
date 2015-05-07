@@ -58,7 +58,7 @@ public class MathematicalOperationsTest {
         assertEquals(2,mathematicalOperations.divide(4, 0), DELTA);
     }
     
- @Test
+    @Test
     public void testPower(){
         assertEquals(8,mathematicalOperations.power(2, 3),0.00000001);
         assertEquals(1,mathematicalOperations.power(10, 0),0.00000001);
@@ -90,13 +90,20 @@ public class MathematicalOperationsTest {
         assertEquals(2,mathematicalOperations.remainder(4, 0), DELTA);
     }
 
+    /*
+    * Tests the unary plus operation
+    * the result should be equal to the given value
+    */
     @Test
     public void unaryPlus() {
     	assertEquals(79,mathematicalOperations.unaryPlus(79));
         assertEquals(0,mathematicalOperations.unaryPlus(0));
         assertEquals(-17,mathematicalOperations.unaryPlus(-17));
-    }
-    
+    } 
+    /*
+    * Test the unary negation operation
+    * the result should be equal to the unary negation of the given value 
+    */
     @Test
     public void unaryMinus(){
     	assertEquals(-547,mathematicalOperations.unaryMinus(547));

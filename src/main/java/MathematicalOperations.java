@@ -69,13 +69,24 @@ public class MathematicalOperations {
     	return x % y;
     }
 
+    /*
+    * performs unary plus operation
+    * @param x is the operand
+    * @return the value of the x
+    */
     public int unaryPlus(int x) {
     	return x;
     }
 
+    /*
+    * performs unary minus operation
+    * @param x is the operand
+    * @return the unary negation of the x
+    */
     public int unaryMinus(int x) {
     	return -x;
     }
+
     public boolean negation(boolean x) {
         if(x == true){
             return false;

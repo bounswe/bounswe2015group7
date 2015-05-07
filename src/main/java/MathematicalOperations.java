@@ -65,7 +65,14 @@ public class MathematicalOperations {
             ret = ret * x;
         return ret;
     }
-
+    /**
+     * Performs division operation
+     * @param y dividend
+     * @param x divisor
+     * @return division of y and x (y/x)
+     * Implemented by Oğuzhan Murat Çakmak
+     *
+     */
     public float inverseDivide(int x, int y){
         //returns y/x
         

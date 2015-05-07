@@ -30,10 +30,6 @@ public class MathematicalOperationsTest {
         assertEquals(-7,mathematicalOperations.binaryMinus(-2, 5));
         assertEquals(0,mathematicalOperations.binaryMinus(5, 5));
     }
-    /**
-     * Tests whether times method works properly
-     * @result The multiplication is performed without error.
-     */
     @Test
     public void testTimes(){
     	assertEquals(21,mathematicalOperations.times(7, 3));
@@ -62,6 +58,12 @@ public class MathematicalOperationsTest {
         assertEquals(2,mathematicalOperations.divide(4, 0), DELTA);
     }
     
+    
+    
+    /**
+     * Tests valid power operations
+     * The result will be one input variable raised to the second input variable's power
+     */
     @Test
     public void testPower(){
         assertEquals(8,mathematicalOperations.power(2, 3),0.00000001);

@@ -30,6 +30,10 @@ public class MathematicalOperationsTest {
         assertEquals(-7,mathematicalOperations.binaryMinus(-2, 5));
         assertEquals(0,mathematicalOperations.binaryMinus(5, 5));
     }
+    /**
+     * Tests whether the times method works properly. 
+     * The result should be the multiplication of given two parameters.
+     */
     @Test
     public void testTimes(){
     	assertEquals(21,mathematicalOperations.times(7, 3));

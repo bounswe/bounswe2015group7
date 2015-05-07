@@ -8,3 +8,9 @@ You can read through and get impressed by our wiki, or if you are feeling cool e
 Before running test you should install jdk and maven to your computer. Then run these commands:
 
 `mvn clean install`  this command will run the tests also
+
+
+for generating docs:
+
+
+`doxygen docsConfig`

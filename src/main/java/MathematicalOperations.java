@@ -17,7 +17,13 @@ public class MathematicalOperations {
     public int binaryMinus(int x, int y) {
         return x-y;
     }
-
+    
+    /**
+     * Performs multiplication (times) operation
+     * @param x multiplicant
+     * @param y multiplier
+     * @return multiplication of x and y (x*y)
+     */
     public int times(int x, int y){ // returns x*y;
     	return x*y;
     }

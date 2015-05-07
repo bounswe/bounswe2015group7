@@ -50,7 +50,7 @@ public class MathematicalOperationsTest {
     }
 
     /**
-     * Tests an unvalid division operation (divided by zero)
+     * Tests an invalid division operation (divided by zero)
      * The system should throw ArithmeticException
      */
     @Test(expected = ArithmeticException.class)
@@ -77,6 +77,10 @@ public class MathematicalOperationsTest {
         assertEquals(2,mathematicalOperations.inverseDivide(0, 4), DELTA);
     }
     
+    /**
+     * Tests valid modulo operations
+     * The result will be modulo of two input variables
+     */
     @Test
     public void testRemainder() {
     	assertEquals(0, mathematicalOperations.remainder(45, 15));
@@ -85,6 +89,10 @@ public class MathematicalOperationsTest {
     	assertEquals(2, mathematicalOperations.remainder(10, -4));
     	assertEquals(-3, mathematicalOperations.remainder(-11, 8));
     }
+    /**
+     * Tests an invalid modulo operation (divided by zero)
+     * The system should throw ArithmeticException
+     */
     @Test(expected = ArithmeticException.class)
     public void testRemainderOfZero(){
         assertEquals(2,mathematicalOperations.remainder(4, 0), DELTA);

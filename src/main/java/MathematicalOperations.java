@@ -61,7 +61,15 @@ public class MathematicalOperations {
         }
         return (float)(y)/(float)(x);
     }
-    
+   
+    /**
+     * Performs modulo operation
+     * @param x dividend
+     * @param y divisor
+     * @return remainder of x and y (x%y)
+     * Implemented by Cenk Temeloğlu
+     *
+     */
     public int remainder(int x, int y) {
     	if(y == 0) {
     		throw new ArithmeticException("divided by 0");

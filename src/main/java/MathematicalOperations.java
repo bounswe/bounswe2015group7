@@ -45,11 +45,11 @@ public class MathematicalOperations {
     }
     
     /**
-* Raises x to the power of n
-* @param x base
-* @param n exponent
-* @return exponentiation of x to the nth power (x^n)
-*/
+     * Raises x to the power of n
+     * @param x base
+     * @param n exponent
+     * @return exponentiation of x to the nth power (x^n)
+     */
 
     double power(double x, int n){
         if(n==0)

@@ -1,4 +1,3 @@
-<%@ page import="java.util.ArrayList" %>
 <%--
   Created by IntelliJ IDEA.
   User: bilal
@@ -6,7 +5,8 @@
   Time: 20:37
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*"
+        %>
 <html lang="en" hola_ext_inject="disabled">
 <head>
     <meta charset="utf-8">
@@ -63,8 +63,8 @@
         <tbody>
         <% for (int i = 0; i < username.size(); i++) { %>
         <tr>
-            <td><% username.get(i); %></td>
-            <td><% password.get(i); %></td>
+            <td><% out.println(username.get(i)); %></td>
+            <td><% out.println(password.get(i));; %></td>
             <%
 
                 } %>

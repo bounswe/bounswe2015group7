@@ -52,7 +52,7 @@ public class MainServlet extends HttpServlet {
             String username = request.getParameter("inputEmail");
             stmt = conn.createStatement();
             String sql;
-            sql = "INSERT (username,password) VALUES (" + username + "," + password + ")";
+            sql = "INSERT INTO users (username,password) VALUES (" + username + "," + password + ")";
             stmt.executeUpdate(sql);
             doGet(request, response);
         } catch (Exception e) {

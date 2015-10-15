@@ -70,8 +70,8 @@ public class MainServlet extends HttpServlet {
                 password1.add(rs.getString("password"));
                 request.setAttribute("username", username1);
                 request.setAttribute("password", password1);
-                request.getRequestDispatcher("/user.jsp").forward(request, response);
             }
+            request.getRequestDispatcher("/user.jsp").forward(request, response);
             rs.close();
             stmt.close();
         } catch (SQLException se) {
@@ -105,8 +105,8 @@ public class MainServlet extends HttpServlet {
                 password.add(rs.getString("password"));
                 request.setAttribute("username", username);
                 request.setAttribute("password", password);
-                request.getRequestDispatcher("/user.jsp").forward(request, response);
             }
+            request.getRequestDispatcher("/user.jsp").forward(request, response);
             rs.close();
             stmt.close();
         } catch (SQLException se) {

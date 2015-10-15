@@ -29,7 +29,7 @@
 
 <div class="container">
 
-  <form class="form-signin">
+  <form action="" method="post" class="form-signin">
     <h2 class="form-signin-heading">Sign up</h2>
     <label for="inputEmail" class="sr-only">Email address</label>
     <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
@@ -42,6 +42,38 @@
 
 </div> <!-- /container -->
 
+<div class="container">
+  <h2>Sculture database ^^</h2>
+  <p>Table of users:</p>
+  <table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+      <th>Email</th>
+      <th>Password</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Atakan</td>
+      <td>Arikan</td>
+    </tr>
+    <tr>
+      <td>Bilal</td>
+      <td>Yasar</td>
+    </tr>
+    <tr>
+      <td>Foo</td>
+      <td>Bar</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+</body>
+<style id="stylish-1" class="stylish" type="text/css">
+</style>
+</html>
 
 
 

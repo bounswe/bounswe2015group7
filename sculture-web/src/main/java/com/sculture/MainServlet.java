@@ -53,7 +53,7 @@ public class MainServlet extends HttpServlet {
             stmt = conn.createStatement();
             String sql;
             sql = "INSERT INTO user (username,password) VALUES (" + username + " " + password + ")";
-            ResultSet rs = stmt.executeQuery(sql);
+            stmt.executeUpdate(sql);
             doGet(request, response);
         } catch (Exception e) {
             e.printStackTrace();

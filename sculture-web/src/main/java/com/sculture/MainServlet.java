@@ -45,7 +45,20 @@ public class MainServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        doGet(request,response);
+        System.out.println("Creating statement...");
+        Statement stmt = null;
+        try {
+            String password = request.getParameter("inputPassword");
+            String username = request.getParameter("inputEmail");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "INSERT INTO user (username,password) VALUES (" + username + " " + password + ")";
+            ResultSet rs = stmt.executeQuery(sql);
+            doGet(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

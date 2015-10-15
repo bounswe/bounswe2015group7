@@ -55,11 +55,32 @@ public class MainServlet extends HttpServlet {
             sql = "INSERT INTO users " + "VALUES ('" + username + "', '" + password + "')";
             System.out.println(sql);
             stmt.executeUpdate(sql);
-            doGet(request, response);
+
+            System.out.println("Creating statement...");
+            stmt = conn.createStatement();
+            sql = "SELECT username,password FROM users";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            //STEP 5: Extract data from result set
+            ArrayList<String> username1 = new ArrayList<String>();
+            ArrayList<String> password1 = new ArrayList<String>();
+            while (rs.next()) {
+                //Retrieve by column name
+                username1.add(rs.getString("username"));
+                password1.add(rs.getString("password"));
+                request.setAttribute("username", username1);
+                request.setAttribute("password", password1);
+                request.getRequestDispatcher("/user.jsp").forward(request, response);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
         } catch (Exception e) {
+            //Handle errors for Class.forName
             e.printStackTrace();
         }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

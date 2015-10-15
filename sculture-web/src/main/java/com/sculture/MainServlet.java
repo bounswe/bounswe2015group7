@@ -69,7 +69,7 @@ public class MainServlet extends HttpServlet {
                 password.add(rs.getString("password"));
                 request.setAttribute("username", username);
                 request.setAttribute("password", password);
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/user.jsp").forward(request, response);
             }
             rs.close();
             stmt.close();

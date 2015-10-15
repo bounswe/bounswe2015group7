@@ -62,8 +62,8 @@ public class MainServlet extends HttpServlet {
             //STEP 5: Extract data from result set
             while (rs.next()) {
                 //Retrieve by column name
-                String username = rs.getString("first");
-                String password = rs.getString("last");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
 
                 //Display values
                 response.getWriter().println("username: " + username);

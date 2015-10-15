@@ -69,14 +69,6 @@
 
                 } %>
         </tr>
-        <tr>
-            <td>Bilal</td>
-            <td>Yasar</td>
-        </tr>
-        <tr>
-            <td>Foo</td>
-            <td>Bar</td>
-        </tr>
         </tbody>
     </table>
 </div>

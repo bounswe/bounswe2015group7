@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * Created by bilal on 14/10/15.
@@ -60,14 +61,15 @@ public class MainServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery(sql);
 
             //STEP 5: Extract data from result set
+            ArrayList<String> username = new ArrayList<String>();
+            ArrayList<String> password = new ArrayList<String>();
             while (rs.next()) {
                 //Retrieve by column name
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-
-                //Display values
-                response.getWriter().println("username: " + username);
-                response.getWriter().println("password: " + password);
+                username.add(rs.getString("username"));
+                password.add(rs.getString("password"));
+                request.setAttribute("username", username);
+                request.setAttribute("password", password);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
             rs.close();
             stmt.close();

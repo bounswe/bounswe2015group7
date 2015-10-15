@@ -1,3 +1,5 @@
+package com.sculture;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +17,7 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getOutputStream().println("Hello World!");
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
 
     }
 }

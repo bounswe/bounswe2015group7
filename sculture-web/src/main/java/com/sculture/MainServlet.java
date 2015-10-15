@@ -56,7 +56,7 @@ public class MainServlet extends HttpServlet {
             System.out.println("Creating statement...");
             Statement stmt = conn.createStatement();
             String sql;
-            sql = "SELECT username,passsword FROM users";
+            sql = "SELECT username,password FROM users";
             ResultSet rs = stmt.executeQuery(sql);
 
             //STEP 5: Extract data from result set

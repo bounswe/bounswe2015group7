@@ -47,7 +47,7 @@
 <!-- /container -->
 
 <div class="container">
-    <h2>Sculture database ^^</h2>
+    <h2>Sculture database</h2>
 
     <p>Table of users:</p>
     <table class="table table-hover table-bordered">

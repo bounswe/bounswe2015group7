@@ -44,7 +44,7 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        connect();
         System.out.println("Creating statement...");
         Statement stmt = null;
         try {
@@ -84,7 +84,7 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        connect();
         try {
             //STEP 2: Register JDBC driver
 
@@ -117,6 +117,17 @@ public class MainServlet extends HttpServlet {
             e.printStackTrace();
         }
 //        request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+    }
+
+    private void connect() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

@@ -23,20 +23,15 @@ Registers user to system for the first time and generate a unique access token.
 - facebook-id           `string` `optional`
 - facebook-token        `string` `optional`
 
-
-##### Response:
-
-Response is (`User`)[#user-object] object.
-
-- access-token          `string`
-
-**Sample Request:**
 Header:
 ```json
 
 ```
 
-**Sample Response:**
+
+##### Response:
+
+Response is registered user's information in the format of a [`User`](#user-object) object.
 
 Status Code: **200**
 ```json
@@ -95,7 +90,7 @@ Status Code: **200**
 }
 ```
 ---
-### <a name="user-register">User Object ###
+### <a name="user-object"></a>User Object ###
 |Field|Type|Optional|Note|
 |---|---|---|---|
 |id|`long`|||
@@ -103,3 +98,6 @@ Status Code: **200**
 |username|`string`|||
 |fullname|`string`|||
 |access-token|`string`|||
+|facebook-id|`long`|`optional`||
+|is-promoted|`string`|||
+|notification-rate|`int`||0: None, 1: Only own posts, 2: Own and followed posts|

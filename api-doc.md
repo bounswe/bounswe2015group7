@@ -64,14 +64,16 @@ Logs in user to system and response it's `access-token` back.
 - access-token          `string`
 
 **Sample Request:**
-Header:
 ```json
-
+{
+  "email": "johndoe@gmail.com",
+  "password": "098f6bcd4621d373cade4e832627b4f6"
+}
 ```
 
 **Sample Response:**
 
-Status Code: **200**
+**`Status Code: 200`**
 ```json
 {
   "data": [

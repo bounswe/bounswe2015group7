@@ -10,12 +10,13 @@ This is the API documentation of Sculture Restful Web Services.
 - **[`POST` /user/register](#user-register)**
 - **[`POST` /user/login](#user-login)**
 
+<br /><br />
 
 ---
 #### <a name="user-register"></a>`/user/register`
 Registers user to system for the first time and generate a unique access token.
 
-##### Request:
+##### Request Params:
 - email                 `string`
 - username              `string`
 - password              `string`
@@ -23,15 +24,25 @@ Registers user to system for the first time and generate a unique access token.
 - facebook-id           `string` `optional`
 - facebook-token        `string` `optional`
 
-Header:
-```json
+**Sample Request:**
 
+```json
+{
+  "email": "johndoe@gmail.com",
+  "username": "johndoe",
+  "password": "098f6bcd4621d373cade4e832627b4f6",
+  "fullname":"John Doe",
+  "facebook-id": 642892189177318,
+  "facebook-token": "C3YXdoPX8a1_234pQswLJybYrc"
+}
 ```
 
 
 ##### Response:
 
 Response is registered user's information in the format of a [`User`](#user-object) object.
+
+**Sample Response:**
 
 Status Code: **200**
 ```json
@@ -51,6 +62,7 @@ Status Code: **200**
   "errors": []
 }
 ```
+<br /><br />
 
 ---
 #### <a name="user-login"></a>`/user/login`
@@ -91,6 +103,8 @@ Logs in user to system and response it's `access-token` back.
   "errors": []
 }
 ```
+<br /><br />
+
 ---
 ### <a name="user-object"></a>User Object ###
 |Field|Type|Optional|Note|

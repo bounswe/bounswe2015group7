@@ -15,7 +15,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class UITests {
 
     @Rule
-    public ActivityTestRule<MainActivity> mA = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivityabc> mA = new ActivityTestRule<>(MainActivityabc.class);
 
     @Test
     public void MainMenuTest() {

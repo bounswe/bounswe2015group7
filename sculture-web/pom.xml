@@ -7,13 +7,14 @@
     <groupId>Sculture</groupId>
     <artifactId>Sculture-web</artifactId>
     <packaging>war</packaging>
+    <version>1.0.1-SNAPSHOT</version>
     <name>Sculture</name>
 
-    <parent>
-        <artifactId>Sculture</artifactId>
-        <groupId>Sculture</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+    <!--<parent>-->
+        <!--<artifactId>Sculture</artifactId>-->
+        <!--<groupId>Sculture</groupId>-->
+        <!--<version>1.0-SNAPSHOT</version>-->
+    <!--</parent>-->
 
 
     <dependencies>

@@ -11,7 +11,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/sculture/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="C:\Users\Atakan Arıkan\Documents\GitHub\bounswe2015group7\sculture-web\target/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="Sculture-web/web/Web" />
     </root>

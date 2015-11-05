@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9d23387e-924f-45c9-b88b-fb71b023342a" name="Default" comment="Added a template for the homapage, consisting of login &amp; registration pages.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/css/font-awesome.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/css/font-awesome.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/css/form-elements.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/css/homepage_style.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/js/jquery-1.11.1.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/js/jquery-1.11.1.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/js/jquery.backstretch.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/js/jquery.backstretch.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/js/placeholder.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/js/scripts.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Sculture-web.iml" afterPath="$PROJECT_DIR$/Sculture-web.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/Sculture_web_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/Sculture_web_war_exploded.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="9d23387e-924f-45c9-b88b-fb71b023342a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html" afterPath="$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Sculture-web.iws" />
@@ -48,8 +32,8 @@
       <file leaf-file-name="frontend_homepage.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.53367" vertical-offset="63" max-vertical-offset="2071">
-              <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+            <state vertical-scroll-proportion="1.1599326" vertical-offset="831" max-vertical-offset="2052">
+              <caret line="88" column="6" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="6" />
               <folding>
                 <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
@@ -98,8 +82,8 @@
         <option value="$PROJECT_DIR$/src/main/webapp/css/style.css" />
         <option value="$PROJECT_DIR$/src/main/webapp/js/scripts.js" />
         <option value="$PROJECT_DIR$/src/main/webapp/view/login.html" />
-        <option value="$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html" />
         <option value="$PROJECT_DIR$/src/main/webapp/css/homepage_style.css" />
+        <option value="$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html" />
       </list>
     </option>
   </component>
@@ -638,12 +622,19 @@
       <updated>1444931553067</updated>
       <workItem from="1444931557444" duration="888000" />
       <workItem from="1445016101650" duration="392000" />
-      <workItem from="1446749478817" duration="9411000" />
+      <workItem from="1446749478817" duration="9581000" />
     </task>
+    <task id="LOCAL-00001" summary="Added a template for the homapage, consisting of login &amp; registration pages(popups).">
+      <created>1446763604516</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1446763604516</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10691000" />
+    <option name="totallyTimeSpent" value="10861000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1874" height="1096" extended-state="6" />
@@ -696,7 +687,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="Added a template for the homapage, consisting of login &amp; registration pages." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a template for the homapage, consisting of login &amp; registration pages." />
+    <MESSAGE value="Added a template for the homapage, consisting of login &amp; registration pages(popups)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a template for the homapage, consisting of login &amp; registration pages(popups)." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -912,8 +904,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/view/frontend_homepage.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.53367" vertical-offset="63" max-vertical-offset="2071">
-          <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+        <state vertical-scroll-proportion="1.1599326" vertical-offset="831" max-vertical-offset="2052">
+          <caret line="88" column="6" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="6" />
           <folding>
             <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />

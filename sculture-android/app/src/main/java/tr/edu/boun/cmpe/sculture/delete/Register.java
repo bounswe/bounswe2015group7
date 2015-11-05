@@ -1,13 +1,11 @@
-package tr.edu.boun.cmpe.sculture;
+package tr.edu.boun.cmpe.sculture.delete;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -19,10 +17,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import tr.edu.boun.cmpe.sculture.R;
+
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity  {
+public class Register extends AppCompatActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -43,29 +43,20 @@ public class LoginActivity extends AppCompatActivity  {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private EditText mNameView;
     private EditText mPasswordView;
+    private EditText mConfirmPasswordView;
     private View mProgressView;
     private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_login);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, Register.class);
-                startActivity(intent);
-                finish();
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                  //      .setAction("Action", null).show();
-            }
-        });
+        setContentView(R.layout.activity_register);
         // Set up the login form.
-
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mNameView = (EditText) findViewById(R.id.nameSurname);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -79,6 +70,7 @@ public class LoginActivity extends AppCompatActivity  {
             }
         });
 
+        mConfirmPasswordView = (EditText) findViewById(R.id.confirmPassword);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -112,9 +104,15 @@ public class LoginActivity extends AppCompatActivity  {
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
+        String password2 = mConfirmPasswordView.getText().toString();
+        String name = mNameView.getText().toString();
+        String[]nameSurname = name.split(" ");
         boolean cancel = false;
         View focusView = null;
+        boolean check = true;
+        for(int i = 0; i < nameSurname.length;i++){
+            if(nameSurname[i].matches("[a-zA-z]+")){}
+        }
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -122,7 +120,19 @@ public class LoginActivity extends AppCompatActivity  {
             focusView = mPasswordView;
             cancel = true;
         }
-
+        if (TextUtils.isEmpty(name)){
+            mNameView.setError("This field required");
+            focusView = mNameView;
+            cancel = true;
+        }else if(name.split(" ").length<=1 || !!name.matches("[a-zA-z]+")){
+            mNameView.setError("Invalid Name/Surname");
+            focusView = mNameView;
+            cancel = true;
+        }else if (name.matches("[0-9]+")){
+            mNameView.setError("Numerical characters is not allowed");
+            focusView = mNameView;
+            cancel = true;
+        }else
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -131,6 +141,11 @@ public class LoginActivity extends AppCompatActivity  {
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
+            cancel = true;
+        }
+        if(!password.equals(password2)){
+            mConfirmPasswordView.setError(getString(R.string.error_unmatched_password));
+            focusView = mConfirmPasswordView;
             cancel = true;
         }
 
@@ -146,6 +161,7 @@ public class LoginActivity extends AppCompatActivity  {
             mAuthTask.execute((Void) null);
         }
     }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -191,6 +207,7 @@ public class LoginActivity extends AppCompatActivity  {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
 
 
     /**

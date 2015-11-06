@@ -35,6 +35,8 @@
             android:label="@string/title_activity_story_create"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".activity.SearchActivity" >
+        </activity>
     </application>
 
 </manifest>

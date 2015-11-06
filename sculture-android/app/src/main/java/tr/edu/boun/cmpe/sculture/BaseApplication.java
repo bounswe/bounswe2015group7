@@ -16,7 +16,8 @@ public class BaseApplication extends Application {
 
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String PREF_PASSWORD = "password";
-    public static final String PREF_USERNAME= "username";
+    public static final String PREF_USERNAME = "username";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,15 +39,14 @@ public class BaseApplication extends Application {
                     @Override
                     public void done(ParseUser user, ParseException e) {
                         if (e == null)
-                        Toast.makeText(getApplicationContext(), getString(R.string.userLogin) + username, Toast.LENGTH_SHORT).show();
-                    else
+                            Toast.makeText(getApplicationContext(), getString(R.string.userLogin) + username, Toast.LENGTH_SHORT).show();
+                        else
                             Toast.makeText(getApplicationContext(), getString(R.string.error_login), Toast.LENGTH_LONG).show();
                     }
                 });
             }
 
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), getString(R.string.userLogin) + ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_SHORT).show();
         }
     }

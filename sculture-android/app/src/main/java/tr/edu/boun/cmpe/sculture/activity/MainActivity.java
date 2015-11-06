@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity
                     editor.apply();
                 }
             });
+        } else if (id == R.id.nav_search) {
+            intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -37,4 +37,5 @@
     <string name="error_login">While loging in, an error is occured</string>
     <string name="logout">Log out</string>
     <string name="loggedout">Logged out</string>
+    <string name="search">Search</string>
 </resources>

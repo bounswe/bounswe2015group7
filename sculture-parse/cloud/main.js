@@ -1,10 +1,4 @@
-// Use Parse.Cloud.define to define as many cloud functions as you want.
-// For example:
-Parse.Cloud.define("hello", function (request, response) {
-    response.success("Hello world!");
-});
-
-
+//region STORY
 Parse.Cloud.define("story_create", function (request, response) {
     var content = request.params.content;
     var title = request.params.title;
@@ -37,9 +31,6 @@ Parse.Cloud.define("story_create", function (request, response) {
         }
     }
 
-
-
-
     // There is no errors
     else {
         var StoryClass = Parse.Object.extend("Story");
@@ -52,7 +43,7 @@ Parse.Cloud.define("story_create", function (request, response) {
 
         story.save(null, {
             success: function (story) {
-                response.success(convertStory(story,true));
+                response.success(convertStory(story, true));
             },
             error: function (error) {
                 response.error(error);
@@ -61,21 +52,25 @@ Parse.Cloud.define("story_create", function (request, response) {
     }
 
 });
+//endregion
 
+//region STORY
 Parse.Cloud.define("story_get", function (request, response) {
     var id = request.params.id;
     var StoryClass = Parse.Object.extend("Story");
     var query = new Parse.Query(StoryClass);
     query.get(id, {
         success: function (object) {
-            response.success(convertStory(object,true));
+            response.success(convertStory(object, true));
         },
         error: function (error) {
             response.error(error);
         }
     });
 });
+//endregion
 
+//region SEARCH
 Parse.Cloud.define("search", function (request, response) {
     // This is our main search API.
     // The search will be parsed here.
@@ -94,115 +89,33 @@ Parse.Cloud.define("search", function (request, response) {
 
     var StoryClass = Parse.Object.extend("Story");
 
-    var results = [];
-
     var query = new Parse.Query(StoryClass);
     query.containedIn("tagsArray", tags);
     query.limit(size);
     query.skip(page * size);
     query.find({
         success: function (results) {
-            var myres = [];
+            var myRes = [];
             for (var i = 0; i < results.length; i++) {
-                myres.push(
+                myRes.push(
                     convertStory(results[i], false)
                 );
             }
-            response.success(myres);
+            response.success(myRes);
         }
     });
 });
+//endregion
 
-
-
-/* 
-
- Parse.Cloud.beforeSave("Story", function(request, response) {
- var story = request.object;
- var tags = story.get("tagsArray");
- var locTags = story.get("locationTagsArray");
-
- var TagClass = Parse.Object.extend("Tag");
- tags.forEach(function(item) {
- var query = new Parse.Query(TagClass);
- query.equalTo("title", item);
- query.first().then(function(object) {
- if (object != null) {
- object.relation("stories").add(story);
- } else {
- var newtag = new TagClass();
- newtag.set("title", item);
- newtag.set("lastEditor", request.user);
- newtag.set("isLocation", false);
- newtag.save().then(
- function(newtag) {
- newtag.relation("stories").add(story);
- },
- function(error) {
- // fail
- });
-
- }
- });
- });
-
- locTags.forEach(function(item) {
- var query = new Parse.Query(TagClass);
- query.equalTo("title", item);
- query.first().then(function(object) {
- if (object != null) {
- if (!object.get("isLocation")) {
- object.set("isLocation", true);
- object.save().then(
- function(object) {
- object.relation("stories").add(story);
- },
- function(error) {
- // fail
- });
-
- } else {
- object.relation("stories").add(story);
- }
- } else {
- var newtag = new TagClass();
- newtag.set("title", item);
- newtag.set("lastEditor", request.user);
- newtag.set("isLocation", true);
- newtag.save().then(
- function(newtag) {
- newtag.relation("stories").add(story);
- },
- function(error) {
- // fail
- });
-
- }
- });
- });
- });
- */
-/*  Parse.Cloud.beforeSave("Tag", function(request, response)){
- var query = new Parse.Query("Tag");
- query.equalTo("title", request.object.get("title"));
- query.first({
- success: function(count) {
- if(count > 0)
- response.error("Tag already exists");
- else
- response.success();
- },
- error: function(error){
- response.error(error);
- }
- })
- }; */
-
+//region Utility Functions
 function isEmpty(str) {
     return str.replace(/^\s+|\s+$/g, '').length == 0;
 }
+//endregion
 
-// Parse object to standart  object
+//region Object Converters
+//Parse object to response object.
+//The reason is hide to database structure from API user
 function convertStory(story, withContent) {
     var obj = {
         "id": story.id,
@@ -219,3 +132,4 @@ function convertStory(story, withContent) {
 
     return obj;
 }
+//endregion

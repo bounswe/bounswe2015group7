@@ -39,7 +39,7 @@ Error response
 Request
 ```
 {
-  "id" : "01KdGXxQgj title"
+  "id" : "01KdGXxQgj"
 }
 ```
 Success response
@@ -71,9 +71,9 @@ Searches give querry and return results. The results can be paged by using size 
 Request
 ```
 {
-  "query" : "turkey asia"
+  "query" : "turkey asia",
   "size" : 10, //default 100
-  "page" : 0, //default 0
+  "page" : 0 //default 0
 }
 ```
 Success response

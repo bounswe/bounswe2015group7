@@ -5,21 +5,24 @@ Parse.Cloud.define("story_create", function (request, response) {
     var tags = request.params.tags;
 
     var valid_tags = [];
-
+    var isError = false;
     // Check errors
     if (request.user == null) {
         response.error('Authentication error');
+        isError = true;
     }
     else if (content == null || isEmpty(content)) {
         response.error("Syntax error");
+        isError = true;
     }
     else if (title == null || isEmpty(title)) {
         response.error("Syntax error");
+        isError = true;
     }
     else if (tags == null || !(tags instanceof Array)) {
         response.error("Syntax error");
+        isError = true;
     }
-
     else if (tags instanceof Array) {
         var i;
         for (i = 0; i < tags.length; i++) {
@@ -28,11 +31,12 @@ Parse.Cloud.define("story_create", function (request, response) {
         }
         if (valid_tags.length < 1) {
             response.error("Syntax error");
+            isError = true;
         }
     }
 
     // There is no errors
-    else {
+    if(!isError) {
         var StoryClass = Parse.Object.extend("Story");
         var story = new StoryClass();
         story.set("content", content.trim());

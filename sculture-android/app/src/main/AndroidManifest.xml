@@ -33,7 +33,7 @@
         <activity
             android:name=".activity.StoryCreateActivity"
             android:label="@string/title_activity_story_create"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:name=".activity.SearchActivity" >
         </activity>

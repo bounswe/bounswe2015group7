@@ -18,10 +18,10 @@ import tr.edu.boun.cmpe.sculture.R;
 
 
 public class StoryCreateActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText editText2;
-    EditText editText3;
-    EditText editText4;
-    EditText editText;
+    EditText titleText;
+    EditText contentText;
+    EditText tag1Text;
+    EditText tag2Text;
     Button button;
 
     @Override
@@ -29,11 +29,12 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_create);
 
-        editText2 = (EditText) findViewById(R.id.editText2);
-        editText3 = (EditText) findViewById(R.id.editText3);
-        editText4 = (EditText) findViewById(R.id.editText4);
-        editText = (EditText) findViewById(R.id.editText);
-        button = (Button) findViewById(R.id.button);
+        titleText = (EditText) findViewById(R.id.title);
+        contentText = (EditText) findViewById(R.id.content);
+        tag1Text = (EditText) findViewById(R.id.tag1);
+        tag2Text = (EditText) findViewById(R.id.tag2);
+
+        button = (Button) findViewById(R.id.postStorybutton);
 
         button.setOnClickListener(this);
     }
@@ -41,25 +42,32 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button:
-                clickSearchButton();
+            case R.id.postStorybutton:
+                clickCreateButton();
                 break;
         }
     }
 
-    private void clickSearchButton() {
-        String title = editText.getText().toString();
-        String content = editText2.getText().toString();
-        String tag1 = editText3.getText().toString();
-        String tag2 = editText4.getText().toString();
+    private void clickCreateButton() {
+        String title = titleText.getText().toString();
+        String content = contentText.getText().toString();
+        String tag1 = tag1Text.getText().toString();
+        String tag2 = tag2Text.getText().toString();
+        String emptyTag = "NoTag";
 
         HashMap<String, Object> param = new HashMap<>();
         param.put("title", title);
         param.put("content", content);
 
         ArrayList<String> tags = new ArrayList<>();
-        tags.add(tag1);
-        tags.add(tag2);
+
+        // if there is no tag, add "NoTag" value to tags
+        if(tag1.isEmpty() && tag2.isEmpty()) {
+            tags.add(emptyTag);
+        } else {
+            tags.add(tag1);
+            tags.add(tag2);
+        }
 
         param.put("tags", tags);
 
@@ -68,10 +76,10 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                     public void done(HashMap response, ParseException e) {
                         if (e == null) {
                             Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
-                            editText.setText("");
-                            editText2.setText("");
-                            editText3.setText("");
-                            editText4.setText("");
+                            titleText.setText("");
+                            contentText.setText("");
+                            tag1Text.setText("");
+                            tag2Text.setText("");
 
                         } else
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();

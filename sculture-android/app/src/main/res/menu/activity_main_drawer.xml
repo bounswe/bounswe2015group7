@@ -7,6 +7,10 @@
             android:icon="@drawable/login"
             android:title="@string/loginRegister" />
         <item
+            android:id="@+id/nav_search"
+            android:title="@string/search"
+        />
+        <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/home" />
@@ -21,6 +25,7 @@
     <group android:enabled="true">
         <item
             android:id="@+id/nav_logout"
-            android:title="@string/logout" />
+            android:title="@string/logout"
+            android:visible="false"/>
     </group>
 </menu>

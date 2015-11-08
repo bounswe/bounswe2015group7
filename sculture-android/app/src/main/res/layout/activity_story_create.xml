@@ -1,20 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="tr.edu.boun.cmpe.sculture.activity.StoryCreateActivity">
 
-    <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
-        android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
+    <EditText
+        android:id="@+id/title"
+        android:hint="Enter a title"
+        android:background="@drawable/edittext_input_border"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:paddingLeft="10dp" />
 
-        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
-            android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <EditText
+        android:id="@+id/content"
+        android:hint="Enter your story"
+        android:gravity="top"
+        android:background="@drawable/edittext_input_border"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="5dp"
+        android:paddingLeft="10dp" />
 
-    </android.support.design.widget.AppBarLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:id="@+id/tagsLayout"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
 
-    <include layout="@layout/content_story_create" />
+        <EditText
+            android:id="@+id/tag1"
+            android:hint="Enter a tag"
+            android:background="@drawable/edittext_input_border"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:paddingLeft="10dp"
+            android:maxLength="20"/>
 
-</android.support.design.widget.CoordinatorLayout>
+        <EditText
+            android:id="@+id/tag2"
+            android:hint="Enter a tag"
+            android:background="@drawable/edittext_input_border"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:paddingLeft="10dp"
+            android:maxLength="20"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        android:id="@+id/postStorybutton"
+        android:layout_margin="5dp" />
+</LinearLayout>

@@ -31,10 +31,11 @@
     <string name="error_invalid_username">Invalid username</string>
     <string name="home">Home</string>
     <string name="login">Login</string>
-    <string name="title_activity_story_create">StoryCreateActivity</string>
+    <string name="title_activity_story_create">Create Your Story</string>
     <string name="userLogin">Current user:</string>
     <string name="loginAdvice">To acces all features, please sign up!</string>
     <string name="error_login">While loging in, an error is occured</string>
     <string name="logout">Log out</string>
     <string name="loggedout">Logged out</string>
+    <string name="search">Search</string>
 </resources>

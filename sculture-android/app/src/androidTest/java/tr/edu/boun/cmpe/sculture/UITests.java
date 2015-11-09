@@ -5,6 +5,8 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import tr.edu.boun.cmpe.sculture.activity.MainActivity;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -19,7 +21,7 @@ public class UITests {
 
     @Test
     public void MainMenuTest() {
-        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.createStoryButton)).perform(click());
         onView(withText("Replace with your own action")).check(matches(isDisplayed()));
     }
 

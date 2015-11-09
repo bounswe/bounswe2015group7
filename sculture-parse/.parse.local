@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "sculture"
+    },
+    "sculture": {
+      "applicationId": "yJboQpdSMbOBNsvjN3KU43SWvsFIDGhyYP1QZVP4"
+    }
+  }
+}

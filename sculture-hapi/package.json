@@ -1,0 +1,25 @@
+{
+  "name": "sculture-hapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sculture.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "good": "^6.4.0",
+    "good-console": "^5.2.0",
+    "handlebars": "^4.0.4",
+    "hapi": "^11.1.0",
+    "hapi-assets": "^0.3.0",
+    "hapi-auth-basic": "^4.0.0",
+    "hapi-auth-cookie": "^3.1.0",
+    "inert": "^3.2.0",
+    "parse": "^1.6.8",
+    "parse-cloud-express": "~1.0",
+    "views": "^1.0.2",
+    "vision": "^4.0.0"
+  }
+}

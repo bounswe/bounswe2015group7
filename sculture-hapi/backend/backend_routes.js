@@ -1,0 +1,119 @@
+/**
+ * Created by Atakan Ar�kan on 09.11.2015.
+ */
+var Bcrypt = require('bcrypt');
+var User = Parse.Object.extend("User");
+
+module.exports = [
+    {
+        method: 'GET',
+        path: '/',
+        config: {
+            auth: {
+                mode: 'try',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            },
+            handler: function (request, reply) {
+                return reply.view('frontend_homepage', {
+                    credentials: request.auth.credentials
+                });
+            }
+        }
+    },
+    { //handle css,js etc.
+        path: "/{public*}",
+        method: "GET",
+        handler: {
+            directory: {
+                path: "./views",
+                listing: false,
+                index: false
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/login',
+        config: {
+            handler: function (request, reply) {
+
+                request.auth.session.clear();
+                if (request.auth.isAuthenticated) {
+                    return reply.redirect('/');
+                }
+
+
+                Parse.User.logIn(request.payload["form-email"], request.payload["form-password"], {
+                    success: function (user) {
+                        request.auth.session.set(user);
+                        return reply.redirect('/');
+                        // Do stuff after successful login.
+                    },
+                    error: function (user, error) {
+                        return reply.view('frontend_homepage', {
+                            error: error
+                        });
+                    }
+                });
+            },
+            auth: {
+                mode: 'try',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/logout',
+        handler: function(request, reply){
+            request.auth.session.clear();
+            reply.redirect('/');
+        }
+    },
+    {
+        method: 'POST',
+        path: '/signup',
+        handler: function (request, reply) {
+            var email = request.payload["form-email"];
+            var username = request.payload["form-username"];
+            var pw = request.payload["form-password"];
+            var pw2 = request.payload["form-retypedpassword"];
+            Bcrypt.genSalt(10, function(err, salt) {
+                Bcrypt.hash(pw, salt, function(err, hash) {
+                    Bcrypt.compare(pw2, hash, function(err, res) {
+                        if(!res) { //error case, passwords dont match!
+                            return reply.view('frontend_homepage', {
+                                error: {
+                                    message: "Your passwords dont match!"
+                                }
+                            });
+                        } else {
+                            Parse.User.signUp(username, pw, {email: email}, {
+                                success: function (user) {
+                                    request.auth.session.set(user); //don't ask for the user to login again
+                                    return reply.redirect('/'); //redirect home
+                                },
+                                error: function (user, error) {
+                                    return reply.view('frontend_homepage', { //show error
+                                        error: error
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+
+        }
+    }
+];

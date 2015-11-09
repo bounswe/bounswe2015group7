@@ -73,10 +73,17 @@
     </div>
 </nav>
 <div class="jumbotron text-center">
+    <br>
+    <h1>Sculture!</h1>
+    {{#if credentials.username}}
+    <h3a>Welcome back, {{credentials.username}} !</h3a>v
+    {{/if}}
+</div>
+
 <div class="container">
     <div class="row">
         <form role="form" method="post" action="/{{id}}/addstory">
-            <div class="col-lg-6">
+            <div class="col-md-8 col-md-offset-2">
                 <div class="form-group">
                     <label for="story-title">Title</label>
                     <div class="input-group">
@@ -109,7 +116,6 @@
     </div>
 </div>
 
-</div>
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
     <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>

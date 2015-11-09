@@ -23,12 +23,10 @@
     <link rel="stylesheet" href="public/css/homepage_style.css">
     <script>
         window.onload = function() {
-            {{#if message}}
-                var asd = "{{messsage}}";
+            {{#if error}}
+                var asd = "{{error.message}}";
                 swal("Oops...", asd, "error");
                 {{/if}}
-                    GLOBAL.Parse = require('parse/node').Parse; // add parse
-                    Parse.initialize("yJboQpdSMbOBNsvjN3KU43SWvsFIDGhyYP1QZVP4", "Uc65Wz5kLYIvUpRdspNTRbI5vy1MLSvOmsNAmZbu");
                 }
     </script>
 
@@ -47,15 +45,15 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                {{#if isAuthenticated}}
+                {{#if credentials}}
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-createStory">Add Story</a>
+                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
                     </div>
                 </li>
                 <li>
                     <div class="top-big-link">
-                       Welcome, {{username}} !
+                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
                     </div>
                 </li>
                 {{else}}
@@ -77,6 +75,9 @@
 <div class="jumbotron text-center">
     <br>
     <h1>Sculture!</h1>
+    {{#if credentials.username}}
+    <h3a>Welcome back, {{credentials.username}} !</h3a>
+    {{/if}}
     <form class="form-inline">
         <br> <br>
         <input type="text" class="form-control" size="50" placeholder="Search stories" required>
@@ -216,7 +217,7 @@
         $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
             // Prevent default anchor click behavior
-            event.preventDefault();
+         //   event.preventDefault();
 
             // Store hash
             var hash = this.hash;

@@ -1,14 +1,27 @@
 /**
- * Created by Atakan Arýkan on 09.11.2015.
+ * Created by Atakan Arï¿½kan on 09.11.2015.
  */
-//var Bcrypt = require('bcrypt');
 var User = Parse.Object.extend("User");
+
 module.exports = [
     {
         method: 'GET',
         path: '/',
-        handler: function (request, reply) {
-            return reply.view('frontend_homepage', request.auth);
+        config: {
+            auth: {
+                mode: 'optional',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            },
+            handler: function (request, reply) {
+                return reply.view('frontend_homepage', {
+                    credentials: request.auth.credentials
+                });
+            }
         }
     },
     { //handle css,js etc.
@@ -27,27 +40,141 @@ module.exports = [
         path: '/login',
         config: {
             handler: function (request, reply) {
-                console.log(request.auth);
-                request.auth.session.clear();
+
                 if (request.auth.isAuthenticated) {
-                    console.log("c");
-
-                    return reply.redirect('/', request.auth);
+                    return reply.redirect('/');
                 }
-                Parse.User.logIn(request.payload["form-email"], request.payload["form-password"], {
-                    success: function(user) {
-                        console.log("a");
-                        request.auth.session.set(user);
-                        user.isAuthenticated = true;
-                        return reply.redirect('/', request.auth);
-                        // Do stuff after successful login.
-                    },
-                    error: function(user, error) {
-                        console.log("b");
-                        console.log(error);
-                        return reply.redirect('/', error);
 
-                        // The login failed. Check error to see why.
+                Parse.User.logIn(request.payload["form-email"], request.payload["form-password"], {
+                    success: function (user) {
+                        console.log("asDSAD:ASDSA:DASD:SAD:ASD : " + Parse.User.current());
+                        request.auth.session.set(user);
+                        return reply.redirect('/');
+                    },
+                    error: function (user, error) {
+                        return reply.view('frontend_homepage', {
+                            error: error
+                        });
+                    }
+                });
+            },
+            auth: {
+                mode: 'optional',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/logout',
+        handler: function (request, reply) {
+            request.auth.session.clear();
+            reply.redirect('/');
+        }
+    },
+    {
+        method: 'POST',
+        path: '/signup',
+        handler: function (request, reply) {
+            var email = request.payload["form-email"];
+            var username = request.payload["form-username"];
+            var pw = request.payload["form-password"];
+            var pw2 = request.payload["form-retypedpassword"];
+            if (pw != pw2) { //error case, passwords dont match!
+                return reply.view('frontend_homepage', {
+                    error: {
+                        message: "Your passwords dont match!"
+                    }
+                });
+            }
+            else {
+                Parse.User.signUp(username, pw, {email: email}, {
+                    success: function (user) {
+                        request.auth.session.set(user); //don't ask for the user to login again
+                        request.auth.credentials.user = user;
+                        return reply.redirect('/'); //redirect home
+                    },
+                    error: function (user, error) {
+                        return reply.view('frontend_homepage', { //show error
+                            error: error
+                        });
+                    }
+                });
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/sex/{id}',
+        handler: function (request, reply) {
+            var id = request.params["id"];
+            Parse.Cloud.run('story_get', {id: id}, {
+                success: function (story) {
+                    console.log(story);
+                    reply.view(html, story);
+                },
+                error: function (error) {
+                }
+            });
+        }
+    },
+    {
+        method: 'GET',
+        path: '/addstory',
+        config:  {
+            auth: {
+                mode: 'try',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            },
+            handler: function (request, reply) {
+                var user = request.auth.credentials;
+                if (user == null) {
+                    return reply.view('frontend_homepage', { //show error
+                        error: {
+                            message: "You are not logged in"
+                        }
+                    });
+                }
+                reply.view('add_story', request.auth);
+
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/{userid}/addstory',
+        config: {
+            handler: function (request, reply) {
+                var id = request.auth.credentials.user;
+                var content = request.payload["story-content"];
+                var tags = request.payload["story-tags"].split(' ');
+                var title = request.payload["story-title"];
+                console.log("id: " + id);
+                console.log("content: " + content);
+                console.log("tags: " + tags);
+                console.log("title: " + title);
+                Parse.Cloud.run('story_create', {
+                    userid: id,
+                    content: content,
+                    tags: tags,
+                    title: title
+                }, {
+                    success: function (story) {
+                        console.log(story);
+                        reply.redirect('/');
+                    },
+                    error: function (error) {
+                        console.log(error);
                     }
                 });
             },
@@ -61,27 +188,9 @@ module.exports = [
                 }
             }
         }
-    },
-    {
-        method: 'POST',
-        path: '/signup',
-        handler: function (request, reply) {
-            var email = request.payload["form-email"];
-            var username = request.payload["form-username"];
-            var pw = request.payload["form-password"];
-            var pw2 = request.payload["form-retypedpassword"];
-
-            Parse.User.signUp(username, pw, {email: email}, {
-                success: function (user) {
-                    return reply.view('frontend_homepage', user);
-                },
-                error: function (user, error) {
-                    var err = {
-                        errmsg: error.message
-                    };
-                    return reply.view('frontend_homepage', err);
-                }
-            });
-        }
     }
+    // todo STORY EKLEME HANDLER/SAYFA
+    // todo STORY GOSTERME HANDLER/SAYFA
+    // todo TAGE GORE ARAMA HANDLER/SAYFA
+    // TODO
 ];

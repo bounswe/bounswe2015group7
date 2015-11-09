@@ -76,13 +76,13 @@
     <br>
     <h1>Sculture!</h1>
     {{#if credentials.username}}
-    <h3a>Welcome back, {{credentials.username}} !</h3a>v
+    <h3a>Welcome back, {{credentials.username}} !</h3a>
     {{/if}}
 </div>
 
 <div class="container">
     <div class="row">
-        <form role="form" method="post" action="/{{id}}/addstory">
+        <form role="form" method="post" action="/{{credentials.objectId}}/addstory">
             <div class="col-md-8 col-md-offset-2">
                 <div class="form-group">
                     <label for="story-title">Title</label>
@@ -94,14 +94,14 @@
                 <div class="form-group">
                     <label for="story-content">Content</label>
                     <div class="input-group">
-                        <textarea name="InputMessage" id="story-content" class="form-control" placeholder="Enter your story" rows="5" required></textarea>
+                        <textarea name="story-content" id="story-content" class="form-control" placeholder="Enter your story" rows="5" required></textarea>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="story-tags">Tags</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="story-tags" name="story-tags" placeholder="Seperate tags by whitespace">
+                        <input type="text" class="form-control" id="story-tags" name="story-tags" placeholder="Seperate tags by whitespace">
                         <span class="input-group-addon"></span>
                     </div>
                 </div>
@@ -115,6 +115,9 @@
         </form>
     </div>
 </div>
+<br>
+<br><br>
+
 
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>

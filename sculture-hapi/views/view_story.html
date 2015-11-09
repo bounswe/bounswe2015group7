@@ -46,6 +46,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                {{#if credentials}}
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
@@ -91,34 +92,22 @@
             <!-- Blog Post -->
 
             <!-- Title -->
-            <h1>Camel Wrestling in Turkey: A Traditional Festival</h1>
-
-            <!-- Author -->
-            <p class="lead">
-                by <a href="#">Narin Mahmuti</a>
-            </p>
+            <h1>{{title}}</h1>
 
             <hr>
 
             <!-- Date/Time -->
-            <p><span class="glyphicon glyphicon-time"></span> Posted on November 9, 2015 at 9:00 PM</p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on {{createdAt}}</p>
 
             <hr>
 
             <!-- Preview Image -->
-            <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
+            <!--      <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
 
-            <hr>
+                  <hr>
 
-            <!-- Post Content -->
-            <p class="lead"> I'll do my best to give you a dose of the amazing Turkish culture while I study as a foreign student and use my terrible Turkish to get around.</p>
-            <p>I have seen many sights during my time in Turkey but none of them has ever matched the experience I had last Sunday. Seven of us hired a driver and set off to the village of Kizilcayiki to watch the traditional show of camel wrestling. From the moment, we got out of the van I realized that we were the only foreigners in a crowd of possibly 1000 Turkish village people.
-
-                My first instinct was to stand in the parade along with the camels as it appeared we were just as much on show as them. Quiet whispers, long stares and raised eyebrows were followed by questions of where we were from. Foreign tourists in this small unknown village are obviously a rare sight. </p>
-            My first instinct was to sit in a corner while trying to blend in, but instead we decided to embrace the situation and open conservation. Most of us could speak Turkish to a certain degree and this went a long way into breaking the ice. It transpired that being foreign was not the only shock factor but we were also women. I looked around and indeed noticed that the men outnumbered the women in vast numbers.
-            That day I laughed and joked with many of the village people. Don’t ask me how but I ended up playing in the village band and also had the delight of meeting some of the camel owners. It was a totally crazy day and I have the feeling that my husband knew it was going to be. Before leaving in the morning, I told him what we were doing and his response was a big grin followed by “this should be fun!”
-
-            So in case you do find yourself off the beaten track in Turkey and at a Camel Wrestling show, I have written this small guide which should help you to enjoy a thoroughly unique experience.
+                  <!-- Post Content -->
+            <p>{{content}}
             <hr>
 
             <!-- Blog Comments -->
@@ -196,34 +185,18 @@
                 <!-- /.input-group -->
             </div>
 
-            <!-- Blog Categories Well -->
+            <!-- Tags -->
             <div class="well">
                 <h4>Story Tags</h4>
                 <div class="row">
-                    <div class="col-lg-6">
+                    {{#each tags}}
+                    <div class="col-lg">
                         <ul class="list-unstyled">
-                            <li><a href="#">Camel Wrestling</a>
-                            </li>
-                            <li><a href="#">Tülü</a>
-                            </li>
-                            <li><a href="#">Sport</a>
-                            </li>
-                            <li><a href="#">Turkey</a>
+                            <li><a href="#">{{this}} </a>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-lg-6">
-                        <ul class="list-unstyled">
-                            <li><a href="#">Selcuk </a>
-                            </li>
-                            <li><a href="#">Ephesus</a>
-                            </li>
-                            <li><a href="#">Tag</a>
-                            </li>
-                            <li><a href="#">Tag</a>
-                            </li>
-                        </ul>
-                    </div>
+                    {{/each}}
                 </div>
                 <!-- /.row -->
             </div>

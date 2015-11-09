@@ -258,5 +258,3 @@ function convertTempStory(story, withContent) {
     return obj;
 }
 //endregion
-
-

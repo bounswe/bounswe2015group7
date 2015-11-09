@@ -8,17 +8,7 @@ module.exports = [
         method: 'GET',
         path: '/',
         handler: function (request, reply) {
-
-            // Render the view with the custom greeting
-            console.log(Parse.User.current());
-            if(Parse.User.current()){ //logged in user
-                console.log("a");
-                return reply.view('frontend_homepage');
-            }else{ // noob user
-                console.log("b");
-                return reply.view('frontend_homepage');
-            }
-            return reply.view('frontend_homepage');
+            return reply.view('frontend_homepage', request.auth);
         }
     },
     { //handle css,js etc.
@@ -35,21 +25,41 @@ module.exports = [
     {
         method: 'POST',
         path: '/login',
-        handler: function (request, reply) {
-            var username = request.payload["form-email"];
-            var pw = request.payload["form-password"];
-            Parse.User.logIn(username, pw, {
-                success: function(user) {
-                    console.log(user);
-                    return reply.view('frontend_homepage', user);
-                },
-                error: function(user, error) {
-                    var err = {
-                        errmsg: error.message
-                    };
-                    return reply.view('frontend_homepage', err);
+        config: {
+            handler: function (request, reply) {
+                console.log(request.auth);
+                request.auth.session.clear();
+                if (request.auth.isAuthenticated) {
+                    console.log("c");
+
+                    return reply.redirect('/', request.auth);
                 }
-            });
+                Parse.User.logIn(request.payload["form-email"], request.payload["form-password"], {
+                    success: function(user) {
+                        console.log("a");
+                        request.auth.session.set(user);
+                        user.isAuthenticated = true;
+                        return reply.redirect('/', request.auth);
+                        // Do stuff after successful login.
+                    },
+                    error: function(user, error) {
+                        console.log("b");
+                        console.log(error);
+                        return reply.redirect('/', error);
+
+                        // The login failed. Check error to see why.
+                    }
+                });
+            },
+            auth: {
+                mode: 'try',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            }
         }
     },
     {

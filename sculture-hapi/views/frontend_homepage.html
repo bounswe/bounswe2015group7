@@ -23,11 +23,13 @@
     <link rel="stylesheet" href="public/css/homepage_style.css">
     <script>
         window.onload = function() {
-            {{#if errmsg}}
-                var asd = "{{errmsg}}";
+            {{#if message}}
+                var asd = "{{messsage}}";
                 swal("Oops...", asd, "error");
                 {{/if}}
-        }
+                    GLOBAL.Parse = require('parse/node').Parse; // add parse
+                    Parse.initialize("yJboQpdSMbOBNsvjN3KU43SWvsFIDGhyYP1QZVP4", "Uc65Wz5kLYIvUpRdspNTRbI5vy1MLSvOmsNAmZbu");
+                }
     </script>
 
 </head>
@@ -45,7 +47,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                {{#if id}}
+                {{#if isAuthenticated}}
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-createStory">Add Story</a>

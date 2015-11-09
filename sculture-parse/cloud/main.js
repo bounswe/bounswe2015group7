@@ -3,7 +3,7 @@ Parse.Cloud.define("story_create", function (request, response) {
     var content = request.params.content;
     var title = request.params.title;
     var tags = request.params.tags;
-
+ 
     var valid_tags = [];
     var isError = false;
     // Check errors

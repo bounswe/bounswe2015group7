@@ -36,7 +36,6 @@ server.register(require('hapi-auth-cookie'), function (err) {
     server.auth.strategy('session', 'cookie', {
         password: 'secret',
         cookie: 'sid-example',
-        redirectTo: '/',
         isSecure: false,
         clearInvalid: true,
         ttl: 60 * 1000 * 60, // 1 hour session time

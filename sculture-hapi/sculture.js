@@ -42,7 +42,7 @@ server.register(require('hapi-auth-cookie'), function (err) {
         validateFunc: function (request, session, callback) {
 
             if (!session) {
-               // request.auth.session.clear();
+                request.auth.session.clear();
                 return callback("Session not found", false);
             }
             return callback(null, true, session);

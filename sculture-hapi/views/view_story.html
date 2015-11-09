@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="public/css/sweetalert.css">
     <link rel="stylesheet" href="public/css/style.css">
     <link rel="stylesheet" href="public/css/homepage_style.css">
+    <link rel="stylesheet" href="public/css/storystyle.css">
     <script>
         window.onload = function() {
             {{#if error}}
@@ -45,7 +46,6 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                {{#if credentials}}
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
@@ -78,37 +78,174 @@
     {{#if credentials.username}}
     <h3a>Welcome back, {{credentials.username}} !</h3a>v
     {{/if}}
-    <form class="form-inline">
-        <br> <br>
-        <input type="text" class="form-control" size="50" placeholder="Search stories" required>
-    </form>
-    <br> <br>
 </div>
 
 
-<div class="row">
-    <div class="col-lg-4">
-        <img class="img-circle" src="http://i.telegraph.co.uk/multimedia/archive/02397/girl-light_2397286k.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Heading</h2>
-        <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-        <p><a href="#">#diwali</a> <a href="#">#india</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-        <img class="img-circle" src="http://blog.hostelbookers.com/wp-content/uploads/2011/01/New-York-Chinese-on-float-e1296050297471.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Heading</h2>
-        <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-        <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-        <img class="img-circle" src="http://www.venice-carnival-italy.com/multimedia/foto/large/5.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Heading</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
+<div class="container">
+
+    <div class="row">
+
+        <!-- Blog Post Content Column -->
+        <div class="col-lg-8">
+
+            <!-- Blog Post -->
+
+            <!-- Title -->
+            <h1>Camel Wrestling in Turkey: A Traditional Festival</h1>
+
+            <!-- Author -->
+            <p class="lead">
+                by <a href="#">Narin Mahmuti</a>
+            </p>
+
+            <hr>
+
+            <!-- Date/Time -->
+            <p><span class="glyphicon glyphicon-time"></span> Posted on November 9, 2015 at 9:00 PM</p>
+
+            <hr>
+
+            <!-- Preview Image -->
+            <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
+
+            <hr>
+
+            <!-- Post Content -->
+            <p class="lead"> I'll do my best to give you a dose of the amazing Turkish culture while I study as a foreign student and use my terrible Turkish to get around.</p>
+            <p>I have seen many sights during my time in Turkey but none of them has ever matched the experience I had last Sunday. Seven of us hired a driver and set off to the village of Kizilcayiki to watch the traditional show of camel wrestling. From the moment, we got out of the van I realized that we were the only foreigners in a crowd of possibly 1000 Turkish village people.
+
+                My first instinct was to stand in the parade along with the camels as it appeared we were just as much on show as them. Quiet whispers, long stares and raised eyebrows were followed by questions of where we were from. Foreign tourists in this small unknown village are obviously a rare sight. </p>
+            My first instinct was to sit in a corner while trying to blend in, but instead we decided to embrace the situation and open conservation. Most of us could speak Turkish to a certain degree and this went a long way into breaking the ice. It transpired that being foreign was not the only shock factor but we were also women. I looked around and indeed noticed that the men outnumbered the women in vast numbers.
+            That day I laughed and joked with many of the village people. Don’t ask me how but I ended up playing in the village band and also had the delight of meeting some of the camel owners. It was a totally crazy day and I have the feeling that my husband knew it was going to be. Before leaving in the morning, I told him what we were doing and his response was a big grin followed by “this should be fun!”
+
+            So in case you do find yourself off the beaten track in Turkey and at a Camel Wrestling show, I have written this small guide which should help you to enjoy a thoroughly unique experience.
+            <hr>
+
+            <!-- Blog Comments -->
+
+            <!-- Comments Form -->
+            <div class="well">
+                <h4>Leave a Comment:</h4>
+                <form role="form">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+            <hr>
+
+            <!-- Posted Comments -->
+
+            <!-- Comment -->
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading" align="left">   Josh Adams
+                        <small>November 9, 2015 at 9:30 PM</small>
+                    </h4>
+                    Amazing pictures! I was also at the Selcuk Efes Camel Wrestling Festival last year, it was such a fascinating experience. I heard that this tradition was popular in my hometown in Texas during the 1850s! How crazy is that?
+                </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading" align="left"> Justin Graham
+                        <small>August 25, 2014 at 9:30 PM</small>
+                    </h4>
+                    I’ve been to a camel market in Egypt, but I didn't know they also had camel wrestling! Does the festival go on throughout the year? I would love to see it!
+                    <!-- Nested Comment -->
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading" align="left"> Narin Mahmuti
+                                <small>August 25, 2014 at 9:30 PM</small>
+                            </h4>
+                            From what I have heard they have camel wrestling in other countries so maybe in Egypt as well. Sadly, the festival goes on only for three months of the year, while they are on heat.
+                        </div>
+                    </div>
+                    <!-- End Nested Comment -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Blog Sidebar Widgets Column -->
+        <div class="col-md-4">
+
+            <!-- Blog Search Well -->
+            <div class="well">
+                <h4>Search for a story:</h4>
+                <div class="input-group">
+                    <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                </div>
+                <!-- /.input-group -->
+            </div>
+
+            <!-- Blog Categories Well -->
+            <div class="well">
+                <h4>Story Tags</h4>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <ul class="list-unstyled">
+                            <li><a href="#">Camel Wrestling</a>
+                            </li>
+                            <li><a href="#">Tülü</a>
+                            </li>
+                            <li><a href="#">Sport</a>
+                            </li>
+                            <li><a href="#">Turkey</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <ul class="list-unstyled">
+                            <li><a href="#">Selcuk </a>
+                            </li>
+                            <li><a href="#">Ephesus</a>
+                            </li>
+                            <li><a href="#">Tag</a>
+                            </li>
+                            <li><a href="#">Tag</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+
+
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+    <hr>
+
 </div>
+
+
+
+
+
+
+
+
+
 
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
@@ -212,7 +349,7 @@
         $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
             // Prevent default anchor click behavior
-         //   event.preventDefault();
+            //   event.preventDefault();
 
             // Store hash
             var hash = this.hash;

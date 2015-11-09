@@ -3,11 +3,12 @@ Parse.Cloud.define("story_create", function (request, response) {
     var content = request.params.content;
     var title = request.params.title;
     var tags = request.params.tags;
- 
+    var userid = request.params.userid;
+
     var valid_tags = [];
     var isError = false;
     // Check errors
-    if (request.user == null) {
+    if (userid == null) {
         response.error('Authentication error');
         isError = true;
     }
@@ -41,8 +42,8 @@ Parse.Cloud.define("story_create", function (request, response) {
         var story = new StoryClass();
         story.set("content", content.trim());
         story.set("title", title.trim());
-        story.set("owner", request.user);
-        story.set("lastEditor", request.user);
+        story.set("owner", userid);
+        story.set("lastEditor", userid);
         story.set("tagsArray", valid_tags);
 
         story.save(null, {
@@ -137,3 +138,5 @@ function convertStory(story, withContent) {
     return obj;
 }
 //endregion
+
+

@@ -45,10 +45,11 @@ module.exports = [
                     return reply.redirect('/');
                 }
 
-                Parse.User.logIn(request.payload["form-email"], request.payload["form-password"], {
+                Parse.User.logIn(request.payload["form-username"], request.payload["form-password"], {
                     success: function (user) {
-                        console.log("asDSAD:ASDSA:DASD:SAD:ASD : " + Parse.User.current());
+                        console.log(user);
                         request.auth.session.set(user);
+                        GLOBAL.currentUser = user;
                         return reply.redirect('/');
                     },
                     error: function (user, error) {
@@ -96,7 +97,6 @@ module.exports = [
                 Parse.User.signUp(username, pw, {email: email}, {
                     success: function (user) {
                         request.auth.session.set(user); //don't ask for the user to login again
-                        request.auth.credentials.user = user;
                         return reply.redirect('/'); //redirect home
                     },
                     error: function (user, error) {
@@ -155,7 +155,7 @@ module.exports = [
         path: '/{userid}/addstory',
         config: {
             handler: function (request, reply) {
-                var id = request.auth.credentials.user;
+                var id = request.params["userid"];
                 var content = request.payload["story-content"];
                 var tags = request.payload["story-tags"].split(' ');
                 var title = request.payload["story-title"];
@@ -163,7 +163,7 @@ module.exports = [
                 console.log("content: " + content);
                 console.log("tags: " + tags);
                 console.log("title: " + title);
-                Parse.Cloud.run('story_create', {
+                Parse.Cloud.run('tempstory_create', {
                     userid: id,
                     content: content,
                     tags: tags,
@@ -187,6 +187,25 @@ module.exports = [
                     redirectTo: false
                 }
             }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/search/{tagquery}',
+        handler: function (request, reply) {
+            var query = request.params["tagquery"];
+            Parse.Cloud.run('search', {
+                query: query,
+                page: 0,
+                size: 100
+            }, {
+                success: function (stories) {
+                    console.log(stories);
+                  //  reply.view(html, story);
+                },
+                error: function (error) {
+                }
+            });
         }
     }
     // todo STORY EKLEME HANDLER/SAYFA

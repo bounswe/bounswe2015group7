@@ -8,8 +8,7 @@ var server = new hapi.Server();
 
 // add connection parameters
 server.connection({
-    host: 'localhost',
-    port: 3000
+    port: 8080
 });
 server.register(Inert, function () {
 });

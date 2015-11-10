@@ -131,6 +131,19 @@ Parse.Cloud.define("story_get", function (request, response) {
         }
     });
 });
+Parse.Cloud.define("tempstory_get", function (request, response) {
+    var id = request.params.id;
+    var TempStoryClass = Parse.Object.extend("TempStory");
+    var query = new Parse.Query(TempStoryClass);
+    query.get(id, {
+        success: function (object) {
+            response.success(convertTempStory(object, true));
+        },
+        error: function (error) {
+            response.error(error);
+        }
+    });
+});
 //endregion
 
 //region SEARCH
@@ -169,7 +182,40 @@ Parse.Cloud.define("search", function (request, response) {
     });
 });
 //endregion
+Parse.Cloud.define("tempsearch", function (request, response) {
+    // This is our main search API.
+    // The search will be parsed here.
+    // For now, the search is tag based.
+    var queryWord = request.params.query;
+    var page = request.params.page;
+    var size = request.params.size;
 
+    if (size == null)
+        size = 100;
+
+    if (page == null)
+        page = 0;
+
+    var tags = queryWord.split(" ");
+
+    var TempStoryClass = Parse.Object.extend("TempStory");
+
+    var query = new Parse.Query(TempStoryClass);
+    query.containedIn("tagsArray", tags);
+    query.limit(size);
+    query.skip(page * size);
+    query.find({
+        success: function (results) {
+            var myRes = [];
+            for (var i = 0; i < results.length; i++) {
+                myRes.push(
+                    convertTempStory(results[i], false)
+                );
+            }
+            response.success(myRes);
+        }
+    });
+});
 //region Utility Functions
 function isEmpty(str) {
     return str.replace(/^\s+|\s+$/g, '').length == 0;

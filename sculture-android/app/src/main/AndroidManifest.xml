@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tr.edu.boun.cmpe.sculture" >
+    package="tr.edu.boun.cmpe.sculture">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,11 +12,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,10 +33,9 @@
         <activity
             android:name=".activity.StoryCreateActivity"
             android:label="@string/title_activity_story_create"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:name=".activity.SearchActivity" >
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".activity.SearchActivity"></activity>
+        <activity android:name=".activity.StoryShowActivity"></activity>
     </application>
 
 </manifest>

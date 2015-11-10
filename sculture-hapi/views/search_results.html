@@ -79,10 +79,13 @@
     {{#if credentials.username}}
     <h3a>Looking good, {{credentials.username}}!</h3a>
     {{/if}}
-    <form class="form-inline">
+    <form class="form-inline" action="/search" method="post">
         <br> <br>
-        <input type="text" class="form-control" size="50" placeholder="Search stories" required>
+        <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>
+    <br>
+    <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
+    <br>
     <br> <br>
 </div>
 

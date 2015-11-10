@@ -4,28 +4,35 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+
     <TextView
         android:id="@+id/storyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="111"/>
-    <TextView
-        android:id="@+id/storyTags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tagggggs"/>
+        android:text="111"
+        android:textSize="50dp" />
+
     <TextView
         android:id="@+id/storyContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Content"/>
     <TextView
+        android:id="@+id/storyTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tagggggs"/>
+    <TextView
+        android:paddingTop="100dp"
         android:id="@+id/storyOwner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:text="owner"/>
+
     <TextView
         android:id="@+id/storyCreatedAt"
         android:layout_width="match_parent"

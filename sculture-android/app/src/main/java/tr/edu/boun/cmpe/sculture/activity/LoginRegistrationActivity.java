@@ -96,7 +96,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
 
     private boolean isUserNameValid(String username) {
         //TODO Replace
-        return username.length() > 3;
+        return username.length() < 3;
     }
 
     //region Clicks

@@ -58,7 +58,6 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         HashMap<String, Object> param = new HashMap<>();
         param.put("title", title);
         param.put("content", content);
-
         ArrayList<String> tags = new ArrayList<>();
 
         // if there is no tag, add "NoTag" value to tags

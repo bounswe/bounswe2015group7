@@ -61,8 +61,15 @@ public class StoryShowActivity extends AppCompatActivity {
                                 //s += item.get("title") + "\n";
                                 ArrayList<String> story = new ArrayList<String>();
                                 title.setText((String) item.get("title"));
-                                story.add("Tags: "/*(String) item.get("tags")*/);
-                                content.setText("content: "+ (String) item.get("content"));
+                            ArrayList<String> tags2 = (ArrayList<String> ) item.get("tags");
+                            String all = "";
+                            for(String tagsAll: tags2){
+                                all+= tagsAll+" ";
+                            }
+                            //Toast.makeText(getApplicationContext(), tags.get(0), Toast.LENGTH_LONG).show();
+                                //story.add("Tags: "+all);
+                                tags.setText(all);
+                                content.setText(""+(String) item.get("content"));
                                 //ParseUser ps = (ParseUser) item.get("ownerId");
                                 storyOwner.setText("Story Owner: "+(String)item.get("ownerId"));//ps.getObjectId());
                             String cr = ""+item.get("createdAt");

@@ -178,7 +178,7 @@
                         <div class="form-group has-feedback">
                             <label class="control-label" for="main-search">
                             </label>
-                            <input type="text" class="form-control" id="main-search"
+                            <input type="text" class="form-control" name="main-search" id="main-search"
                                    placeholder="Tag name" /> <span
                                 class="glyphicon glyphicon-search form-control-feedback"></span>
                         </div>
@@ -238,15 +238,15 @@
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
                 <h3 class="modal-title" id="modal-login-label">Sign in to Sculture</h3>
-                <p>Enter your email and password to sign in:</p>
+                <p>Enter your username and password to sign in:</p>
             </div>
 
             <div class="modal-body">
 
                 <form role="form" action="/login" method="post" class="login-form">
                     <div class="form-group">
-                        <label class="sr-only" for="form-email">E-mail</label>
-                        <input type="text" name="form-email" placeholder="E-mail..." class="form-email form-control" id="form-email">
+                        <label class="sr-only" for="form-username">E-mail</label>
+                        <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>

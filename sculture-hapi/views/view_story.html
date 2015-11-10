@@ -77,7 +77,7 @@
     <br>
     <h1>Sculture!</h1>
     {{#if credentials.username}}
-    <h3a>Welcome back, {{credentials.username}} !</h3a>v
+    <h3a>Looking good, {{credentials.username}}!</h3a>
     {{/if}}
 </div>
 
@@ -92,12 +92,12 @@
             <!-- Blog Post -->
 
             <!-- Title -->
-            <h1>{{title}}</h1>
+            <h1>{{story.title}}</h1>
 
             <hr>
 
             <!-- Date/Time -->
-            <p><span class="glyphicon glyphicon-time"></span> Posted on {{createdAt}}</p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: {{prettyDateFormat story.createdAt}}</p>
 
             <hr>
 
@@ -107,7 +107,7 @@
                   <hr>
 
                   <!-- Post Content -->
-            <p>{{content}}
+            <p>{{story.content}}
             <hr>
 
             <!-- Blog Comments -->
@@ -174,14 +174,16 @@
             <!-- Blog Search Well -->
             <div class="well">
                 <h4>Search for a story:</h4>
-                <div class="input-group">
-                    <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                        </span>
-                </div>
+                    <form role="form" action="/search" method="post">
+                        <div class="form-group has-feedback">
+                            <label class="control-label" for="main-search">
+                            </label>
+                            <input type="text" class="form-control" id="main-search"
+                                   placeholder="Tag name" /> <span
+                                class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </form>
+
                 <!-- /.input-group -->
             </div>
 
@@ -189,10 +191,10 @@
             <div class="well">
                 <h4>Story Tags</h4>
                 <div class="row">
-                    {{#each tags}}
+                    {{#each story.tags}}
                     <div class="col-lg">
                         <ul class="list-unstyled">
-                            <li><a href="#">{{this}} </a>
+                            <li><a href="/search/{{this}}">{{this}} </a>
                             </li>
                         </ul>
                     </div>

@@ -76,34 +76,36 @@
     <br>
     <h1>Sculture!</h1>
     {{#if credentials.username}}
-    <h3a>Welcome back, {{credentials.username}} !</h3a>v
+    <h3a>Looking good, {{credentials.username}}!</h3a>
     {{/if}}
-    <form class="form-inline">
+    <form class="form-inline" action="/search" method="post">
         <br> <br>
-        <input type="text" class="form-control" size="50" placeholder="Search stories" required>
+        <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>
-    <br> <br>
+    <br>
+    <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
+    <br>
 </div>
 
 
 <div class="row">
     <div class="col-lg-4">
         <img class="img-circle" src="http://i.telegraph.co.uk/multimedia/archive/02397/girl-light_2397286k.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Heading</h2>
+        <h2>A Horseman in the Sky</h2>
         <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
         <p><a href="#">#diwali</a> <a href="#">#india</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
         <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
     </div><!-- /.col-lg-4 -->
     <div class="col-lg-4">
         <img class="img-circle" src="http://blog.hostelbookers.com/wp-content/uploads/2011/01/New-York-Chinese-on-float-e1296050297471.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Heading</h2>
+        <h2>Springtime a la Carte</h2>
         <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
         <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
         <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
     </div><!-- /.col-lg-4 -->
     <div class="col-lg-4">
         <img class="img-circle" src="http://www.venice-carnival-italy.com/multimedia/foto/large/5.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Heading</h2>
+        <h2>The Green Door</h2>
         <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
         <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
         <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>

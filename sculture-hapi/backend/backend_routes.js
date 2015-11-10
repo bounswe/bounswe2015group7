@@ -18,9 +18,11 @@ module.exports = [
                 }
             },
             handler: function (request, reply) {
-                return reply.view('frontend_homepage', {
-                    credentials: request.auth.credentials
-                });
+                var viewConfig = {
+                    credentials: request.auth.credentials,
+                    shiningStories: ["id1", "id2", "id3"] //not used for now, can be used to change featured stories on the homepage
+                };
+                return reply.view('frontend_homepage', viewConfig);
             }
         }
     },
@@ -37,6 +39,17 @@ module.exports = [
     },
     { //handle css,js etc.
         path: "/story/{path*}",
+        method: "GET",
+        handler: {
+            directory: {
+                path: "./views",
+                listing: false,
+                index: false
+            }
+        }
+    },
+    { //handle css,js etc.
+        path: "/search/{path*}",
         method: "GET",
         handler: {
             directory: {
@@ -120,24 +133,91 @@ module.exports = [
     {
         method: 'GET',
         path: '/story/{id}',
-        handler: function (request, reply) {
-            var id = request.params["id"];
-            Parse.Cloud.run('tempstory_get', {id: id}, {
-                success: function (story) {
-                    console.log(story);
-                    reply.view('view_story', story);
-                },
-                error: function (error) {
-                    return reply.view('frontend_homepage', { //show error
-                        error: {
-                            message: "Cannot find story!"
-                        }
-                    });
+        config: {
+            handler: function (request, reply) {
+                var id = request.params["id"];
+                Parse.Cloud.run('tempstory_get', {id: id}, {
+                    success: function (story) {
+                        var myStory = {
+                            story: story,
+                            credentials: request.auth.credentials
+                        };
+                        reply.view('view_story', myStory);
+                    },
+                    error: function (error) {
+                        return reply.view('frontend_homepage', { //show error
+                            error: {
+                                message: "Cannot find story!"
+                            }
+                        });
+                    }
+                });
+            },
+            auth: {
+                mode: 'optional',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
                 }
-            });
+            }
         }
     },
+    {
+        method: 'GET',
+        path: '/search/{query}',
+        config: {
+            handler: function (request, reply) {
+                var query = request.params["query"];
+                Parse.Cloud.run('tempsearch', {query: query}, {
+                    success: function (storiez) {
+                        var myStoriez = {
+                            stories: storiez,
+                            credentials: request.auth.credentials
+                        };
+                        reply.view('search_results', myStoriez);
+                    },
+                    error: function (error) {
+                        return reply.view('frontend_homepage', { //show error
+                            error: {
+                                message: "Cannot find story!"
+                            }
+                        });
+                    }
+                });
+            },
+            auth: {
+                mode: 'optional',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/search',
+        config: {
+            handler: function (request, reply) {
+                var query = request.payload["main-search"];
+                return reply.redirect('/search/' + query);
 
+            },
+            auth: {
+                mode: 'optional',
+                strategy: 'session'
+            },
+            plugins: {
+                'hapi-auth-cookie': {
+                    redirectTo: false
+                }
+            }
+        }
+    },
     {
         method: 'GET',
         path: '/addstory',
@@ -173,11 +253,8 @@ module.exports = [
                 var id = request.params["id"];
                 var content = request.payload["story-content"];
                 var tags = request.payload["story-tags"].split(" ");
+                tags.push("all");
                 var title = request.payload["story-title"];
-                console.log("id: " + id);
-                console.log("content: " + content);
-                console.log("tags: " + tags);
-                console.log("title: " + title);
                 Parse.Cloud.run('tempstory_create', {
                     userid: id,
                     content: content,
@@ -209,8 +286,4 @@ module.exports = [
         }
 
     }
-    // todo STORY EKLEME HANDLER/SAYFA
-    // todo STORY GOSTERME HANDLER/SAYFA
-    // todo TAGE GORE ARAMA HANDLER/SAYFA
-    // TODO
 ];

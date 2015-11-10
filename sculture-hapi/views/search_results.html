@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="public/css/sweetalert.css">
     <link rel="stylesheet" href="public/css/style.css">
     <link rel="stylesheet" href="public/css/homepage_style.css">
+    <link rel="stylesheet" href="public/css/searchstyle.css">
     <script>
         window.onload = function() {
             {{#if error}}
@@ -78,39 +79,61 @@
     {{#if credentials.username}}
     <h3a>Looking good, {{credentials.username}}!</h3a>
     {{/if}}
-    <form class="form-inline" action="/search" method="post">
+    <form class="form-inline">
         <br> <br>
-        <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
+        <input type="text" class="form-control" size="50" placeholder="Search stories" required>
     </form>
-    <br>
-    <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
-    <br>
+    <br> <br>
+</div>
+
+<h1>We found {{outputLength stories}} results for your search</h1>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <!--/stories-->
+                    {{#each stories}}
+                    <div class="row">
+                        <br>
+                        <div class="col-md-2 col-sm-3 text-center">
+                            <a class="story-title" href="#"><img alt="" src="http://api.randomuser.me/portraits/thumb/men/58.jpg" style="width:100px;height:100px" class="img-circle"></a>
+                        </div>
+                        <div class="col-md-10 col-sm-9">
+                            <h3 align="left"><a href="/story/{{this.id}}">{{this.title}}</a></h3>
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <p> {{shortenedContent this.content}}</p>
+                                    <small style="font-family:courier,'new courier';" class="text-muted">{{prettyDateFormat this.createdAt}} • <a href="/story/{{this.id}}" class="text-muted">Read More</a></small>
+                                    </h4></div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                    <hr>
+                    {{/each}}
+                    <!--/stories-->
+                    {{#if stories}}
+                    <a href="/" class="btn btn-primary pull-right btnNext">More <i class="glyphicon glyphicon-chevron-right"></i></a>
+                    {{/if}}
+                </div>
+            </div>
+        </div><!--/col-12-->
+    </div>
 </div>
 
 
-<div class="row">
-    <div class="col-lg-4">
-        <img class="img-circle" src="http://i.telegraph.co.uk/multimedia/archive/02397/girl-light_2397286k.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>A Horseman in the Sky</h2>
-        <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-        <p><a href="#">#diwali</a> <a href="#">#india</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-        <img class="img-circle" src="http://blog.hostelbookers.com/wp-content/uploads/2011/01/New-York-Chinese-on-float-e1296050297471.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>Springtime a la Carte</h2>
-        <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-        <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-        <img class="img-circle" src="http://www.venice-carnival-italy.com/multimedia/foto/large/5.jpg" alt="Generic placeholder image" width="200" height="200">
-        <h2>The Green Door</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-</div>
+
+
+
+
+
+
+
+
 
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
@@ -214,7 +237,7 @@
         $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
             // Prevent default anchor click behavior
-         //   event.preventDefault();
+            //   event.preventDefault();
 
             // Store hash
             var hash = this.hash;

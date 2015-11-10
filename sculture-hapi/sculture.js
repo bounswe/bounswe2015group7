@@ -8,10 +8,10 @@ var server = new hapi.Server();
 
 // add connection parameters
 server.connection({
-    host: 'localhost',
-    port: 3000
+    port: 8080
 });
-server.register(Inert, function () {});
+server.register(Inert, function () {
+});
 
 server.register(require('vision'), function (err) {
     if (err) {
@@ -27,7 +27,6 @@ server.register(require('vision'), function (err) {
     });
 });
 
-
 // create your routes, currently it's just one
 var routes = require("./backend/backend_routes.js");
 
@@ -36,19 +35,16 @@ server.register(require('hapi-auth-cookie'), function (err) {
     server.auth.strategy('session', 'cookie', {
         password: 'secret',
         cookie: 'sid-example',
-        redirectTo: '/login',
         isSecure: false,
-        validateFunc: function (request, username, password, callback) {
-            var user = request.auth.credentials;
-            if (!user) {
-                return callback(null, false);
+        clearInvalid: true,
+        ttl: 60 * 1000 * 60, // 1 hour session time
+        validateFunc: function (request, session, callback) {
+
+            if (!session) {
+                request.auth.session.clear();
+                return callback("Session not found", false);
             }
-            var currentUser = Parse.User.current();
-            if (currentUser) {
-                callback(null, true, { id: user.id, name: user.name });
-            } else {
-                callback(null, false, { id: user.id, name: user.name });
-            }
+            return callback(null, true, session);
         }
     });
 });

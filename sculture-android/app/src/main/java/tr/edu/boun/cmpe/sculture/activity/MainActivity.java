@@ -1,7 +1,6 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,14 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.parse.LogOutCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-
-import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.R;
+
+import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -101,17 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_setting) {
         } else if (id == R.id.nav_logout) {
-            ParseUser.logOutInBackground(new LogOutCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.loggedout), Toast.LENGTH_SHORT).show();
-                    SharedPreferences settings = getSharedPreferences(BaseApplication.PREFS_NAME, 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(BaseApplication.PREF_USERNAME, "");
-                    editor.putString(BaseApplication.PREF_PASSWORD, "");
-                    editor.apply();
-                }
-            });
+            baseApplication.logOut();
         } else if (id == R.id.nav_search) {
             intent = new Intent(this, SearchActivity.class);
             startActivity(intent);

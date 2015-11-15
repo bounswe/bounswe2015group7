@@ -1,10 +1,8 @@
-package tr.edu.boun.cmpe.sculture.activity;
+package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.view.View;
 
-/**
- * Created by MrPaksoy on 10/11/15.
- */
 public interface ItemClickListener {
+    //TODO delete this
     void onClick(View view, int position);
 }

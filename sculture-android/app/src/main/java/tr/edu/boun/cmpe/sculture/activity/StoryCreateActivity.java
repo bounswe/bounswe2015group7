@@ -5,14 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import tr.edu.boun.cmpe.sculture.R;
 
@@ -55,35 +47,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         String tag2 = tag2Text.getText().toString();
         String emptyTag = "NoTag";
 
-        HashMap<String, Object> param = new HashMap<>();
-        param.put("title", title);
-        param.put("content", content);
-        ArrayList<String> tags = new ArrayList<>();
+        //TODO Create story request
 
-        // if there is no tag, add "NoTag" value to tags
-        if(tag1.isEmpty() && tag2.isEmpty()) {
-            tags.add(emptyTag);
-        } else {
-            tags.add(tag1);
-            tags.add(tag2);
-        }
-
-        param.put("tags", tags);
-
-        ParseCloud.callFunctionInBackground("story_create", param, new FunctionCallback<HashMap>() {
-                    @Override
-                    public void done(HashMap response, ParseException e) {
-                        if (e == null) {
-                            Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
-                            titleText.setText("");
-                            contentText.setText("");
-                            tag1Text.setText("");
-                            tag2Text.setText("");
-
-                        } else
-                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
     }
 }

@@ -1,10 +1,4 @@
-package tr.edu.boun.cmpe.sculture.activity;
-
-
-/**
- * Created by MrPaksoy on 09/11/15.
- */
-
+package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -20,12 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.activity.SearchActivity;
 
-//      import com.android.volley.toolbox.ImageLoader;
-//    import com.volley.osisExamples.app.AppController;
-//  import com.volley.osisExamples.volley.utils.Const;
-
-public class RecyclerViewAdaptor extends RecyclerView.Adapter<RecyclerViewAdaptor.ViewHolder>
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
 {
     private Activity mActivity;
     private ArrayList<ArrayList<String>> mDataset;
@@ -81,14 +72,14 @@ public class RecyclerViewAdaptor extends RecyclerView.Adapter<RecyclerViewAdapto
     }*/
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerViewAdaptor(ArrayList<ArrayList<String>> myDataset, Activity activity) {
+    public RecyclerViewAdapter(ArrayList<ArrayList<String>> myDataset, Activity activity) {
         mDataset = myDataset;
         mActivity = activity;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public RecyclerViewAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.searched_story, parent, false);
@@ -104,7 +95,6 @@ public class RecyclerViewAdaptor extends RecyclerView.Adapter<RecyclerViewAdapto
            Date date = format.parse(ISODate);
             return date.toString();
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return "null";

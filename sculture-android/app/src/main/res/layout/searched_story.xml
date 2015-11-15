@@ -9,10 +9,10 @@
         android:id="@+id/storyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="111"/>
+        android:text="PLACE HOLDER TITLE"/>
     <TextView
         android:id="@+id/storyLastUpdatedAt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="444"/>
+        android:text="PLACE HOLDER DATE"/>
 </LinearLayout>

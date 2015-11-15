@@ -1,7 +1,6 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,14 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
-
-import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.R;
 
+import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 
 public class LoginRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,13 +37,12 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_registration);
 
-        if (ParseUser.getCurrentUser() != null) {
+        if (!baseApplication.checkLogin()) {
             Toast.makeText(this, "All ready logged in", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             return;
         }
-
 
         passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordInputLayout);
         passwordConfirmationInputLayout = (TextInputLayout) findViewById(R.id.passwordConfirmInputLayout);
@@ -152,26 +145,10 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         }
 
         if (!isError) {
-            final ParseUser user = new ParseUser();
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.signUpInBackground(new SignUpCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        SharedPreferences settings = getSharedPreferences(BaseApplication.PREFS_NAME, 0);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(BaseApplication.PREF_USERNAME, username);
-                        editor.putString(BaseApplication.PREF_PASSWORD, password);
-                        editor.apply();
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            /**
+             * TODO Signup request
+             * Update setUserInfo
+             */
         }
     }
 
@@ -191,23 +168,11 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
             isError = true;
         }
         if (!isError) {
-            ParseUser.logInInBackground(username, password, new LogInCallback() {
-                @Override
-                public void done(ParseUser user, ParseException e) {
-                    if (user != null) {
-                        SharedPreferences settings = getSharedPreferences(BaseApplication.PREFS_NAME, 0);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(BaseApplication.PREF_USERNAME, username);
-                        editor.putString(BaseApplication.PREF_PASSWORD, password);
-                        editor.apply();
+            /**
+             * TODO Signup request
+             * Update setUserInfo
+             */
 
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         }
     }
 }

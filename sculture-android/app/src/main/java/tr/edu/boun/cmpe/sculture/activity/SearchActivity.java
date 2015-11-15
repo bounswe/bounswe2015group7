@@ -9,16 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.adapter.RecyclerViewAdapter;
 
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,7 +24,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayoutManager mLayoutManager;
     ArrayList<ArrayList<String>> myDataset = new ArrayList<ArrayList<String>>();
     ArrayList<String> story = new ArrayList<String>();
-    private RecyclerViewAdaptor mRecyclerViewAdaptor;
+    private RecyclerViewAdapter mRecyclerViewAdapter;
 
 
     @Override
@@ -59,42 +54,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private void clickSearchButton() {
         String query = searchText.getText().toString();
+        //TODO Search request
 
-        HashMap<String, Object> param = new HashMap<>();
-        param.put("query", query);
-        param.put("size", 10);
-        param.put("page", 0);
-
-        ParseCloud.callFunctionInBackground("search", param, new FunctionCallback<ArrayList<HashMap>>() {
-                    @Override
-                    public void done(ArrayList<HashMap> list, ParseException e) {
-                        if (e == null) {
-                            String s = "";
-                            myDataset.clear();
-                            for (HashMap item : list) {
-
-                                //s += item.get("title") + "\n";
-                                ArrayList <String> story = new ArrayList<String>();
-                                story.add((String) item.get("title"));
-                                //story.add("Tags: "/*(String) item.get("tags")*/);
-                                //story.add("Content: "+(String) item.get("content"));
-                                //ParseUser usr = (ParseUser)item.get("ownerId");
-                                //story.add("ownerId: "+(String)item.get("ownerId").toString());
-                                //story.add("created at: "+(String) item.get("createdAt"));
-                                //story.add("LastEditor ID: "+(String) item.get("lastEditorId").toString());
-                                story.add((String) item.get("updatedAt"));
-                                story.add((String) item.get("id"));
-                                myDataset.add(story);
-                            }
-                            mRecyclerViewAdaptor = new RecyclerViewAdaptor(myDataset , SearchActivity.this);
-
-                            mRecyclerView.setAdapter(mRecyclerViewAdaptor);
-                            resultText.setText(s);
-                        } else
-                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
     }
 
     public void sendToNextActivity(String id) {

@@ -12,11 +12,9 @@ import java.util.List;
 @Repository
 @Transactional
 public class UserDao {
-
-    // ------------------------
-    // PUBLIC METHODS
-    // ------------------------
-
+    
+    
+    
     /**
      * Save the user in the database.
      */

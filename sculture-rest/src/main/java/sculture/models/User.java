@@ -23,12 +23,12 @@ public class User {
     @NotNull
     private String username;
 
+    @NotNull
     private String email;
 
     private String password_hash;
 
     private String facebook_id;
-
 
     private String facebook_token;
 
@@ -40,6 +40,7 @@ public class User {
     private long id;
     private String name;
 
+    private String bb;
 
     // ------------------------
     // PUBLIC METHODS

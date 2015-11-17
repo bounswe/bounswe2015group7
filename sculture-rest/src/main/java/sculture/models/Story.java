@@ -5,6 +5,10 @@ package sculture.models;
  */
 public class Story {
 
+    
+    
+    
+    
     public String getId() {
         return id;
     }

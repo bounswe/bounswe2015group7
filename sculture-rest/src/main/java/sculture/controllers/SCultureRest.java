@@ -32,7 +32,8 @@ public class SCultureRest {
 
     // TODO
     @RequestMapping("/story/get")
-    public Story storyGet(@RequestParam("id") String id) {
+    public Story storyGet(@RequestParam("id") long id) {
+
         return new Story(id);
     }
 

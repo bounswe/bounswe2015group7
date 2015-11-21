@@ -45,6 +45,9 @@ public class Story {
     @NotNull
     private long report_count;
 
+    @NotNull
+    private String title;
+
     public Story() {
     }
 
@@ -112,4 +115,9 @@ public class Story {
     public long getReport_count(){return report_count; }
 
     public void setReport_count(long report_count){this.report_count=report_count; }
+
+    public String getTitle(){return title; }
+
+    public void setTitle(String title){this.title=title; }
+
 }

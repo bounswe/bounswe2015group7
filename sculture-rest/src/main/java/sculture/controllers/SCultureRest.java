@@ -58,11 +58,28 @@ public class SCultureRest {
             throw new WrongPasswordException();
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/story/create")
+    public Story story_create(@RequestParam("owner_id") long owner,
+                              @RequestParam("title") String title,
+                              @RequestParam("content") Clob content) {
+        Story s = new Story();
+        s.setContent(content);
+        s.setOwner_id(owner);
+        s.setTitle(title);
+        s.setLast_editor_id(owner);
+        s.setCreate_date(new Date());
+        s.setLast_edit_date(new Date());
+        s.setNegative_vote(0);
+        s.setPositive_vote(0);
+        s.setReport_count(0);
+        storyDao.create(s);
+        return s;
+    }
+
     // TODO
     @RequestMapping("/story/get")
     public Story storyGet(@RequestParam("id") long id) {
-
-        return new Story(id);
+        return storyDao.getById(id);
     }
 
 

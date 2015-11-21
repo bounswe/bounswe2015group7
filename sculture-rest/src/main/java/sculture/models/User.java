@@ -1,10 +1,6 @@
 package sculture.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
@@ -23,7 +19,7 @@ public class User {
     @NotNull
     private String username;
 
-    @NotNull
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     private String password_hash;
@@ -32,38 +28,22 @@ public class User {
 
     private String facebook_token;
 
+    private String fullname;
+
+    @Column(name = "is_promoted", nullable = false, columnDefinition = "boolean default false")
     private boolean is_promoted;
 
+    @Column(name = "notification_rate", nullable = false, columnDefinition = "int default 0")
     private int notification_rate;
 
+    @Column(name = "access_token", unique = true)
     private String access_token;
-    private long id;
-    private String name;
-
-    private String bb;
 
     // ------------------------
     // PUBLIC METHODS
     // ------------------------
 
     public User() {
-    }
-
-    public User(long id) {
-        this.id = id;
-    }
-
-    public User(String email, String name) {
-        this.email = email;
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long value) {
-        this.id = value;
     }
 
     public String getEmail() {
@@ -74,13 +54,6 @@ public class User {
         this.email = value;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
 
     public long getUser_id() {
         return user_id;
@@ -146,5 +119,11 @@ public class User {
         this.access_token = access_token;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
 
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
 } // class User

@@ -38,4 +38,10 @@
     <string name="logout">Log out</string>
     <string name="loggedout">Logged out</string>
     <string name="search">Search</string>
+    <string name="story_written_by">by</string>
+    <string name="story_last_edit_date">Last edited on</string>
+    <string name="placeholder_title">TITLE</string>
+
+    <string name="updated_time">Updated %1$s by %2$s</string>
+    <string name="written_by_username">Written by %s</string>
 </resources>

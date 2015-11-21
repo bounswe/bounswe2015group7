@@ -11,9 +11,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.requests.JsonObjectWithParamsRequest;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_LOGIN;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_REGISTER;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ACCESS_TOKEN;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_EMAIL;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PASSWORD;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
+import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_LOGIN;
+import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_REGISTER;
+import static tr.edu.boun.cmpe.sculture.Utils.*;
 
 public class LoginRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,30 +41,32 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
     private static final int STATUS_REGISTRATION = 2;
     private static int STATUS = STATUS_LOGIN;
 
-    TextInputLayout passwordTextInputLayout;
-    TextInputLayout passwordConfirmationInputLayout;
-    TextInputLayout emailInputLayout;
-    TextInputLayout usernameInputLayout;
-    Button loginRegistrationButton;
-    Button loginRegistrationSwitchButton;
+    private TextInputLayout passwordConfirmationInputLayout;
+    private TextInputLayout emailInputLayout;
+    private TextInputLayout usernameInputLayout;
+    private Button loginRegistrationButton;
+    private Button loginRegistrationSwitchButton;
     private AutoCompleteTextView mEmailView;
     private EditText mNameView;
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
 
+    private RequestQueue requestQueue = baseApplication.mRequestQueue;
+
+    LoginRegistrationActivity mActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_registration);
-
-        if (!baseApplication.checkLogin()) {
+        mActivity = this;
+        if (baseApplication.checkLogin()) {
             Toast.makeText(this, "All ready logged in", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             return;
         }
 
-        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordInputLayout);
         passwordConfirmationInputLayout = (TextInputLayout) findViewById(R.id.passwordConfirmInputLayout);
         emailInputLayout = (TextInputLayout) findViewById(R.id.emailInputLayout);
         usernameInputLayout = (TextInputLayout) findViewById(R.id.usernameInoutLayout);
@@ -62,13 +84,21 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         setVisibilities();
     }
 
+    protected void onDestroy() {
+        super.onDestroy();
+        requestQueue.cancelAll(REQUEST_TAG_REGISTER);
+        requestQueue.cancelAll(REQUEST_TAG_LOGIN);
+    }
+
     private void setVisibilities() {
         if (STATUS == STATUS_LOGIN) {
+            usernameInputLayout.setVisibility(View.GONE);
             passwordConfirmationInputLayout.setVisibility(View.GONE);
-            emailInputLayout.setVisibility(View.GONE);
+            emailInputLayout.setVisibility(View.VISIBLE);
             loginRegistrationButton.setText(R.string.login);
             loginRegistrationSwitchButton.setText(R.string.wantRegister);
         } else if (STATUS == STATUS_REGISTRATION) {
+            usernameInputLayout.setVisibility(View.VISIBLE);
             passwordConfirmationInputLayout.setVisibility(View.VISIBLE);
             emailInputLayout.setVisibility(View.VISIBLE);
             loginRegistrationButton.setText(R.string.action_register);
@@ -76,21 +106,6 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         }
     }
 
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
-
-    private boolean isUserNameValid(String username) {
-        //TODO Replace
-        return username.length() < 3;
-    }
 
     //region Clicks
     @Override
@@ -126,34 +141,67 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
 
         boolean isError = false;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        //PASSWORD
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             isError = true;
         } else if (!password.equals(password_confirmation)) {
             mPasswordView.setError(getString(R.string.error_unmatched_password));
             isError = true;
         }
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            isError = true;
-        } else if (!isEmailValid(email)) {
+        //EMAIL
+        if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             isError = true;
-        } else if (isUserNameValid(username)) {
+        }
+        // USERNAME
+        if (!isUserNameValid(username)) {
             mNameView.setError(getString(R.string.error_invalid_username));
             isError = true;
         }
 
         if (!isError) {
-            /**
-             * TODO Signup request
-             * Update setUserInfo
-             */
+            HashMap<String, String> params = new HashMap<>();
+            params.put(FIELD_EMAIL, email);
+            params.put(FIELD_PASSWORD, password);
+            params.put(FIELD_USERNAME, username);
+
+
+            requestQueue.cancelAll(REQUEST_TAG_REGISTER);
+            requestQueue.cancelAll(REQUEST_TAG_LOGIN);
+
+            JsonObjectWithParamsRequest registerRequest = new JsonObjectWithParamsRequest(Request.Method.POST, API_USER_REGISTER, params,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                String email = response.getString(FIELD_EMAIL);
+                                String username = response.getString(FIELD_USERNAME);
+                                String access_token = response.getString(FIELD_ACCESS_TOKEN);
+                                baseApplication.setUserInfo(access_token, username, email);
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                //TODO Error handling
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //TODO Error handling
+                            Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+            registerRequest.setTag(REQUEST_TAG_REGISTER);
+
+
+            requestQueue.add(registerRequest);
         }
     }
 
     private void clickLogin() {
-        final String username = mNameView.getText().toString();
+        final String email = mEmailView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
         boolean isError = false;
@@ -163,16 +211,41 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
             isError = true;
         }
 
-        if (!isUserNameValid(username)) {
+        if (!isEmailValid(email)) {
             mNameView.setError(getString(R.string.error_field_required));
             isError = true;
         }
         if (!isError) {
-            /**
-             * TODO Signup request
-             * Update setUserInfo
-             */
-
+            requestQueue.cancelAll(REQUEST_TAG_REGISTER);
+            requestQueue.cancelAll(REQUEST_TAG_LOGIN);
+            HashMap<String, String> params = new HashMap<>();
+            params.put(FIELD_EMAIL, email);
+            params.put(FIELD_PASSWORD, password);
+            JsonObjectWithParamsRequest loginRequest = new JsonObjectWithParamsRequest(Request.Method.POST, API_USER_LOGIN, params,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                String email = response.getString(FIELD_EMAIL);
+                                String username = response.getString(FIELD_USERNAME);
+                                String access_token = response.getString(FIELD_ACCESS_TOKEN);
+                                baseApplication.setUserInfo(access_token, username, email);
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            } catch (JSONException e) {
+                                //TODO Error handling
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //TODO Error handling
+                            Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+            loginRequest.setTag(REQUEST_TAG_LOGIN);
+            requestQueue.add(loginRequest);
         }
     }
 }

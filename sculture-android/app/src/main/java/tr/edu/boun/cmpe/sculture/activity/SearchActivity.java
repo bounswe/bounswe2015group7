@@ -5,12 +5,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.RecyclerViewAdapter;
@@ -26,10 +33,44 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     ArrayList<String> story = new ArrayList<String>();
     private RecyclerViewAdapter mRecyclerViewAdapter;
 
+    int co = 0;
+    JSONArray dataset = new JSONArray();
+
+    //TODO DELETE THIS TESTING
+    JSONArray jsonArray = new JSONArray();
+    HashMap<Integer, JSONObject> stroies = new HashMap<>();
+
+    //TODO DELETE THIS TESTING
+    public void create_data() throws JSONException {
+        for (int i = 0; i < 10; i++) {
+            JSONObject object = new JSONObject();
+            object.put("story_id", i);
+            object.put("title", "my title " + i );
+            object.put("owner_id", i + 1000);
+            object.put("create_date", new Date().getTime() - i * 1000000);
+            object.put("last_editor_id", i + 1000);
+            object.put("last_edit_date", new Date().getTime()  - i * 1000000);
+            object.put("content", "My content is this bla bla bla " + i);
+            JSONArray tags = new JSONArray();
+            tags.put("tag1");
+            tags.put("tag2");
+            object.put("tags", tags);
+            object.put("positive_vote", 10 + i);
+            object.put("negative_vote", 1 + i);
+            jsonArray.put(object);
+            stroies.put(i, object);
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            create_data();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_search);
         searchButton = (Button) findViewById(R.id.searchButton);
         searchText = (EditText) findViewById(R.id.searchEditText);
@@ -39,7 +80,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
 
+        mRecyclerViewAdapter = new RecyclerViewAdapter(dataset, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -54,7 +97,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private void clickSearchButton() {
         String query = searchText.getText().toString();
-        //TODO Search request
+        try {
+            Log.i("HERE", jsonArray.length() + "");
+            dataset.put(jsonArray.getJSONObject(co++));
+            mRecyclerViewAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

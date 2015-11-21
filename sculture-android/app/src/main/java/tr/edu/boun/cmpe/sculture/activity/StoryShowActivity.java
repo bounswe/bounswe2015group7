@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import tr.edu.boun.cmpe.sculture.R;
 
 public class StoryShowActivity extends AppCompatActivity {
@@ -24,13 +21,13 @@ public class StoryShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_show);
         Bundle bundle = getIntent().getExtras();
-        title = (TextView) findViewById(R.id.storyTitle);
+        title = (TextView) findViewById(R.id.story_title);
         content = (TextView) findViewById(R.id.storyContent);
         tags = (TextView) findViewById(R.id.storyTags);
         storyOwner = (TextView) findViewById(R.id.storyOwner);
         createdAt = (TextView) findViewById(R.id.storyCreatedAt);
         lastEditor = (TextView) findViewById(R.id.storyLastEditor);
-        lastUpdatedAt = (TextView) findViewById(R.id.storyLastUpdatedAt);
+        lastUpdatedAt = (TextView) findViewById(R.id.story_update_date);
         if (bundle.getString("id") != null) {
             getStory(bundle.getString("id"));
         }
@@ -78,17 +75,6 @@ public class StoryShowActivity extends AppCompatActivity {
 //        );
     }
 
-    public String StringToDate(String ISODate) {
-        String dtStart = "ISODate";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date date = new Date();
-        try {
-            date = format.parse(dtStart);
-            System.out.println(date);
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-        return date.toString();
-    }
+
 
 }

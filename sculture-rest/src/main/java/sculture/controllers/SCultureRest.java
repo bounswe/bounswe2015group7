@@ -60,10 +60,12 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
     public Story story_create(@RequestParam("owner_id") long owner,
+                              @RequestParam("title") String title,
                               @RequestParam("content") Clob content) {
         Story s = new Story();
         s.setContent(content);
         s.setOwner_id(owner);
+        s.setTitle(title);
         s.setLast_editor_id(owner);
         s.setCreate_date(new Date());
         s.setLast_edit_date(new Date());

@@ -2,10 +2,7 @@ package sculture.controllers;
 
 import com.mysql.jdbc.Clob;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
 import sculture.dao.CommentDao;
 import sculture.dao.StoryDao;
@@ -59,21 +56,18 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
-    public Story story_create(@RequestParam("owner_id") long owner,
-                              @RequestParam("title") String title,
-                              @RequestParam("content") Clob content) {
-        Story s = new Story();
-        s.setContent(content);
-        s.setOwner_id(owner);
-        s.setTitle(title);
-        s.setLast_editor_id(owner);
+    public Story story_create(@RequestBody Story s) {
+        Story story = new Story();
+        story.setTitle(s.getTitle());
+        story.setContent(s.getContent());
+        story.setOwner_id(s.getOwner_id());
         s.setCreate_date(new Date());
         s.setLast_edit_date(new Date());
         s.setNegative_vote(0);
         s.setPositive_vote(0);
         s.setReport_count(0);
-        storyDao.create(s);
-        return s;
+        storyDao.create(story);
+        return story;
     }
 
     // TODO

@@ -19,6 +19,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static sculture.Utils.checkEmailSyntax;
+import static sculture.Utils.checkPasswordSyntax;
+import static sculture.Utils.checkUsernameSyntax;
+
 @RestController
 public class SCultureRest {
 
@@ -46,13 +50,13 @@ public class SCultureRest {
         long facebook_id = requestBody.getFacebook_id();
         String facebook_token = requestBody.getFacebook_token();
 
-        if (email == null || email.isEmpty()) //TODO more email syntax checking
+        if (!checkEmailSyntax(email))
             throw new InvalidEmailException();
 
-        if (username == null || username.isEmpty()) //TODO more username syntax checking
+        if (!checkUsernameSyntax(username))
             throw new InvalidUsernameException();
 
-        if (password == null || password.isEmpty()) //TODO more password syntax checking
+        if (!checkPasswordSyntax(password))
             throw new InvalidPasswordException();
 
 
@@ -79,10 +83,11 @@ public class SCultureRest {
         String email = requestBody.getEmail();
         String password = requestBody.getPassword();
 
-        if (email == null || email.isEmpty()) //TODO more email syntax checking
+        if (!checkEmailSyntax(email))
             throw new InvalidEmailException();
 
-        if (password == null || password.isEmpty()) //TODO more password syntax checking
+
+        if (!checkPasswordSyntax(password))
             throw new InvalidPasswordException();
 
 

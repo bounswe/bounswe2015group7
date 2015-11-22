@@ -67,7 +67,7 @@ public class SCultureRest {
         s.setPositive_vote(0);
         s.setReport_count(0);
         storyDao.create(story);
-        return s;
+        return story;
     }
 
     // TODO

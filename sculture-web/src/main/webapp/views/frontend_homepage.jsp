@@ -69,8 +69,9 @@
 </nav>
 <div class="jumbotron text-center">
     <br>
+    <% String username = request.getAttribute("username"); %>
     <h1>Sculture!</h1>
-    <h3a>Looking good!</h3a>
+    <h3a>Looking good, <%out.print(username);%>!</h3a>
     <form class="form-inline" action="/search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>

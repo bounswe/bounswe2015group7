@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="public/css/sweetalert.css">
     <link rel="stylesheet" href="public/css/style.css">
     <link rel="stylesheet" href="public/css/homepage_style.css">
-    <link rel="stylesheet" href="public/css/storystyle.css">
+    <link rel="stylesheet" href="public/css/searchstyle.css">
 
 
 </head>
@@ -40,13 +40,13 @@
             <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right">
+           <ul class="nav navbar-nav navbar-right">
                <li>
                    <div class="top-big-link">
                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
                    </div>
                </li>
-               <% boolean isLoggedIn = request.getAttribute(isLoggedIn); %>
+               <% boolean isLoggedIn = request.getAttribute("isLoggedIn"); %>
                   <% if (isLoggedIn) { %>
                <li>
                    <div class="top-big-link">
@@ -65,7 +65,8 @@
                    </div>
                </li>
                <% } %>
-            </ul>
+           </ul>
+
         </div>
     </div>
 </nav>
@@ -81,154 +82,65 @@
     <br>
     <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
     <br>
+    <br> <br>
 </div>
 
+<%-- here we assumed that there is a Story class with attributes title, content, tags and date created  --%>
+<%
+Story[] results = request.getAttribute("results");
+
+%>
+<h1>We found <%results.length%>results for your search</h1>
+<br>
 
 <div class="container">
-
     <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <!--/stories-->
+                    <% for (int i = 0; i < username.size(); i++) { %>
 
-        <!-- Blog Post Content Column -->
-        <div class="col-lg-8">
+                      <div class="row">
+                        <br>
+                        <div class="col-md-2 col-sm-3 text-center">
+                            <a class="story-title" href="#"><img alt="" src="http://api.randomuser.me/portraits/thumb/men/58.jpg" style="width:100px;height:100px" class="img-circle"></a>
+                        </div>
+                        <div class="col-md-10 col-sm-9">
+                            <h3 align="left"><a href="#"></a> <% out.print(results[i].getTitle());%> </h3>
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <p> <%
 
-            <!-- Blog Post -->
-
-            <!-- Title -->
-            <%
-            String title = request.getAttribute("storyTitle");
-            String date = request.getAttribute("storyCreationDate");
-            String content = request.getAttribute("storyContent");
-            String[] tags = request.getAttribute("storyTags");
-
-            %>
-
-            <h1><% out.print(title); %></h1>
-
-            <hr>
-
-            <!-- Date/Time -->
-            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(date); %></p>
-
-            <hr>
-
-            <!-- Preview Image -->
-            <!--      <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
-
-                  <hr>
-
-                  <!-- Post Content -->
-            <p><% out.print(content); %>
-            <hr>
-
-            <!-- Blog Comments -->
-
-            <!-- Comments Form -->
-            <div class="well">
-                <h4>Leave a Comment:</h4>
-                <form role="form">
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-
-            <hr>
-
-            <!-- Posted Comments -->
-
-            <!-- Comment -->
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="http://placehold.it/64x64" alt="">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading" align="left">   Josh Adams
-                        <small>November 9, 2015 at 9:30 PM</small>
-                    </h4>
-                    Amazing pictures! I was also at the Selcuk Efes Camel Wrestling Festival last year, it was such a fascinating experience. I heard that this tradition was popular in my hometown in Texas during the 1850s! How crazy is that?
-                </div>
-            </div>
-
-            <!-- Comment -->
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="http://placehold.it/64x64" alt="">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading" align="left"> Justin Graham
-                        <small>August 25, 2014 at 9:30 PM</small>
-                    </h4>
-                    I’ve been to a camel market in Egypt, but I didn't know they also had camel wrestling! Does the festival go on throughout the year? I would love to see it!
-                    <!-- Nested Comment -->
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" src="http://placehold.it/64x64" alt="">
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading" align="left"> Narin Mahmuti
-                                <small>August 25, 2014 at 9:30 PM</small>
-                            </h4>
-                            From what I have heard they have camel wrestling in other countries so maybe in Egypt as well. Sadly, the festival goes on only for three months of the year, while they are on heat.
+                                    String content = results[i].getContent();
+                                    if(content.length<500){
+                                        out.print(content);
+                                    }else{
+                                        out.print(content.substring(0,500) + "...";
+                                    }
+                                    %></p>
+                                    <small style="font-family:courier,'new courier';" class="text-muted"> <% out.print(results[i].getDate());%> • <a href="#" class="text-muted">Read More</a></small>
+                                    </h4></div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                            <br><br>
                         </div>
                     </div>
-                    <!-- End Nested Comment -->
+                    <hr>
+
+
+                    <% } %>
+
+
+
+
+                    <!--/stories-->
+                    <a href="/" class="btn btn-primary pull-right btnNext">More <i class="glyphicon glyphicon-chevron-right"></i></a>
                 </div>
             </div>
-
-        </div>
-
-        <!-- Blog Sidebar Widgets Column -->
-        <div class="col-md-4">
-
-            <!-- Blog Search Well -->
-            <div class="well">
-                <h4>Search for a story:</h4>
-                    <form role="form" action="/search" method="post">
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="main-search">
-                            </label>
-                            <input type="text" class="form-control" name="main-search" id="main-search"
-                                   placeholder="Tag name" /> <span
-                                class="glyphicon glyphicon-search form-control-feedback"></span>
-                        </div>
-                    </form>
-
-                <!-- /.input-group -->
-            </div>
-
-            <!-- Tags -->
-            <div class="well">
-                <h4>Story Tags</h4>
-                <div class="row">
-                    <div class="col-lg">
-                        <ul class="list-unstyled">
-                            <% for (int i = 0; i < tags.length; i++) { %>
-                            <li><a href=""><% out.print(tags[i])%></a>
-                            </li>
-                            <% } %>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /.row -->
-            </div>
-
-
-        </div>
-
+        </div><!--/col-12-->
     </div>
-    <!-- /.row -->
-
-    <hr>
-
 </div>
-
-
-
-
-
-
-
 
 
 
@@ -255,7 +167,7 @@
 
                 <form role="form" action="/login" method="post" class="login-form">
                     <div class="form-group">
-                        <label class="sr-only" for="form-username">E-mail</label>
+                        <label class="sr-only" for="form-username">Username</label>
                         <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
                     </div>
                     <div class="form-group">

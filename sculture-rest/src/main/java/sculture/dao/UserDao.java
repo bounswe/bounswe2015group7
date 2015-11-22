@@ -1,7 +1,7 @@
 package sculture.dao;
 
 import org.springframework.stereotype.Repository;
-import sculture.models.User;
+import sculture.models.tables.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,6 +49,16 @@ public class UserDao {
         return (User) entityManager.createQuery(
                 "from User where email = :email ")
                 .setParameter("email", email)
+                .getSingleResult();
+    }
+
+    /**
+     * Return the user having the access_token email.
+     */
+    public User getByAccessToken(String access_token) {
+        return (User) entityManager.createQuery(
+                "from User where access_token = :access_token ")
+                .setParameter("access_token", access_token)
                 .getSingleResult();
     }
 

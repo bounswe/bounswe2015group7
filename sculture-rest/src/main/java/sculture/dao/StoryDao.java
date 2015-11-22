@@ -1,7 +1,7 @@
 package sculture.dao;
 
 import org.springframework.stereotype.Repository;
-import sculture.models.Story;
+import sculture.models.tables.Story;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;

@@ -1,17 +1,23 @@
 package sculture.controllers;
 
-import com.mysql.jdbc.Clob;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
-import sculture.dao.CommentDao;
-import sculture.dao.StoryDao;
-import sculture.dao.UserDao;
-import sculture.exceptions.WrongPasswordException;
-import sculture.models.Story;
-import sculture.models.User;
+import sculture.dao.*;
+import sculture.exceptions.*;
+import sculture.models.requests.*;
+import sculture.models.response.BaseStoryResponse;
+import sculture.models.response.FullStoryResponse;
+import sculture.models.response.LoginResponse;
+import sculture.models.response.SearchResponse;
+import sculture.models.tables.Story;
+import sculture.models.tables.User;
+import sculture.models.tables.relations.TagStory;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 public class SCultureRest {
@@ -25,55 +31,152 @@ public class SCultureRest {
     @Autowired
     private CommentDao commentDao;
 
+    @Autowired
+    private TagDao tagDao;
+
+    @Autowired
+    private TagStoryDao tagStoryDao;
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/register")
-    public User user_register(@RequestParam("email") String email,
-                              @RequestParam("username") String username,
-                              @RequestParam("password") String password,
-                              @RequestParam(value = "fullname", required = false) String fullname,
-                              @RequestParam(value = "facebook_id", required = false) String facebook_id,
-                              @RequestParam(value = "facebook_token", required = false) String facebook_token) {
+    public LoginResponse user_register(@RequestBody RegisterRequestBody requestBody) {
+        String email = requestBody.getEmail();
+        String username = requestBody.getUsername();
+        String password = requestBody.getPassword();
+        String fullname = requestBody.getFullname();
+        long facebook_id = requestBody.getFacebook_id();
+        String facebook_token = requestBody.getFacebook_token();
+
+        if (email == null || email.isEmpty()) //TODO more email syntax checking
+            throw new InvalidEmailException();
+
+        if (username == null || username.isEmpty()) //TODO more username syntax checking
+            throw new InvalidUsernameException();
+
+        if (password == null || password.isEmpty()) //TODO more password syntax checking
+            throw new InvalidPasswordException();
+
+
         User u = new User();
         u.setEmail(email);
         u.setUsername(username);
         u.setPassword_hash(Utils.password_hash(password));
-        if (fullname != null) u.setFullname(fullname);
-        if (facebook_id != null) u.setFacebook_id(facebook_id);
-        if (facebook_token != null) u.setFacebook_token(facebook_token);
+        if (requestBody.getFullname() != null) u.setFullname(fullname);
+        if (requestBody.getFacebook_id() != 0) u.setFacebook_id(facebook_id);
+        if (requestBody.getFacebook_token() != null) u.setFacebook_token(facebook_token);
         u.setAccess_token(Utils.access_token_generate());
 
-        userDao.create(u);
-        return u;
+        try {
+            userDao.create(u);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new UserAlreadyExistsException();
+        }
+        return new LoginResponse(u);
     }
 
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")
-    public User user_login(@RequestParam("email") String email,
-                           @RequestParam("password") String password) {
-        User u = userDao.getByEmail(email);
-        if (u.getPassword_hash().equals(Utils.password_hash(password)))
-            return u;
-        else
+    public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {
+        String email = requestBody.getEmail();
+        String password = requestBody.getPassword();
+
+        if (email == null || email.isEmpty()) //TODO more email syntax checking
+            throw new InvalidEmailException();
+
+        if (password == null || password.isEmpty()) //TODO more password syntax checking
+            throw new InvalidPasswordException();
+
+
+        User u;
+        try {
+            u = userDao.getByEmail(email);
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new UserNotExistException();
+        }
+
+
+        if (u.getPassword_hash().equals(Utils.password_hash(password))) {
+            return new LoginResponse(u);
+
+        } else
             throw new WrongPasswordException();
     }
 
+
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
-    public Story story_create(@RequestBody Story s) {
+    public BaseStoryResponse story_create(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            current_user = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new InvalidAccessTokenException();
+        }
+
+        //TODO Exception handling
+
+        Date date = new Date();
         Story story = new Story();
-        story.setTitle(s.getTitle());
-        story.setContent(s.getContent());
-        story.setOwner_id(s.getOwner_id());
-        s.setCreate_date(new Date());
-        s.setLast_edit_date(new Date());
-        s.setNegative_vote(0);
-        s.setPositive_vote(0);
-        s.setReport_count(0);
+
+        story.setTitle(requestBody.getTitle());
+        story.setContent(requestBody.getContent());
+        story.setOwner_id(current_user.getUser_id());
+        story.setCreate_date(date);
+        story.setLast_edit_date(date);
+        story.setLast_editor_id(current_user.getUser_id());
+
         storyDao.create(story);
-        return story;
+
+        List<String> tags = requestBody.getTags();
+
+        for (String tag : tags) {
+            TagStory tagStory = new TagStory();
+            tagStory.setTag_title(tag);
+            tagStory.setStory_id(story.getStory_id());
+            tagStoryDao.update(tagStory);
+        }
+
+        List<String> tag_titles = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
+        return new BaseStoryResponse(story, tag_titles, current_user.getUsername(), current_user.getUsername());
     }
 
     // TODO
     @RequestMapping("/story/get")
-    public Story storyGet(@RequestParam("id") long id) {
-        return storyDao.getById(id);
+    public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody) {
+        //TODO Exception handling
+        Story story = storyDao.getById(requestBody.getId());
+        List<String> tag_titles = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
+
+        User owner = userDao.getById(story.getOwner_id());
+        User editor = userDao.getById(story.getLast_editor_id());
+
+        return new FullStoryResponse(story, tag_titles, owner.getUsername(), editor.getUsername());
+    }
+
+    @RequestMapping("/search")
+    public SearchResponse search(@RequestBody SearchRequestBody requestBody) {
+        //TODO Exception handling
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+
+        List<Long> story_ids = tagStoryDao.getStoryIdsByTag(requestBody.getQuery(), page, size);
+
+        List<BaseStoryResponse> responses = new LinkedList<>();
+        for (long id : story_ids) {
+            List<String> tags = tagStoryDao.getTagTitlesByStoryId(id);
+            Story story = storyDao.getById(id);
+            User owner = userDao.getById(story.getOwner_id());
+            User editor = userDao.getById(story.getLast_editor_id());
+
+            responses.add(new BaseStoryResponse(story, tags, owner.getUsername(), editor.getUsername()));
+        }
+        SearchResponse searchResponse = new SearchResponse();
+        searchResponse.setResult(responses);
+        return searchResponse;
     }
 
 

@@ -1,17 +1,10 @@
-package sculture.models;
+package sculture.models.tables;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Clob;
 import java.util.Date;
 
-/**
- * Created by bilal on 15/11/15.
- */
+
 @Entity
 @Table(name = "STORY")
 public class Story {
@@ -33,16 +26,17 @@ public class Story {
     @NotNull
     private Date last_edit_date;
 
+    @Lob//Large object
     @NotNull
-    private Clob content;
+    private String content;
 
-    @NotNull
+    @Column(name = "positive_vote", nullable = false) //Default automatically 0
     private long positive_vote;
 
-    @NotNull
+    @Column(name = "negative_vote", nullable = false) //Default automatically 0
     private long negative_vote;
 
-    @NotNull
+    @Column(name = "report_count", nullable = false) //Default automatically 0
     private long report_count;
 
     @NotNull
@@ -88,11 +82,11 @@ public class Story {
         this.last_editor_id = last_editor_id;
     }
 
-    public Clob getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(Clob content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

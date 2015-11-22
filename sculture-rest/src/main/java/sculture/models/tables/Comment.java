@@ -1,16 +1,9 @@
-package sculture.models;
+package sculture.models.tables;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-/**
- * Created by bulent on 17.11.2015.
- */
 @Entity
 @Table(name = "COMMENT")
 public class Comment {
@@ -29,6 +22,7 @@ public class Comment {
     @NotNull
     private Date create_date;
 
+    @Lob //Large object
     @NotNull
     private String content;
 

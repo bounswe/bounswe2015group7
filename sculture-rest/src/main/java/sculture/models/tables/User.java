@@ -1,4 +1,4 @@
-package sculture.models;
+package sculture.models.tables;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public class User {
 
     private String password_hash;
 
-    private String facebook_id;
+    private long facebook_id;
 
     private String facebook_token;
 
@@ -79,11 +79,11 @@ public class User {
         this.password_hash = password_hash;
     }
 
-    public String getFacebook_id() {
+    public long getFacebook_id() {
         return facebook_id;
     }
 
-    public void setFacebook_id(String facebook_id) {
+    public void setFacebook_id(long facebook_id) {
         this.facebook_id = facebook_id;
     }
 

@@ -42,6 +42,7 @@ public class BaseStoryResponse {
 
     public BaseStoryResponse(Story story, List<String> tags, String owner_username, String editor_username) {
         this.id = story.getStory_id();
+        this.title = story.getTitle();
         this.creation_date = story.getCreate_date();
         this.update_date = story.getLast_edit_date();
         this.last_editor.id = story.getLast_editor_id();

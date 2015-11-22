@@ -10,15 +10,17 @@
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="public/js/sweetalert.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/font-awesome.css">
-    <link rel="stylesheet" href="../css/form-elements.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/homepage_style.css">
+    <link rel="stylesheet" href="public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/font-awesome.css">
+    <link rel="stylesheet" href="public/css/form-elements.css">
+    <link rel="stylesheet" href="public/css/sweetalert.css">
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/homepage_style.css">
 
 </head>
 
@@ -31,10 +33,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#"><img src="../images/logo.png" style="width:204px;height:58px";></a>
+            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                    </div>
+                </li>
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-login">Sign in</a>
@@ -52,42 +64,40 @@
 <div class="jumbotron text-center">
     <br>
     <h1>Sculture!</h1>
-    <form class="form-inline">
+    <h3a>Looking good!</h3a>
+    <form class="form-inline" action="/search" method="post">
         <br> <br>
-        <input type="text" class="form-control" size="50" placeholder="Search stories" required>
+        <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>
-    <br> <br>
+    <br>
+    <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
+    <br>
 </div>
 
-<div id="story1" class="container-fluid bg-grey">
-    <div class="row">
-        <div class="col-sm-8">
-            <h2><a href="#">STORY 1</a></h2><br>
-            <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h4><br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-            <br>
-        </div>
-        <div class="col-sm-4">
-            <img src="http://teamhoody.com/wp-content/uploads/2015/06/lorem-ipsum-logo.jpg">
-        </div>
-    </div>
-</div>
-<div id="story2" class="container-fluid">
-    <div class="row">
-        <div class="col-sm-4">
-            <img src="http://teamhoody.com/wp-content/uploads/2015/06/lorem-ipsum-logo.jpg">
-        </div>
-        <div class="col-sm-8">
-            <h2><a href="#">STORY 2</a></h2><br>
-            <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h4><br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...</p>
-            <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
-            <br>
-        </div>
-    </div>
-</div>
 
+<div class="row">
+    <div class="col-lg-4">
+        <img class="img-circle" src="http://i.telegraph.co.uk/multimedia/archive/02397/girl-light_2397286k.jpg" alt="Generic placeholder image" width="200" height="200">
+        <h2>A Horseman in the Sky</h2>
+        <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+        <p><a href="#">#diwali</a> <a href="#">#india</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
+        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
+    </div><!-- /.col-lg-4 -->
+    <div class="col-lg-4">
+        <img class="img-circle" src="http://blog.hostelbookers.com/wp-content/uploads/2011/01/New-York-Chinese-on-float-e1296050297471.jpg" alt="Generic placeholder image" width="200" height="200">
+        <h2>Springtime a la Carte</h2>
+        <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+        <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
+        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
+    </div><!-- /.col-lg-4 -->
+    <div class="col-lg-4">
+        <img class="img-circle" src="http://www.venice-carnival-italy.com/multimedia/foto/large/5.jpg" alt="Generic placeholder image" width="200" height="200">
+        <h2>The Green Door</h2>
+        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+        <p><a href="#">#tag1</a> <a href="#">#tag2</a> <a href="#">#tag3</a> <a href="#">#tag4</a></p>
+        <p><a class="btn btn-default" href="#" role="button">Read More &raquo;</a></p>
+    </div><!-- /.col-lg-4 -->
+</div>
 
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
@@ -105,15 +115,15 @@
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
                 <h3 class="modal-title" id="modal-login-label">Sign in to Sculture</h3>
-                <p>Enter your email and password to sign in:</p>
+                <p>Enter your username and password to sign in:</p>
             </div>
 
             <div class="modal-body">
 
-                <form role="form" action="" method="post" class="login-form">
+                <form role="form" action="/login" method="post" class="login-form">
                     <div class="form-group">
-                        <label class="sr-only" for="form-email">E-mail</label>
-                        <input type="text" name="form-email" placeholder="E-mail..." class="form-email form-control" id="form-email">
+                        <label class="sr-only" for="form-username">Username</label>
+                        <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>
@@ -149,10 +159,14 @@
 
             <div class="modal-body">
 
-                <form role="form" action="" method="post" class="register-form">
+                <form role="form" action="/signup" method="post" class="register-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-email">E-mail</label>
                         <input type="text" name="form-email" placeholder="Enter your email" class="form-email form-control" id="form-email">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-username">Username</label>
+                        <input type="text" name="form-username" placeholder="Enter your username" class="form-bane form-control" id="form-username">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>
@@ -161,10 +175,6 @@
                     <div class="form-group">
                         <label class="sr-only" for="form-retypedpassword">Password</label>
                         <input type="password" name="form-retypedpassword" placeholder="Retype your password..." class="form-retypedpassword form-control" id="form-retypedpassword">
-                    </div>
-                    <div class="form-group">
-                        <label class="sr-only" for="form-name">Name</label>
-                        <input type="password" name="form-name" placeholder="Enter your name and surname" class="form-bane form-control" id="form-name">
                     </div>
                     <button type="submit" class="btn">Sign up!</button>
                     <div style="text-align: center;">
@@ -181,17 +191,17 @@
     </div>
 </div>
 <!-- Javascript -->
-<script src="../js/jquery-1.11.1.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/jquery.backstretch.min.js"></script>
-<script src="../js/scripts.js"></script>
+<script src="public/js/jquery-1.11.1.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/jquery.backstretch.min.js"></script>
+<script src="public/js/scripts.js"></script>
 <script>
     $(document).ready(function(){
         // Add smooth scrolling to all links in navbar + footer link
         $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
             // Prevent default anchor click behavior
-            event.preventDefault();
+         //   event.preventDefault();
 
             // Store hash
             var hash = this.hash;

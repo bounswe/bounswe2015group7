@@ -1,6 +1,7 @@
 package sculture.models.requests;
 
 public class StoryGetRequestBody {
+
     private long id;
 
     public long getId() {

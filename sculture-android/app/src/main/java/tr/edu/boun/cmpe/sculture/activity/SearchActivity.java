@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +22,12 @@ import java.util.HashMap;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.RecyclerViewAdapter;
 
+import static tr.edu.boun.cmpe.sculture.Constants.API_SEARCH;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_QUERY;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_RESULTS;
+import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
+import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -85,14 +93,39 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //TODO Search here
+                //TODO RecyclerView is terrible. It should be updated.
+                removeRequests(REQUEST_TAG_SEARCH);
+
+                final JSONObject requestBody = new JSONObject();
                 try {
-                    Log.i("HERE", jsonArray.length() + "");
-                    dataset.put(jsonArray.getJSONObject(co++));
-                    mRecyclerViewAdapter.notifyDataSetChanged();
+                    requestBody.put(FIELD_QUERY, searchView.getQuery().toString());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
+                addRequest(API_SEARCH, requestBody, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    JSONArray array = response.getJSONArray(FIELD_RESULTS);
+                                    for (int i = 0; i < array.length(); i++)
+                                        dataset.put(array.get(i));
+                                    mRecyclerViewAdapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }, REQUEST_TAG_SEARCH);
+
+
                 return false;
             }
 

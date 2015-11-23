@@ -14,7 +14,7 @@ public class BaseApplication extends Application {
 
     public RequestQueue mRequestQueue;
 
-    private String TOKEN = null;
+    private String TOKEN = "";
     private String USERNAME = "";
     private String EMAIL = "";
 
@@ -75,6 +75,10 @@ public class BaseApplication extends Application {
         editor.putString(PREF_ACCESS_TOKEN, "");
         editor.putString(PREF_USERNAME, "");
         editor.apply();
+    }
+
+    public String getTOKEN() {
+        return TOKEN;
     }
 
 

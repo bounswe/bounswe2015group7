@@ -4,7 +4,28 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import tr.edu.boun.cmpe.sculture.R;
+
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CONTENT;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CREATION_DATE;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_LAST_EDITOR;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_OWNER;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TAGS;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_UPDATE_DATE;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
+import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
+import static tr.edu.boun.cmpe.sculture.Utils.timespamptToPrettyStrig;
 
 public class StoryShowActivity extends AppCompatActivity {
 
@@ -28,16 +49,53 @@ public class StoryShowActivity extends AppCompatActivity {
         createdAt = (TextView) findViewById(R.id.storyCreatedAt);
         lastEditor = (TextView) findViewById(R.id.storyLastEditor);
         lastUpdatedAt = (TextView) findViewById(R.id.story_update_date);
-        if (bundle.getString("id") != null) {
-            getStory(bundle.getString("id"));
+        if (bundle.getLong("id") != 0) {
+            getStory(bundle.getLong("id"));
         }
 
     }
 
 
-    public void getStory(String id) {
+    public void getStory(long id) {
 
         // TODO get story request
+
+        JSONObject requestObject = new JSONObject();
+        try {
+            requestObject.put(FIELD_ID, id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        addRequest(API_STORY_GET, requestObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            title.setText(response.getString(FIELD_TITLE));
+                            content.setText(response.getString(FIELD_CONTENT));
+                            JSONArray tagsAr = response.getJSONArray(FIELD_TAGS);
+                            String tagstring = "";
+                            for (int i = 0; i < tagsAr.length(); i++)
+                                tagstring += tagsAr.get(i) + ", ";
+                            tags.setText(tagstring);
+                            storyOwner.setText(response.getJSONObject(FIELD_OWNER).getString(FIELD_USERNAME));
+                            lastEditor.setText(response.getJSONObject(FIELD_LAST_EDITOR).getString(FIELD_USERNAME));
+                            createdAt.setText(timespamptToPrettyStrig(response.getLong(FIELD_CREATION_DATE)));
+                            lastUpdatedAt.setText(timespamptToPrettyStrig(response.getLong(FIELD_UPDATE_DATE)));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                },
+                REQUEST_TAG_STORY_GET);
 
 
 //        ParseCloud.callFunctionInBackground("story_get", param, new FunctionCallback<HashMap>() {
@@ -49,7 +107,7 @@ public class StoryShowActivity extends AppCompatActivity {
 //
 //
 //                            ArrayList<String> story = new ArrayList<String>();
-//                            title.setText((String) item.get("title"));
+//
 //                            ArrayList<String> tags2 = (ArrayList<String>) item.get("tags");
 //                            String all = "";
 //                            for (String tagsAll : tags2) {
@@ -74,7 +132,6 @@ public class StoryShowActivity extends AppCompatActivity {
 //                }
 //        );
     }
-
 
 
 }

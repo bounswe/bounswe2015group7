@@ -10,6 +10,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>sculture</servlet-name>
-        <url-pattern>/sculture</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created by bilal on 14/10/15.
  */
 @WebServlet(name = "MainServlet")
-public class MainServlet extends HttpServlet {
+public class Signup extends HttpServlet {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://52.28.216.93/user";

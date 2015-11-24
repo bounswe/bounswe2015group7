@@ -1,5 +1,10 @@
 package com.sculture;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,18 +18,17 @@ import java.io.IOException;
 @WebServlet(name = "MainServlet")
 public class Signup extends HttpServlet {
 
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://52.28.216.93/user";
-    static final String USER = "root";
-    static final String PASS = "123456";
-//    Connection conn = null;
-
-//    @Override
-//    public void init() throws ServletException {
-//        super.init();
-//    }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        try {
+            HttpResponse<JsonNode> jsonResponse = Unirest.post("http://52.28.216.93:9000/user/register")
+                    .field("email", request.getAttribute("form-email"))
+                    .field("username", request.getAttribute("form-username"))
+                    .field("password", request.getAttribute("form-password")).asJson();
+            System.out.println(jsonResponse.getBody());
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);

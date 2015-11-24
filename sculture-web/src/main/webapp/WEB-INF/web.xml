@@ -8,8 +8,16 @@
         <servlet-name>sculture</servlet-name>
         <servlet-class>com.sculture.MainServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>signup</servlet-name>
+        <servlet-class>com.sculture.Signup</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>sculture</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>signup</servlet-name>
+        <url-pattern>/signup</url-pattern>
     </servlet-mapping>
 </web-app>

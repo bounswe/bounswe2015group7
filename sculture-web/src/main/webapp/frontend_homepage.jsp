@@ -167,7 +167,7 @@
 
             <div class="modal-body">
 
-                <form role="form" action="/signup" method="post" class="register-form">
+                <form role="form" action="signup" method="post" class="register-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-email">E-mail</label>
                         <input type="text" name="form-email" placeholder="Enter your email" class="form-email form-control" id="form-email">

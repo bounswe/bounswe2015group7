@@ -106,7 +106,7 @@ public class SCultureRest {
         String password = requestBody.getPassword();
         String username = requestBody.getUsername();
 
-        if (!checkEmailSyntax(email) || username != null)
+        if (!checkEmailSyntax(email) && username != null)
             throw new InvalidEmailException();
 
 

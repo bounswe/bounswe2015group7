@@ -2,18 +2,44 @@ package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import sculture.Utils;
-import sculture.dao.*;
-import sculture.exceptions.*;
-import sculture.models.requests.*;
-import sculture.models.response.*;
+import sculture.dao.CommentDao;
+import sculture.dao.StoryDao;
+import sculture.dao.TagDao;
+import sculture.dao.TagStoryDao;
+import sculture.dao.UserDao;
+import sculture.exceptions.InvalidAccessTokenException;
+import sculture.exceptions.InvalidEmailException;
+import sculture.exceptions.InvalidPasswordException;
+import sculture.exceptions.InvalidUsernameException;
+import sculture.exceptions.UserAlreadyExistsException;
+import sculture.exceptions.UserNotExistException;
+import sculture.exceptions.WrongPasswordException;
+import sculture.models.requests.CommentGetRequestBody;
+import sculture.models.requests.CommentListRequestBody;
+import sculture.models.requests.LoginRequestBody;
+import sculture.models.requests.RegisterRequestBody;
+import sculture.models.requests.SearchRequestBody;
+import sculture.models.requests.StoryCreateRequestBody;
+import sculture.models.requests.StoryGetRequestBody;
+import sculture.models.response.BaseStoryResponse;
+import sculture.models.response.CommentResponse;
+import sculture.models.response.FullStoryResponse;
+import sculture.models.response.LoginResponse;
+import sculture.models.response.SearchResponse;
+import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
 import sculture.models.tables.User;
-import sculture.models.tables.Comment;
 import sculture.models.tables.relations.TagStory;
 
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -78,8 +104,9 @@ public class SCultureRest {
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {
         String email = requestBody.getEmail();
         String password = requestBody.getPassword();
+        String username = requestBody.getUsername();
 
-        if (!checkEmailSyntax(email))
+        if (!checkEmailSyntax(email) || username != null)
             throw new InvalidEmailException();
 
 
@@ -89,7 +116,10 @@ public class SCultureRest {
 
         User u;
         try {
-            u = userDao.getByEmail(email);
+            if (email != null) {
+                u = userDao.getByEmail(email);
+            }
+            else u = userDao.getByUsername(username);
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
@@ -181,18 +211,18 @@ public class SCultureRest {
     }
 
 
-      @RequestMapping("/comment/get")
-    public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody){
-          Comment comment = commentDao.getById(requestBody.getCommentId());
-          return new CommentResponse(comment);
-      }
+    @RequestMapping("/comment/get")
+    public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
+        Comment comment = commentDao.getById(requestBody.getCommentId());
+        return new CommentResponse(comment);
+    }
 
     @RequestMapping("/comment/list")
-    public List<CommentResponse> commentList(@RequestBody CommentListRequestBody requestBody){
-        List <Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id());
-        List <CommentResponse> responses = new LinkedList<CommentResponse>();
+    public List<CommentResponse> commentList(@RequestBody CommentListRequestBody requestBody) {
+        List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id());
+        List<CommentResponse> responses = new LinkedList<CommentResponse>();
 
-        for (int i = 0 ; i<comments.size() ; i++){
+        for (int i = 0; i < comments.size(); i++) {
             responses.add(new CommentResponse(comments.get(i)));
         }
         return responses;

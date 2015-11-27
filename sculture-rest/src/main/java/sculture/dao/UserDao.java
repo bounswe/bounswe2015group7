@@ -12,9 +12,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class UserDao {
-    
-    
-    
+
+
     /**
      * Save the user in the database.
      */
@@ -77,6 +76,13 @@ public class UserDao {
         return;
     }
 
+    public User getByUsername(String username) {
+        return (User) entityManager.createQuery(
+                "from User where username = :username ")
+                .setParameter("username", username)
+                .getSingleResult();
+        
+    }
     // ------------------------
     // PRIVATE FIELDS
     // ------------------------
@@ -85,5 +91,6 @@ public class UserDao {
     // setup on DatabaseConfig class.
     @PersistenceContext
     private EntityManager entityManager;
+
 
 } // class UserDao

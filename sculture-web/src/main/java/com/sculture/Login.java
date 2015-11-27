@@ -12,28 +12,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 
-/**
- * Created by bilal on 14/10/15.
- */
-@WebServlet(name = "signup")
-public class Signup extends HttpServlet {
+
+@WebServlet(name = "login")
+public class Login extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Enumeration<String> enumeration = request.getParameterNames();
-//        while (enumeration.hasMoreElements()) System.out.println(enumeration.nextElement());
         HttpResponse<JsonNode> jsonResponse = null;
         try {
 
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("email", request.getParameter("form-email"));
             jsonObject.put("username", request.getParameter("form-username"));
             jsonObject.put("password", request.getParameter("form-password"));
 
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/register")
+            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/login")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();

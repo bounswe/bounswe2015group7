@@ -27,12 +27,21 @@ public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
+        if (request.getSession().getAttribute("username") != null) {
+            request.setAttribute("username", request.getSession().getAttribute("username"));
+            request.setAttribute("isLoggedIn", true);
+        }
+
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
+        if (request.getSession().getAttribute("username") != null) {
+            request.setAttribute("username", request.getSession().getAttribute("username"));
+            request.setAttribute("isLoggedIn", true);
+        }
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }
 

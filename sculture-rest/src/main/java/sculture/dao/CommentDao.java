@@ -1,5 +1,6 @@
 package sculture.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import sculture.models.tables.Comment;
 import javax.persistence.EntityManager;
@@ -15,6 +16,7 @@ import java.util.List;
 @Transactional
 public class CommentDao {
 
+    
 
     /**
      * Save the comment in the database.

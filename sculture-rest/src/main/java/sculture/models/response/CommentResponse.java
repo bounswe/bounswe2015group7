@@ -11,11 +11,12 @@ public class CommentResponse {
     private long comment_id;
     private long story_id;
     private long owner_id;
+    private String owner_username;
     private Date create_date;
     private String content;
     private Date last_edit_date;
 
-    public CommentResponse(Comment comment){
+    public CommentResponse(Comment comment) {
         this.comment_id = comment.getComment_id();
         this.story_id = comment.getStory_id();
         this.owner_id = comment.getOwner_id();
@@ -75,7 +76,13 @@ public class CommentResponse {
     }
 
 
+    public String getOwner_username() {
+        return owner_username;
+    }
 
+    public void setOwner_username(String  owner_username) {
+        this.owner_username = owner_username;
+    }
 
 
 }

@@ -118,8 +118,7 @@ public class SCultureRest {
         try {
             if (email != null) {
                 u = userDao.getByEmail(email);
-            }
-            else u = userDao.getByUsername(username);
+            } else u = userDao.getByUsername(username);
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
@@ -214,6 +213,8 @@ public class SCultureRest {
     @RequestMapping("/comment/get")
     public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
         Comment comment = commentDao.getById(requestBody.getCommentId());
+        CommentResponse commentResponse = new CommentResponse(comment);
+        commentResponse.setOwner_username(userDao.getById(comment.getOwner_id()).getUsername());
         return new CommentResponse(comment);
     }
 

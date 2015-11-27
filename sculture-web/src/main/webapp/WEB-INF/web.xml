@@ -13,6 +13,10 @@
         <servlet-class>com.sculture.Login</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>addstory</servlet-name>
+        <servlet-class>com.sculture.AddStory</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>signup</servlet-name>
         <servlet-class>com.sculture.Signup</servlet-class>
     </servlet>
@@ -27,5 +31,9 @@
     <servlet-mapping>
         <servlet-name>sculture</servlet-name>
         <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addstory</servlet-name>
+        <url-pattern>/addstory</url-pattern>
     </servlet-mapping>
 </web-app>

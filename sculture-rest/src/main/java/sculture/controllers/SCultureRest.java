@@ -7,17 +7,13 @@ import sculture.Utils;
 import sculture.dao.*;
 import sculture.exceptions.*;
 import sculture.models.requests.*;
-import sculture.models.response.BaseStoryResponse;
-import sculture.models.response.FullStoryResponse;
-import sculture.models.response.LoginResponse;
-import sculture.models.response.SearchResponse;
+import sculture.models.response.*;
 import sculture.models.tables.Story;
 import sculture.models.tables.User;
+import sculture.models.tables.Comment;
 import sculture.models.tables.relations.TagStory;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -184,5 +180,24 @@ public class SCultureRest {
         return searchResponse;
     }
 
+
+      @RequestMapping("/comment/get")
+    public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody){
+          Comment comment = commentDao.getById(requestBody.getCommentId());
+          return new CommentResponse(comment);
+      }
+
+    @RequestMapping("/comment/list")
+    public List<CommentResponse> commentList(@RequestBody CommentListRequestBody requestBody){
+        List <Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id());
+        List <CommentResponse> responses = new LinkedList<CommentResponse>();
+
+        for (int i = 0 ; i<comments.size() ; i++){
+            responses.add(new CommentResponse(comments.get(i)));
+        }
+        return responses;
+
+
+    }
 
 }

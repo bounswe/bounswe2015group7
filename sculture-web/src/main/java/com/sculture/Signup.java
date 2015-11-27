@@ -23,7 +23,8 @@ public class Signup extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Enumeration<String> enumeration = request.getParameterNames();
-        while (enumeration.hasMoreElements()) System.out.println(enumeration.nextElement());
+//        while (enumeration.hasMoreElements()) System.out.println(enumeration.nextElement());
+        HttpResponse<JsonNode> jsonResponse = null;
         try {
 
 
@@ -32,20 +33,22 @@ public class Signup extends HttpServlet {
             jsonObject.put("username", request.getParameter("form-username"));
             jsonObject.put("password", request.getParameter("form-password"));
 
-
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            HttpResponse<JsonNode> jsonResponse = Unirest.post("http://52.28.216.93:9000/user/register")
+            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/register")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();
-            System.out.println(jsonResponse.getBody());
-            System.out.println(request.getParameter("form-email"));
-            System.out.println(request.getParameter("form-username"));
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        request.setAttribute("isLoggedIn", false);
-        request.setAttribute("username", "");
+        if (jsonResponse != null) {
+            request.setAttribute("isLoggedIn", true);
+            request.setAttribute("username", jsonResponse.getBody().getObject().get("username"));
+            request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+        }
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }
 

@@ -1,11 +1,17 @@
 package sculture.models.tables;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USER", uniqueConstraints =
+@UniqueConstraint(columnNames = {"email", "access_token"}))
 public class User {
 
     // ------------------------
@@ -16,7 +22,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long user_id;
 
-    @NotNull
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)

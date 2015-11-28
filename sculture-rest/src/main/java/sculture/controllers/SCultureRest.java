@@ -27,6 +27,7 @@ import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
 import sculture.models.requests.StoryCreateRequestBody;
 import sculture.models.requests.StoryGetRequestBody;
+import sculture.models.requests.UserFollowRequestBody;
 import sculture.models.requests.UserGetRequestBody;
 import sculture.models.response.BaseStoryResponse;
 import sculture.models.response.CommentResponse;
@@ -143,6 +144,20 @@ public class SCultureRest {
             throw new WrongPasswordException();
     }
 
+
+    @RequestMapping(method = RequestMethod.POST, value = "/user/follow")
+    public LoginResponse user_follow(@RequestBody UserFollowRequestBody requestBody) {
+        long id = requestBody.getUser_id();
+        String accessToken = requestBody.getAccessToken();
+        User u;
+        try {
+            u = userDao.getByAccessToken(accessToken);
+            userDao.follow(u, id, requestBody.isFollow());
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new UserNotExistException();
+        }
+        return new LoginResponse(u);
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
     public BaseStoryResponse story_create(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {

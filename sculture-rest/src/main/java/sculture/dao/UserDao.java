@@ -2,6 +2,7 @@ package sculture.dao;
 
 import org.springframework.stereotype.Repository;
 import sculture.models.tables.User;
+import sculture.models.tables.relations.RelationFollowUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +20,21 @@ public class UserDao {
      */
     public void create(User user) {
         entityManager.persist(user);
+        return;
+    }
+
+    public void follow(User user, long id, boolean isFollow) {
+        RelationFollowUser relationFollowUser = new RelationFollowUser();
+        relationFollowUser.setFOLLOWER_USER_ID(user.getUser_id());
+        relationFollowUser.setFOLLOWED_USER_ID(id);
+        if (!isFollow) {
+            if (entityManager.contains(user))
+                entityManager.remove(user);
+            else
+                entityManager.remove(entityManager.merge(user));
+        } else {
+            entityManager.persist(relationFollowUser);
+        }
         return;
     }
 
@@ -81,8 +97,9 @@ public class UserDao {
                 "from User where username = :username ")
                 .setParameter("username", username)
                 .getSingleResult();
-        
+
     }
+
     // ------------------------
     // PRIVATE FIELDS
     // ------------------------

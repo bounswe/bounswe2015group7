@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 public class CommentDao {
 
-    
+
 
     /**
      * Save the comment in the database.

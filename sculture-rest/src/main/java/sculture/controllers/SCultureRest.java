@@ -27,6 +27,7 @@ import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
 import sculture.models.requests.StoryCreateRequestBody;
 import sculture.models.requests.StoryGetRequestBody;
+import sculture.models.requests.UserGetRequestBody;
 import sculture.models.response.BaseStoryResponse;
 import sculture.models.response.CommentResponse;
 import sculture.models.response.FullStoryResponse;
@@ -99,6 +100,17 @@ public class SCultureRest {
         return new LoginResponse(u);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/user/get")
+    public LoginResponse user_get(@RequestBody UserGetRequestBody requestBody) {
+        long id = requestBody.getUserId();
+        User u;
+        try {
+            u = userDao.getById(id);
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new UserNotExistException();
+        }
+        return new LoginResponse(u);
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {

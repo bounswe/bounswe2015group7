@@ -28,10 +28,10 @@ public class UserDao {
         relationFollowUser.setFOLLOWER_USER_ID(user.getUser_id());
         relationFollowUser.setFOLLOWED_USER_ID(id);
         if (!isFollow) {
-            if (entityManager.contains(user))
-                entityManager.remove(user);
+            if (entityManager.contains(relationFollowUser))
+                entityManager.remove(relationFollowUser);
             else
-                entityManager.remove(entityManager.merge(user));
+                entityManager.remove(entityManager.merge(relationFollowUser));
         } else {
             entityManager.persist(relationFollowUser);
         }

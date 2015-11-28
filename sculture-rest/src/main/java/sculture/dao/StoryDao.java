@@ -2,6 +2,8 @@ package sculture.dao;
 
 import org.springframework.stereotype.Repository;
 import sculture.models.tables.Story;
+import sculture.models.tables.relations.ReportStory;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -16,6 +18,14 @@ public class StoryDao {
      */
     public void create(Story story) {
         entityManager.persist(story);
+        return;
+    }
+
+    public void reportStory(long userId, long storyId) {
+        ReportStory reportStory = new ReportStory();
+        reportStory.setReporting_user_id(userId);
+        reportStory.setReported_story_id(storyId);
+        entityManager.persist(reportStory);
         return;
     }
 

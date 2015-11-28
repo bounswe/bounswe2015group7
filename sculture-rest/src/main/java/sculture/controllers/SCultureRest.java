@@ -27,6 +27,7 @@ import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
 import sculture.models.requests.StoryCreateRequestBody;
 import sculture.models.requests.StoryGetRequestBody;
+import sculture.models.requests.StoryReportRequestBody;
 import sculture.models.requests.UserFollowRequestBody;
 import sculture.models.requests.UserGetRequestBody;
 import sculture.models.response.BaseStoryResponse;
@@ -243,6 +244,13 @@ public class SCultureRest {
         CommentResponse commentResponse = new CommentResponse(comment);
         commentResponse.setOwner_username(userDao.getById(comment.getOwner_id()).getUsername());
         return new CommentResponse(comment);
+    }
+
+    @RequestMapping("/story/report")
+    public boolean commentGet(@RequestBody StoryReportRequestBody requestBody) {
+
+        storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
+        return true;
     }
 
     @RequestMapping("/comment/list")

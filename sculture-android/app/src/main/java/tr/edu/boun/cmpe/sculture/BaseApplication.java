@@ -44,6 +44,12 @@ public class BaseApplication extends Application {
         }
     }
 
+    /**
+     * Set user session.
+     * @param token Access token of the user.
+     * @param username Username of the user.
+     * @param email Email address of the user.
+     */
     public void setUserInfo(String token, String username, String email) {
         this.TOKEN = token;
         this.USERNAME = username;
@@ -59,10 +65,17 @@ public class BaseApplication extends Application {
 
     }
 
+    /**
+     * Checks whether there is a user session.
+     * @return Whether tare is a user session.
+     */
     public boolean checkLogin() {
         return isLoggedIn;
     }
 
+    /**
+     * Clears all user information.
+     */
     public void logOut() {
         this.TOKEN = "";
         this.USERNAME = "";
@@ -77,6 +90,10 @@ public class BaseApplication extends Application {
         editor.apply();
     }
 
+    /**
+     * Retrieve the access token of current user.
+     * @return Access token of current user
+     */
     public String getTOKEN() {
         return TOKEN;
     }

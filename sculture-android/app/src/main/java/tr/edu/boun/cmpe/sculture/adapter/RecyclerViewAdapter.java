@@ -82,7 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.story_id = obj.getLong(FIELD_ID);
 
             long date = obj.getLong(FIELD_UPDATE_DATE);
-            String s = mActivity.getString(R.string.updated_time, Utils.timespamptToPrettyStrig(date), obj.getJSONObject(FIELD_LAST_EDITOR).getString(FIELD_USERNAME));
+            String s = mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(date), obj.getJSONObject(FIELD_LAST_EDITOR).getString(FIELD_USERNAME));
 
             holder.story_update_date.setText(s);
 

@@ -25,7 +25,7 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_UPDATE_DATE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_STORY_GET;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
-import static tr.edu.boun.cmpe.sculture.Utils.timespamptToPrettyStrig;
+import static tr.edu.boun.cmpe.sculture.Utils.timestampToPrettyString;
 
 public class StoryShowActivity extends AppCompatActivity {
 
@@ -81,8 +81,8 @@ public class StoryShowActivity extends AppCompatActivity {
                             tags.setText(tagstring);
                             storyOwner.setText(response.getJSONObject(FIELD_OWNER).getString(FIELD_USERNAME));
                             lastEditor.setText(response.getJSONObject(FIELD_LAST_EDITOR).getString(FIELD_USERNAME));
-                            createdAt.setText(timespamptToPrettyStrig(response.getLong(FIELD_CREATION_DATE)));
-                            lastUpdatedAt.setText(timespamptToPrettyStrig(response.getLong(FIELD_UPDATE_DATE)));
+                            createdAt.setText(timestampToPrettyString(response.getLong(FIELD_CREATION_DATE)));
+                            lastUpdatedAt.setText(timestampToPrettyString(response.getLong(FIELD_UPDATE_DATE)));
 
                         } catch (JSONException e) {
                             e.printStackTrace();

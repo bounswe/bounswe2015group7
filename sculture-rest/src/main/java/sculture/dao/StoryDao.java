@@ -1,6 +1,7 @@
 package sculture.dao;
 
 import org.springframework.stereotype.Repository;
+import sculture.exceptions.InvalidReportException;
 import sculture.models.tables.Story;
 import sculture.models.tables.relations.ReportStory;
 import sculture.models.tables.relations.VoteStory;
@@ -26,11 +27,14 @@ public class StoryDao {
         ReportStory reportStory = new ReportStory();
         reportStory.setReporting_user_id(userId);
         reportStory.setReported_story_id(storyId);
+        if (!entityManager.contains(reportStory)) {
+            throw new InvalidReportException();
+        }
         entityManager.persist(reportStory);
         return;
     }
 
-    public Story voteStory(long storyId, boolean isPositive, long userId){
+    public Story voteStory(long storyId, boolean isPositive, long userId) {
         VoteStory relationVoteStoryUser = new VoteStory();
         relationVoteStoryUser.setStory_id(storyId);
         relationVoteStoryUser.setUser_id(userId);
@@ -41,10 +45,10 @@ public class StoryDao {
 
             entityManager.persist(relationVoteStoryUser);
 
-            if(isPositive){
-                story.setPositive_vote(story.getPositive_vote()+1);
-            }else{
-                story.setNegative_vote(story.getNegative_vote()+1);
+            if (isPositive) {
+                story.setPositive_vote(story.getPositive_vote() + 1);
+            } else {
+                story.setNegative_vote(story.getNegative_vote() + 1);
             }
             entityManager.merge(story);
         }

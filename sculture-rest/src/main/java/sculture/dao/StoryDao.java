@@ -29,8 +29,15 @@ public class StoryDao {
         return;
     }
 
-    public void VoteStory(long storyId, boolean up_or_down_vote){
-
+    public Story voteStory(long storyId, boolean isUpvote){
+        Story story = getById(storyId);
+        if(!isUpvote){
+            story.setNegative_vote(story.getNegative_vote()+1);
+        }else{
+            story.setPositive_vote(story.getPositive_vote()+1);
+        }
+        entityManager.merge(story);
+        return story;
     }
 
     /**

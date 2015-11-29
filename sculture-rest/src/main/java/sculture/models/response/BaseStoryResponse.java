@@ -54,7 +54,18 @@ public class BaseStoryResponse {
         this.negative_vote = story.getNegative_vote();
         this.report_count = story.getReport_count();
     }
-
+    public BaseStoryResponse(Story story)
+    {
+        this.id = story.getStory_id();
+        this.title = story.getTitle();
+        this.creation_date = story.getCreate_date();
+        this.update_date = story.getLast_edit_date();
+        this.last_editor.id = story.getLast_editor_id();
+        this.owner.id = story.getOwner_id();
+        this.positive_vote = story.getPositive_vote();
+        this.negative_vote = story.getNegative_vote();
+        this.report_count = story.getReport_count();
+    }
 
     public long getPositive_vote() {
         return positive_vote;

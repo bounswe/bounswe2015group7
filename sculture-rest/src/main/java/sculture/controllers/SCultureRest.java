@@ -1,5 +1,6 @@
 package sculture.controllers;
 
+import com.fasterxml.jackson.databind.deser.Deserializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,16 +21,7 @@ import sculture.exceptions.InvalidUsernameException;
 import sculture.exceptions.UserAlreadyExistsException;
 import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
-import sculture.models.requests.CommentGetRequestBody;
-import sculture.models.requests.CommentListRequestBody;
-import sculture.models.requests.LoginRequestBody;
-import sculture.models.requests.RegisterRequestBody;
-import sculture.models.requests.SearchRequestBody;
-import sculture.models.requests.StoryCreateRequestBody;
-import sculture.models.requests.StoryGetRequestBody;
-import sculture.models.requests.StoryReportRequestBody;
-import sculture.models.requests.UserFollowRequestBody;
-import sculture.models.requests.UserGetRequestBody;
+import sculture.models.requests.*;
 import sculture.models.response.BaseStoryResponse;
 import sculture.models.response.CommentResponse;
 import sculture.models.response.FullStoryResponse;
@@ -100,6 +92,32 @@ public class SCultureRest {
             throw new UserAlreadyExistsException();
         }
         return new LoginResponse(u);
+    }
+    @RequestMapping(method = RequestMethod.POST, value = "/user/update")
+    public LoginResponse user_update(@RequestBody UserUpdateRequestBody requestBody) {
+        String email = requestBody.getEmail();
+        String username = requestBody.getUsername();
+        String old_password = requestBody.getOld_password();
+        String new_password = requestBody.getNew_password();
+        String fullname = requestBody.getFullname();
+        String accesstoken = requestBody.getAccessToken();
+        User u = userDao.getByAccessToken(accesstoken);
+        if (u.getPassword_hash().equals(Utils.password_hash(old_password))) {
+            if(email!=null) u.setEmail(email);
+            if(username !=null) u.setUsername(username);
+            if(new_password!=null)
+            {
+                if (!checkPasswordSyntax(new_password))
+                    throw new InvalidPasswordException();
+                else
+                    u.setPassword_hash(Utils.password_hash(new_password));
+            }
+            if (fullname != null) u.setFullname(fullname);
+            userDao.update(u);
+            return new LoginResponse(u);
+        } else
+            throw new WrongPasswordException();
+
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/get")
@@ -251,6 +269,12 @@ public class SCultureRest {
 
         storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
         return true;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value= "/story/vote")
+    public BaseStoryResponse storyVote(@RequestBody StoryVoteRequestBody requestBody){
+
+        return new BaseStoryResponse(storyDao.voteStory(requestBody.getStory_id(),requestBody.isUp_or_down_vote()));
     }
 
     @RequestMapping("/comment/list")

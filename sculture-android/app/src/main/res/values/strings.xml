@@ -44,4 +44,9 @@
 
     <string name="updated_time">Updated %1$s by %2$s</string>
     <string name="written_by_username">Written by %s</string>
+    <string name="action_save">Save</string>
+    <string name="prompt_title">Title</string>
+    <string name="prompt_story">Story</string>
+    <string name="prompt_tags">Tags</string>
+    <string name="action_add_media">Add Image</string>
 </resources>

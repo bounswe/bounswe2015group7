@@ -27,7 +27,7 @@ public class StoryDao {
         ReportStory reportStory = new ReportStory();
         reportStory.setReporting_user_id(userId);
         reportStory.setReported_story_id(storyId);
-        if (!entityManager.contains(reportStory)) {
+        if (entityManager.contains(reportStory)) {
             throw new InvalidReportException();
         }
         entityManager.persist(reportStory);

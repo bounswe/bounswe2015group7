@@ -5,8 +5,6 @@ package sculture.models.requests;
  */
 public class UserUpdateRequestBody {
 
-    private String accessToken;
-
     private String old_password;
 
     private String new_password;
@@ -17,9 +15,6 @@ public class UserUpdateRequestBody {
 
     private String fullname;
 
-    public String getAccessToken() {
-        return accessToken;
-    }
 
     public String getEmail() {
         return email;

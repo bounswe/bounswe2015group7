@@ -1,11 +1,15 @@
 package sculture.models.tables.relations;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "RELATION_FOLLOW_USER")
 public class RelationFollowUser {
+
+    @Id
+    private long id;
 
     private long FOLLOWER_USER_ID;
 
@@ -25,5 +29,13 @@ public class RelationFollowUser {
 
     public void setFOLLOWER_USER_ID(long FOLLOWER_USER_ID) {
         this.FOLLOWER_USER_ID = FOLLOWER_USER_ID;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

@@ -2,7 +2,7 @@ package tr.edu.boun.cmpe.sculture;
 
 public class Constants {
     //API URLS
-    private static final String API_BASE_URL = "http://52.28.216.93:9000";
+    private static final String API_BASE_URL = BuildConfig.API_BASE_URL;
     public static final String API_USER_LOGIN = API_BASE_URL + "/user/login";
     public static final String API_USER_REGISTER = API_BASE_URL + "/user/register";
     public static final String API_STORY_GET = API_BASE_URL + "/story/get";

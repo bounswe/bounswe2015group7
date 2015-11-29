@@ -8,15 +8,22 @@ import javax.validation.constraints.NotNull;
 public class StoryVoteRequestBody {
 
     private long story_id;
-
-    /*if it is an up vote = 1, if it is a down vote = 0.*/
-    private boolean up_or_down_vote;
+    private boolean isPositive;
+    private long user_id;
 
     public long getStory_id(){ return this.story_id; }
 
+    public long getUser_id() {
+        return user_id;
+    }
+
     public void setStory_id(long storyId) {this.story_id = storyId; }
 
-    public boolean isUp_or_down_vote(){ return this.up_or_down_vote;}
+    public boolean getIsPositive(){ return this.isPositive;}
 
-    public void setUp_or_down_vote(boolean up_or_down_vote){this.up_or_down_vote=up_or_down_vote;}
+    public void setPositive(boolean isPositive){this.isPositive=isPositive;}
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
+    }
 }

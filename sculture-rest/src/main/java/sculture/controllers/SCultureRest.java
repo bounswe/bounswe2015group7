@@ -94,24 +94,39 @@ public class SCultureRest {
         return new LoginResponse(u);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/user/update")
-    public LoginResponse user_update(@RequestBody UserUpdateRequestBody requestBody) {
+    public LoginResponse user_update(@RequestBody UserUpdateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User u;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            u = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new InvalidAccessTokenException();
+        }
+
         String email = requestBody.getEmail();
         String username = requestBody.getUsername();
         String old_password = requestBody.getOld_password();
         String new_password = requestBody.getNew_password();
         String fullname = requestBody.getFullname();
-        String accesstoken = requestBody.getAccessToken();
-        User u = userDao.getByAccessToken(accesstoken);
+
+        if(!checkEmailSyntax(email))
+            throw new InvalidEmailException();
+
+        if (!checkUsernameSyntax(username))
+            throw new InvalidUsernameException();
+
+        if (!checkPasswordSyntax(old_password))
+            throw new InvalidPasswordException();
+
+        if (!checkPasswordSyntax(new_password))
+            throw new InvalidPasswordException();
+
         if (u.getPassword_hash().equals(Utils.password_hash(old_password))) {
-            if(email!=null) u.setEmail(email);
-            if(username !=null) u.setUsername(username);
-            if(new_password!=null)
-            {
-                if (!checkPasswordSyntax(new_password))
-                    throw new InvalidPasswordException();
-                else
-                    u.setPassword_hash(Utils.password_hash(new_password));
-            }
+            u.setEmail(email);
+            u.setUsername(username);
+            u.setPassword_hash(Utils.password_hash(new_password));
+
             if (fullname != null) u.setFullname(fullname);
             userDao.update(u);
             return new LoginResponse(u);
@@ -274,7 +289,9 @@ public class SCultureRest {
     @RequestMapping(method = RequestMethod.POST, value= "/story/vote")
     public BaseStoryResponse storyVote(@RequestBody StoryVoteRequestBody requestBody){
 
-        return new BaseStoryResponse(storyDao.voteStory(requestBody.getStory_id(),requestBody.isUp_or_down_vote()));
+        Story ResponseStory = storyDao.voteStory(requestBody.getStory_id(),requestBody.getIsPositive(),requestBody.getUser_id());
+
+        return new BaseStoryResponse(ResponseStory);
     }
 
     @RequestMapping("/comment/list")

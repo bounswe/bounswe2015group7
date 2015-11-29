@@ -3,6 +3,7 @@ package sculture.dao;
 import org.springframework.stereotype.Repository;
 import sculture.models.tables.Story;
 import sculture.models.tables.relations.ReportStory;
+import sculture.models.tables.relations.VoteStory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,14 +30,24 @@ public class StoryDao {
         return;
     }
 
-    public Story voteStory(long storyId, boolean isUpvote){
+    public Story voteStory(long storyId, boolean isPositive, long userId){
+        VoteStory relationVoteStoryUser = new VoteStory();
+        relationVoteStoryUser.setStory_id(storyId);
+        relationVoteStoryUser.setUser_id(userId);
+        relationVoteStoryUser.setVote_is_positive(isPositive);
         Story story = getById(storyId);
-        if(!isUpvote){
-            story.setNegative_vote(story.getNegative_vote()+1);
-        }else{
-            story.setPositive_vote(story.getPositive_vote()+1);
+
+        if (!entityManager.contains(relationVoteStoryUser)) {
+
+            entityManager.persist(relationVoteStoryUser);
+
+            if(isPositive){
+                story.setPositive_vote(story.getPositive_vote()+1);
+            }else{
+                story.setNegative_vote(story.getNegative_vote()+1);
+            }
+            entityManager.merge(story);
         }
-        entityManager.merge(story);
         return story;
     }
 

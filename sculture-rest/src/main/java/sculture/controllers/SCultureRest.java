@@ -247,7 +247,7 @@ public class SCultureRest {
     }
 
     @RequestMapping("/story/report")
-    public boolean commentGet(@RequestBody StoryReportRequestBody requestBody) {
+    public boolean storyReport(@RequestBody StoryReportRequestBody requestBody) {
 
         storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
         return true;

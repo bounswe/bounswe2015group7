@@ -29,6 +29,10 @@ public class StoryDao {
         return;
     }
 
+    public void VoteStory(long storyId, boolean up_or_down_vote){
+
+    }
+
     /**
      * Delete the story from the database.
      */

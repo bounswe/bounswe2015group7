@@ -1,6 +1,5 @@
 package sculture.controllers;
 
-import com.fasterxml.jackson.databind.deser.Deserializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +20,18 @@ import sculture.exceptions.InvalidUsernameException;
 import sculture.exceptions.UserAlreadyExistsException;
 import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
-import sculture.models.requests.*;
+import sculture.models.requests.CommentGetRequestBody;
+import sculture.models.requests.CommentListRequestBody;
+import sculture.models.requests.LoginRequestBody;
+import sculture.models.requests.RegisterRequestBody;
+import sculture.models.requests.SearchRequestBody;
+import sculture.models.requests.StoryCreateRequestBody;
+import sculture.models.requests.StoryGetRequestBody;
+import sculture.models.requests.StoryReportRequestBody;
+import sculture.models.requests.StoryVoteRequestBody;
+import sculture.models.requests.UserFollowRequestBody;
+import sculture.models.requests.UserGetRequestBody;
+import sculture.models.requests.UserUpdateRequestBody;
 import sculture.models.response.BaseStoryResponse;
 import sculture.models.response.CommentResponse;
 import sculture.models.response.FullStoryResponse;
@@ -93,6 +103,7 @@ public class SCultureRest {
         }
         return new LoginResponse(u);
     }
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/update")
     public LoginResponse user_update(@RequestBody UserUpdateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User u;
@@ -110,7 +121,7 @@ public class SCultureRest {
         String new_password = requestBody.getNew_password();
         String fullname = requestBody.getFullname();
 
-        if(!checkEmailSyntax(email))
+        if (!checkEmailSyntax(email))
             throw new InvalidEmailException();
 
         if (!checkUsernameSyntax(username))
@@ -180,9 +191,9 @@ public class SCultureRest {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/follow")
-    public LoginResponse user_follow(@RequestBody UserFollowRequestBody requestBody) {
+    public LoginResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         long id = requestBody.getUser_id();
-        String accessToken = requestBody.getAccessToken();
+        String accessToken = headers.get("access-token").get(0);
         User u;
         try {
             u = userDao.getByAccessToken(accessToken);
@@ -286,10 +297,10 @@ public class SCultureRest {
         return true;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value= "/story/vote")
-    public BaseStoryResponse storyVote(@RequestBody StoryVoteRequestBody requestBody){
+    @RequestMapping(method = RequestMethod.POST, value = "/story/vote")
+    public BaseStoryResponse storyVote(@RequestBody StoryVoteRequestBody requestBody) {
 
-        Story ResponseStory = storyDao.voteStory(requestBody.getStory_id(),requestBody.getIsPositive(),requestBody.getUser_id());
+        Story ResponseStory = storyDao.voteStory(requestBody.getStory_id(), requestBody.getIsPositive(), requestBody.getUser_id());
 
         return new BaseStoryResponse(ResponseStory);
     }

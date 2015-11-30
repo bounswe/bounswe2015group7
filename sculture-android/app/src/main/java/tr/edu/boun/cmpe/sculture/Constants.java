@@ -7,6 +7,7 @@ public class Constants {
     public static final String API_USER_REGISTER = API_BASE_URL + "/user/register";
     public static final String API_STORY_GET = API_BASE_URL + "/story/get";
     public static final String API_STORY_CREATE = API_BASE_URL + "/story/create";
+    public static final String API_STORY_EDIT = API_BASE_URL + "/story/edit";
     public static final String API_SEARCH = API_BASE_URL + "/search";
 
     //REQUEST TAGS
@@ -37,12 +38,15 @@ public class Constants {
     public static final String FIELD_UPDATE_DATE = "update_date";
     public static final String FIELD_LAST_EDITOR = "last_editor";
     public static final String FIELD_TAGS = "tags";
-    public static final String FIELD_POSITIVE_VODE = "positive_vote";
+    public static final String FIELD_POSITIVE_VOTE = "positive_vote";
     public static final String FIELD_NEGATIVE_VOTE = "negative_vote";
     public static final String FIELD_REPORT_COUNT = "report_count";
     public static final String FIELD_OWNER = "owner";
     public static final String FIELD_CONTENT = "content";
 
+    //INTENT BUNDLE KEYS
+    public static final String BUNDLE_STORY_ID = "story_id";
+    public static final String BUNDLE_IS_EDIT = "is_edit";
 
     //HEADER FIELDS
     public static final String HEADER_ACCESS_TOKEN = "access-token";

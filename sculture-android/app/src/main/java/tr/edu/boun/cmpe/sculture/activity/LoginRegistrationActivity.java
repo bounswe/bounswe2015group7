@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -51,9 +50,9 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
 
-    private RequestQueue requestQueue = baseApplication.mRequestQueue;
+    private final RequestQueue requestQueue = baseApplication.mRequestQueue;
 
-    LoginRegistrationActivity mActivity;
+    private LoginRegistrationActivity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_login_registration);
         mActivity = this;
         if (baseApplication.checkLogin()) {
-            Toast.makeText(this, "All ready logged in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.already_logged, Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             return;
@@ -208,7 +207,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
 
         boolean isError = false;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             isError = true;
         }

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import tr.edu.boun.cmpe.sculture.R;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CONTENT;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CREATION_DATE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
@@ -49,9 +50,8 @@ public class StoryShowActivity extends AppCompatActivity {
         createdAt = (TextView) findViewById(R.id.storyCreatedAt);
         lastEditor = (TextView) findViewById(R.id.storyLastEditor);
         lastUpdatedAt = (TextView) findViewById(R.id.story_update_date);
-        if (bundle.getLong("id") != 0) {
-            getStory(bundle.getLong("id"));
-        }
+        long story_id = bundle.getLong(BUNDLE_STORY_ID, 0);
+        getStory(story_id);
 
     }
 

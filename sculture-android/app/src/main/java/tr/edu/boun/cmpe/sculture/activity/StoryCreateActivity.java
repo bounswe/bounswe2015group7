@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -29,7 +28,12 @@ import tr.edu.boun.cmpe.sculture.adapter.StoryImageViewAdapter;
 import tr.edu.boun.cmpe.sculture.view.TagView;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_CREATE;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_EDIT;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_IS_EDIT;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CONTENT;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TAGS;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_STORY_CREATE;
@@ -38,20 +42,29 @@ import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 public class StoryCreateActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
-
-    EditText titleText;
-    EditText contentText;
-    Activity mActivity;
-    TagView completionView;
-
-    private RecyclerView mRecyclerView;
+    private EditText titleText;
+    private EditText contentText;
+    private Activity mActivity;
+    private TagView completionView;
     private StoryImageViewAdapter mAdapter;
+    private boolean isEdit;
+    private long storyId;
+    private ArrayList<Uri> mediaUris = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = this;
         setContentView(R.layout.activity_story_create);
+        mActivity = this;
+
+        Bundle bundle = getIntent().getExtras();
+        isEdit = bundle.getBoolean(BUNDLE_IS_EDIT, false);
+
+        if (isEdit) {
+            storyId = bundle.getLong(BUNDLE_STORY_ID);
+        }
+
+
         titleText = (EditText) findViewById(R.id.title);
         contentText = (EditText) findViewById(R.id.content);
 
@@ -59,47 +72,82 @@ public class StoryCreateActivity extends AppCompatActivity {
         //Even though we don't use autocompletion the library require this adapter.
         completionView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[0]));
 
-        completionView.performValidation();
-
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.image_recyclerView);
-
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-
-        ArrayList<Uri> myDataset = new ArrayList<>();
-
-        mAdapter = new StoryImageViewAdapter(myDataset, this, mRecyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.image_recyclerView);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(llm);
+        mAdapter = new StoryImageViewAdapter(mediaUris);
         mRecyclerView.setAdapter(mAdapter);
 
+        //If it is edit, pre-fill the view
+        if (isEdit) {
+            JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put(FIELD_ID, storyId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            addRequest(API_STORY_GET, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        titleText.setText(response.getString(FIELD_TITLE));
+                        contentText.setText(response.getString(FIELD_CONTENT));
+                        JSONArray tagsAr = response.getJSONArray(FIELD_TAGS);
+                        for (int i = 0; i < tagsAr.length(); i++)
+                            completionView.addObject((String) tagsAr.get(i));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //TODO Get media files and put on recycler view
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }, null);
+        }
     }
 
 
-    private void clickCreateButton() {
-        String title = titleText.getText().toString();
-        String content = contentText.getText().toString();
-
-
+    private void clickSaveButton() {
         JSONObject requestBody = new JSONObject();
         try {
-            requestBody.put(FIELD_TITLE, title);
-            requestBody.put(FIELD_CONTENT, content);
+            requestBody.put(FIELD_TITLE, titleText.getText());
+            requestBody.put(FIELD_CONTENT, contentText.getText());
             JSONArray tags = new JSONArray();
             List<String> ts = completionView.getObjects();
             for (String t : ts)
                 tags.put(t);
             requestBody.put(FIELD_TAGS, tags);
-            //TODO Image upload
+
+            if (isEdit)
+                requestBody.put(FIELD_ID, storyId);
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        String api_url = API_STORY_CREATE;
+        if (isEdit)
+            api_url = API_STORY_EDIT;
 
-        addRequest(API_STORY_CREATE, requestBody,
+        addRequest(api_url, requestBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        startActivity(new Intent(mActivity, MainActivity.class));
+                        try {
+
+                            Intent intent = new Intent(mActivity, StoryShowActivity.class);
+                            intent.putExtra(BUNDLE_STORY_ID, response.getLong(FIELD_ID));
+                            mActivity.startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            //TODO ERROR HANDLING
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -132,7 +180,7 @@ public class StoryCreateActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_save)
-            clickCreateButton();
+            clickSaveButton();
         return super.onOptionsItemSelected(item);
     }
 
@@ -142,7 +190,6 @@ public class StoryCreateActivity extends AppCompatActivity {
             Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
-                Log.i("HERE", "Uri: " + uri.toString());
                 mAdapter.addElement(uri);
             }
         }

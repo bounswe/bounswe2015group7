@@ -1,6 +1,5 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,10 +13,7 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.R;
 
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
-    private Activity mActivity;
     private ArrayList<Uri> uris;
-    private RecyclerView recyclerView;
-    private StoryImageViewAdapter mAdapter;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
@@ -31,21 +27,15 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    uris.remove(uri);
-                    mAdapter.notifyDataSetChanged();
+                    removeElement(uri);
                 }
             });
         }
     }
 
-
-    public StoryImageViewAdapter(ArrayList<Uri> uris, Activity activity, RecyclerView view) {
+    public StoryImageViewAdapter(ArrayList<Uri> uris) {
         this.uris = uris;
-        this.mActivity = activity;
-        this.recyclerView = view;
-        this.mAdapter = this;
     }
-
 
     @Override
     public StoryImageViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,8 +44,6 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
         return new ViewHolder(v);
     }
 
-
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.imageView.setImageURI(uris.get(position));
@@ -72,4 +60,13 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
         this.notifyDataSetChanged();
     }
 
+    private void removeElement(Uri uri) {
+        uris.remove(uri);
+        removeElement(uris.indexOf(uri));
+    }
+
+    private void removeElement(int index) {
+        uris.remove(index);
+        this.notifyItemRemoved(index);
+    }
 }

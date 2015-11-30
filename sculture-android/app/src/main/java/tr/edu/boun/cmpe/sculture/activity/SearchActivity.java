@@ -16,11 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-import java.util.HashMap;
-
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.adapter.RecyclerViewAdapter;
+import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_QUERY;
@@ -31,55 +28,20 @@ import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
 public class SearchActivity extends AppCompatActivity {
 
-    RecyclerView mRecyclerView;
-    private RecyclerViewAdapter mRecyclerViewAdapter;
-
-    int co = 0;
-    JSONArray dataset = new JSONArray();
-
-    //TODO DELETE THIS TESTING
-    JSONArray jsonArray = new JSONArray();
-    HashMap<Integer, JSONObject> stroies = new HashMap<>();
-
-    //TODO DELETE THIS TESTING
-    public void create_data() throws JSONException {
-        for (int i = 0; i < 10; i++) {
-            JSONObject object = new JSONObject();
-            object.put("story_id", i);
-            object.put("title", "my title " + i);
-            object.put("owner_id", i + 1000);
-            object.put("create_date", new Date().getTime() - i * 1000000);
-            object.put("last_editor_id", i + 1000);
-            object.put("last_edit_date", new Date().getTime() - i * 1000000);
-            object.put("content", "My content is this bla bla bla " + i);
-            JSONArray tags = new JSONArray();
-            tags.put("tag1");
-            tags.put("tag2");
-            object.put("tags", tags);
-            object.put("positive_vote", 10 + i);
-            object.put("negative_vote", 1 + i);
-            jsonArray.put(object);
-            stroies.put(i, object);
-        }
-    }
-
+    private StoryListViewAdapter mStoryListViewAdapter;
+    private JSONArray searchResults = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            create_data();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         setContentView(R.layout.activity_search);
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
 
-        mRecyclerViewAdapter = new RecyclerViewAdapter(dataset, this);
+        mStoryListViewAdapter = new StoryListViewAdapter(searchResults, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setAdapter(mStoryListViewAdapter);
     }
 
 
@@ -111,8 +73,8 @@ public class SearchActivity extends AppCompatActivity {
                                 try {
                                     JSONArray array = response.getJSONArray(FIELD_RESULTS);
                                     for (int i = 0; i < array.length(); i++)
-                                        dataset.put(array.get(i));
-                                    mRecyclerViewAdapter.notifyDataSetChanged();
+                                        searchResults.put(array.get(i));
+                                    mStoryListViewAdapter.notifyDataSetChanged();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

@@ -22,21 +22,18 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_register">Sign in</string>
-    <string name="wantRegister">Don\'t have acount? Click to register</string>
+    <string name="wantRegister">Don\'t have account? Click to register</string>
     <string name="wantLogin">Have a account? Click to login</string>
     <string name="error_invalid_username">Invalid username</string>
     <string name="home">Home</string>
     <string name="login">Login</string>
     <string name="title_activity_story_create">Create Your Story</string>
     <string name="userLogin">Current user:</string>
-    <string name="loginAdvice">To acces all features, please sign up!</string>
-    <string name="error_login">While loging in, an error is occured</string>
+    <string name="loginAdvice">To access all features, please sign up!</string>
+    <string name="error_login">While logging in, an error is occurred</string>
     <string name="logout">Log out</string>
-    <string name="loggedout">Logged out</string>
     <string name="search">Search</string>
     <string name="story_written_by">by</string>
     <string name="story_last_edit_date">Last edited on</string>
@@ -49,4 +46,5 @@
     <string name="prompt_story">Story</string>
     <string name="prompt_tags">Tags</string>
     <string name="action_add_media">Add Image</string>
+    <string name="already_logged">All ready logged in</string>
 </resources>

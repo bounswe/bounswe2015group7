@@ -162,7 +162,7 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/tag/get")
-    public LoginResponse user_get(@RequestBody TagGetRequestBody requestBody) {
+    public TagResponse user_get(@RequestBody TagGetRequestBody requestBody) {
         String title = requestBody.getTag_title();
         Tag tag;
         try {

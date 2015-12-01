@@ -1,6 +1,7 @@
 package sculture.dao;
 
 import org.springframework.stereotype.Repository;
+import sculture.exceptions.UserAlreadyExistsException;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.RelationFollowUser;
 
@@ -19,7 +20,9 @@ public class UserDao {
      * Save the user in the database.
      */
     public void create(User user) {
-        entityManager.persist(user);
+        if (getByEmail(user.getEmail()) != null) {
+            entityManager.persist(user);
+        } else throw new UserAlreadyExistsException();
         return;
     }
 

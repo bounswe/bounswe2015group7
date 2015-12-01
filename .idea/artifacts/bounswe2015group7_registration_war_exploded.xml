@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="bounswe2015group7-registration:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/bounswe2015group7_registration_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="bounswe2015group7-registration/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="bounswe2015group7-registration" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

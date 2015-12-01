@@ -75,7 +75,7 @@
 
 <div class="container">
     <div class="row">
-        <form role="form" method="post" action="/{{credentials.objectId}}/addstory">
+        <form role="form" method="post" action="/addstory">
             <div class="col-md-8 col-md-offset-2">
                 <div class="form-group">
                     <label for="story-title">Title</label>

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="Sculture-web:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="sculture.war">
-      <element id="artifact" artifact-name="Sculture-web:war exploded" />
-    </root>
-  </artifact>
-</component>

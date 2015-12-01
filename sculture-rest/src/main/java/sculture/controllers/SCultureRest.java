@@ -25,6 +25,7 @@ import sculture.models.requests.CommentListRequestBody;
 import sculture.models.requests.LoginRequestBody;
 import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
+import sculture.models.requests.StoriesGetRequestBody;
 import sculture.models.requests.StoryCreateRequestBody;
 import sculture.models.requests.StoryGetRequestBody;
 import sculture.models.requests.StoryReportRequestBody;
@@ -45,6 +46,7 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,6 +173,25 @@ public class SCultureRest {
             throw new UserNotExistException();
         }
         return new TagResponse(tag);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
+    public SearchResponse user_get(@RequestBody StoriesGetRequestBody requestBody) {
+        long id = requestBody.getId();
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        List<Story> storyList = storyDao.getByOwner(id);
+        List<BaseStoryResponse> baseStoryResponseList = new ArrayList<BaseStoryResponse>();
+        for (Story story : storyList) {
+            baseStoryResponseList.add(new BaseStoryResponse(story));
+        }
+        SearchResponse searchResponse = new SearchResponse();
+        if (page != 0 && size != 0) {
+            searchResponse.setResult(baseStoryResponseList.subList(page * size, page * size + size));
+        } else {
+            searchResponse.setResult(baseStoryResponseList);
+        }
+        return searchResponse;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")

@@ -9,6 +9,10 @@
         <servlet-class>com.sculture.MainServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>searchall</servlet-name>
+        <servlet-class>com.sculture.SearchAll</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.sculture.Login</servlet-class>
     </servlet>
@@ -43,5 +47,9 @@
     <servlet-mapping>
         <servlet-name>addstory</servlet-name>
         <url-pattern>/addstory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>searchall</servlet-name>
+        <url-pattern>/search/all</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -163,6 +163,11 @@ public class SCultureRest {
         return new LoginResponse(u);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/search/all")
+    public List<Story> user_get() {
+        return storyDao.getAll();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/tag/get")
     public TagResponse user_get(@RequestBody TagGetRequestBody requestBody) {
         String title = requestBody.getTag_title();

@@ -39,7 +39,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
     private static final int STATUS_LOGIN = 1;
     private static final int STATUS_REGISTRATION = 2;
     private static int STATUS = STATUS_LOGIN;
-
+    private final RequestQueue requestQueue = baseApplication.mRequestQueue;
     private TextInputLayout passwordConfirmationInputLayout;
     private TextInputLayout emailInputLayout;
     private TextInputLayout usernameInputLayout;
@@ -49,9 +49,6 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
     private EditText mNameView;
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
-
-    private final RequestQueue requestQueue = baseApplication.mRequestQueue;
-
     private LoginRegistrationActivity mActivity;
 
     @Override

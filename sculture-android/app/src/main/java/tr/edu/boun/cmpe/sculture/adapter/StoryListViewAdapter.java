@@ -26,39 +26,13 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_UPDATE_DATE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
 
 public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdapter.ViewHolder> {
-    private Activity mActivity;
-    private ArrayList<JSONObject> stories = new ArrayList<>();
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView story_title;
-        public TextView story_update_date;
-        public TextView story_creator;
-        public long story_id;
-
-        public ViewHolder(View v) {
-            super(v);
-            story_title = (TextView) v.findViewById(R.id.story_title);
-            story_update_date = (TextView) v.findViewById(R.id.story_update_date);
-            story_creator = (TextView) v.findViewById(R.id.story_creator);
-            v.setOnClickListener(this);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(mActivity, StoryShowActivity.class);
-            intent.putExtra(BUNDLE_STORY_ID, story_id);
-            mActivity.startActivity(intent);
-
-        }
-    }
+    private final Activity mActivity;
+    private final ArrayList<JSONObject> stories = new ArrayList<>();
 
 
     public StoryListViewAdapter(Activity activity) {
         this.mActivity = activity;
     }
-
 
     @Override
     public StoryListViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -110,5 +84,29 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     public void clearElements() {
         stories.clear();
         this.notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public final TextView story_title;
+        public final TextView story_update_date;
+        public final TextView story_creator;
+        public long story_id;
+
+        public ViewHolder(View v) {
+            super(v);
+            story_title = (TextView) v.findViewById(R.id.story_title);
+            story_update_date = (TextView) v.findViewById(R.id.story_update_date);
+            story_creator = (TextView) v.findViewById(R.id.story_creator);
+            v.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(mActivity, StoryShowActivity.class);
+            intent.putExtra(BUNDLE_STORY_ID, story_id);
+            mActivity.startActivity(intent);
+
+        }
     }
 }

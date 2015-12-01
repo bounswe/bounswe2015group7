@@ -13,25 +13,7 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.R;
 
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
-    private ArrayList<Uri> uris;
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-        public ImageButton button;
-        public Uri uri;
-
-        public ViewHolder(View v) {
-            super(v);
-            imageView = (ImageView) v.findViewById(R.id.image);
-            button = (ImageButton) v.findViewById(R.id.button);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removeElement(uri);
-                }
-            });
-        }
-    }
+    private final ArrayList<Uri> uris;
 
     public StoryImageViewAdapter(ArrayList<Uri> uris) {
         this.uris = uris;
@@ -68,5 +50,23 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
     private void removeElement(int index) {
         uris.remove(index);
         this.notifyItemRemoved(index);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final ImageView imageView;
+        public final ImageButton button;
+        public Uri uri;
+
+        public ViewHolder(View v) {
+            super(v);
+            imageView = (ImageView) v.findViewById(R.id.image);
+            button = (ImageButton) v.findViewById(R.id.button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeElement(uri);
+                }
+            });
+        }
     }
 }

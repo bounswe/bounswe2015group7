@@ -29,19 +29,13 @@ import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
  */
 public class ProfileFragment extends Fragment {
 
-    Button login_register_button;
-    TextView username;
-    TextView email;
-    RecyclerView story_list_recycler;
-
-    StoryListViewAdapter mStoryListViewAdapter;
-
-    RelativeLayout loggedInLayout;
-    RelativeLayout loggedOutLayout;
-
-
     //TODO DELETE THIS AFTER REST CONNECTION
-    ArrayList<JSONObject> stories = new ArrayList<>();
+    private final ArrayList<JSONObject> stories = new ArrayList<>();
+    private TextView username;
+    private TextView email;
+    private RecyclerView story_list_recycler;
+    private RelativeLayout loggedInLayout;
+    private RelativeLayout loggedOutLayout;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,7 +55,7 @@ public class ProfileFragment extends Fragment {
 
         story_list_recycler = (RecyclerView) view.findViewById(R.id.profile_story_list);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
+        StoryListViewAdapter mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
         story_list_recycler.setLayoutManager(mLayoutManager);
         story_list_recycler.setAdapter(mStoryListViewAdapter);
 
@@ -76,20 +70,20 @@ public class ProfileFragment extends Fragment {
                         "  \"update_date\": 1448236800000,\n" +
                         "  \"last_editor\": {\n" +
                         "    \"id\": 1,\n" +
-                        "    \"username\": \"fatih\"\n" +
+                        "    \"username\": \"john\"\n" +
                         "  },\n" +
                         "  \"owner\": {\n" +
                         "    \"id\": 1,\n" +
-                        "    \"username\": \"fatih\"\n" +
+                        "    \"username\": \"john\"\n" +
                         "  },\n" +
                         "  \"tags\": [\n" +
-                        "    \"fsa\",\n" +
-                        "    \"fsaf\"\n" +
+                        "    \"tag1\",\n" +
+                        "    \"tag2\"\n" +
                         "  ],\n" +
                         "  \"positive_vote\": 0,\n" +
                         "  \"negative_vote\": 0,\n" +
                         "  \"report_count\": 0,\n" +
-                        "  \"content\": \"asfasf\"\n" +
+                        "  \"content\": \"content\"\n" +
                         "}");
                 stories.add(jsonObject);
             } catch (JSONException e) {
@@ -99,7 +93,7 @@ public class ProfileFragment extends Fragment {
         }
 
         setRecyclerListeners();
-        login_register_button = (Button) view.findViewById(R.id.login_register);
+        Button login_register_button = (Button) view.findViewById(R.id.login_register);
         login_register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

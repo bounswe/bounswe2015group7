@@ -2,12 +2,14 @@ package tr.edu.boun.cmpe.sculture.activity;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,13 +37,13 @@ import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.fragment.main.HomeFragment;
 import tr.edu.boun.cmpe.sculture.fragment.main.ProfileFragment;
 
+import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_QUERY;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_RESULTS;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
-import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton createStoryButton;
     private MenuItem logout_menu_item;
 
+    private MainActivity mActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mActivity = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -220,15 +227,25 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
+            int id;
             switch (position) {
                 case 0:
-                    return getString(R.string.tab_title_home);
+                    id = R.drawable.ic_home_white_48dp;
+                    break;
                 case 1:
-                    return getString(R.string.tab_title_profile);
+                    id = R.drawable.ic_person_white_48dp;
+                    break;
                 default:
-                    return getString(R.string.tab_title_home);
-
+                    id = R.drawable.ic_home_white_48dp;
+                    break;
             }
+
+            Drawable image = ContextCompat.getDrawable(mActivity, id);
+            image.setBounds(0, 0, (int) (image.getIntrinsicWidth() / 1.5), (int) (image.getIntrinsicHeight() / 1.5));
+            SpannableString sb = new SpannableString(" ");
+            ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+            sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return sb;
         }
     }
 }

@@ -42,6 +42,7 @@ import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 public class StoryCreateActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
+    private final ArrayList<Uri> mediaUris = new ArrayList<>();
     private EditText titleText;
     private EditText contentText;
     private Activity mActivity;
@@ -49,7 +50,6 @@ public class StoryCreateActivity extends AppCompatActivity {
     private StoryImageViewAdapter mAdapter;
     private boolean isEdit;
     private long storyId;
-    private ArrayList<Uri> mediaUris = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -30,13 +30,13 @@ import static tr.edu.boun.cmpe.sculture.Utils.timestampToPrettyString;
 
 public class StoryShowActivity extends AppCompatActivity {
 
-    TextView title;
-    TextView content;
-    TextView tags;
-    TextView storyOwner;
-    TextView createdAt;
-    TextView lastEditor;
-    TextView lastUpdatedAt;
+    private TextView title;
+    private TextView content;
+    private TextView tags;
+    private TextView storyOwner;
+    private TextView createdAt;
+    private TextView lastEditor;
+    private TextView lastUpdatedAt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class StoryShowActivity extends AppCompatActivity {
     }
 
 
-    public void getStory(long id) {
+    private void getStory(long id) {
 
         // TODO get story request
 
@@ -75,10 +75,10 @@ public class StoryShowActivity extends AppCompatActivity {
                             title.setText(response.getString(FIELD_TITLE));
                             content.setText(response.getString(FIELD_CONTENT));
                             JSONArray tagsAr = response.getJSONArray(FIELD_TAGS);
-                            String tagstring = "";
+                            String tag_string = "";
                             for (int i = 0; i < tagsAr.length(); i++)
-                                tagstring += tagsAr.get(i) + ", ";
-                            tags.setText(tagstring);
+                                tag_string += tagsAr.get(i) + ", ";
+                            tags.setText(tag_string);
                             storyOwner.setText(response.getJSONObject(FIELD_OWNER).getString(FIELD_USERNAME));
                             lastEditor.setText(response.getJSONObject(FIELD_LAST_EDITOR).getString(FIELD_USERNAME));
                             createdAt.setText(timestampToPrettyString(response.getLong(FIELD_CREATION_DATE)));

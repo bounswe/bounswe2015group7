@@ -33,6 +33,7 @@ public class Utils {
 
     /**
      * Converts milliseconds timestamp to string such as (seconds ago, 1 month ago etc.(
+     *
      * @param milliseconds Unix timestamp milliseconds resolution
      * @return Pretty date string
      */
@@ -48,11 +49,12 @@ public class Utils {
 
     /**
      * Create a request with access_token and add it to queue. When the request done the listener will be triggered.
-     * @param url The url of the request. Use API url constants.
-     * @param requestBody The JSON request body
-     * @param listener The listener which will be triggered with successful response
+     *
+     * @param url           The url of the request. Use API url constants.
+     * @param requestBody   The JSON request body
+     * @param listener      The listener which will be triggered with successful response
      * @param errorListener The listener which will be triggered with error response
-     * @param tag The tag of the request. It may be useful to remove request from the queue. It may be null.
+     * @param tag           The tag of the request. It may be useful to remove request from the queue. It may be null.
      */
     public static void addRequest(String url, JSONObject requestBody, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Object tag) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody.toString(), listener, errorListener) {
@@ -68,6 +70,7 @@ public class Utils {
 
     /**
      * Removes requests with given tag from the queue. The listeners of the removed requests will not be triggered.
+     *
      * @param tag The tag of the request
      */
     public static void removeRequests(Object tag) {

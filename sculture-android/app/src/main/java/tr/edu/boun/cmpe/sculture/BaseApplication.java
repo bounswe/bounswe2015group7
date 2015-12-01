@@ -7,7 +7,10 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import static tr.edu.boun.cmpe.sculture.Constants.*;
+import static tr.edu.boun.cmpe.sculture.Constants.PREFS_NAME;
+import static tr.edu.boun.cmpe.sculture.Constants.PREF_ACCESS_TOKEN;
+import static tr.edu.boun.cmpe.sculture.Constants.PREF_EMAIL;
+import static tr.edu.boun.cmpe.sculture.Constants.PREF_USERNAME;
 
 public class BaseApplication extends Application {
     public static BaseApplication baseApplication;
@@ -46,9 +49,10 @@ public class BaseApplication extends Application {
 
     /**
      * Set user session.
-     * @param token Access token of the user.
+     *
+     * @param token    Access token of the user.
      * @param username Username of the user.
-     * @param email Email address of the user.
+     * @param email    Email address of the user.
      */
     public void setUserInfo(String token, String username, String email) {
         this.TOKEN = token;
@@ -67,6 +71,7 @@ public class BaseApplication extends Application {
 
     /**
      * Checks whether there is a user session.
+     *
      * @return Whether tare is a user session.
      */
     public boolean checkLogin() {
@@ -92,6 +97,7 @@ public class BaseApplication extends Application {
 
     /**
      * Retrieve the access token of current user.
+     *
      * @return Access token of current user
      */
     public String getTOKEN() {

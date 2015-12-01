@@ -29,7 +29,7 @@ public class BaseApplication extends Application {
     }
 
     private void autoLogin() {
-        if (TOKEN == null) {
+        if (TOKEN.equals("")) {
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             String email = settings.getString(PREF_EMAIL, "");
             String username = settings.getString(PREF_USERNAME, "");
@@ -98,5 +98,11 @@ public class BaseApplication extends Application {
         return TOKEN;
     }
 
+    public String getEMAIL() {
+        return EMAIL;
+    }
 
+    public String getUSERNAME() {
+        return USERNAME;
+    }
 }

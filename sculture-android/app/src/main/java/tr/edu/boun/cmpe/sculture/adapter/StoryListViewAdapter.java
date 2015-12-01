@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
@@ -26,7 +27,7 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
 
 public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdapter.ViewHolder> {
     private Activity mActivity;
-    private JSONArray stories;
+    private ArrayList<JSONObject> stories = new ArrayList<>();
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -44,7 +45,6 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
 
         }
 
-
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(mActivity, StoryShowActivity.class);
@@ -55,15 +55,14 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     }
 
 
-    public StoryListViewAdapter(JSONArray stories, Activity activity) {
-        this.stories = stories;
+    public StoryListViewAdapter(Activity activity) {
         this.mActivity = activity;
     }
 
 
     @Override
     public StoryListViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
+                                                              int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.searched_story, parent, false);
         return new ViewHolder(v);
     }
@@ -71,7 +70,7 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         try {
-            JSONObject obj = stories.getJSONObject(position);
+            JSONObject obj = stories.get(position);
             holder.story_title.setText(obj.getString(FIELD_TITLE));
             holder.story_id = obj.getLong(FIELD_ID);
 
@@ -90,6 +89,26 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
 
     @Override
     public int getItemCount() {
-        return stories.length();
+        return stories.size();
+    }
+
+    public void addElement(JSONObject story) {
+        stories.add(story);
+        this.notifyDataSetChanged();
+    }
+
+    private void removeElement(JSONObject story) {
+        stories.remove(story);
+        removeElement(stories.indexOf(story));
+    }
+
+    private void removeElement(int index) {
+        stories.remove(index);
+        this.notifyItemRemoved(index);
+    }
+
+    public void clearElements() {
+        stories.clear();
+        this.notifyDataSetChanged();
     }
 }

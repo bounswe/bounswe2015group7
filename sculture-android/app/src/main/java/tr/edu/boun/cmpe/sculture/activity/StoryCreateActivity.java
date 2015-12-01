@@ -58,12 +58,13 @@ public class StoryCreateActivity extends AppCompatActivity {
         mActivity = this;
 
         Bundle bundle = getIntent().getExtras();
-        isEdit = bundle.getBoolean(BUNDLE_IS_EDIT, false);
+        if (bundle != null) {
+            isEdit = bundle.getBoolean(BUNDLE_IS_EDIT, false);
 
-        if (isEdit) {
-            storyId = bundle.getLong(BUNDLE_STORY_ID);
+            if (isEdit) {
+                storyId = bundle.getLong(BUNDLE_STORY_ID);
+            }
         }
-
 
         titleText = (EditText) findViewById(R.id.title);
         contentText = (EditText) findViewById(R.id.content);

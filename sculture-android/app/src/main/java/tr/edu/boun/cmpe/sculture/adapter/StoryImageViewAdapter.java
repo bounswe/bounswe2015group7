@@ -22,7 +22,6 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
     @Override
     public StoryImageViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item, parent, false);
-
         return new ViewHolder(v);
     }
 
@@ -38,12 +37,13 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
     }
 
     public void addElement(Uri uri) {
-        uris.add(uri);
-        this.notifyDataSetChanged();
+        if (!uris.contains(uri)) {
+            uris.add(uri);
+            this.notifyItemInserted(uris.size() - 1);
+        }
     }
 
     private void removeElement(Uri uri) {
-        uris.remove(uri);
         removeElement(uris.indexOf(uri));
     }
 

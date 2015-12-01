@@ -29,6 +29,7 @@ import sculture.models.requests.StoryCreateRequestBody;
 import sculture.models.requests.StoryGetRequestBody;
 import sculture.models.requests.StoryReportRequestBody;
 import sculture.models.requests.StoryVoteRequestBody;
+import sculture.models.requests.TagGetRequestBody;
 import sculture.models.requests.UserFollowRequestBody;
 import sculture.models.requests.UserGetRequestBody;
 import sculture.models.requests.UserUpdateRequestBody;
@@ -37,8 +38,10 @@ import sculture.models.response.CommentResponse;
 import sculture.models.response.FullStoryResponse;
 import sculture.models.response.LoginResponse;
 import sculture.models.response.SearchResponse;
+import sculture.models.response.TagResponse;
 import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
+import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
@@ -156,6 +159,18 @@ public class SCultureRest {
             throw new UserNotExistException();
         }
         return new LoginResponse(u);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/tag/get")
+    public LoginResponse user_get(@RequestBody TagGetRequestBody requestBody) {
+        String title = requestBody.getTag_title();
+        Tag tag;
+        try {
+            tag = tagDao.getByTitle(title);
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new UserNotExistException();
+        }
+        return new TagResponse(tag);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")

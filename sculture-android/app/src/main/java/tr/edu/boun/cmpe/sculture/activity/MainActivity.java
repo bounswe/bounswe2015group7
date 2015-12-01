@@ -39,24 +39,31 @@ import tr.edu.boun.cmpe.sculture.fragment.main.ProfileFragment;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_SEARCH;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_QUERY;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_RESULTS;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int SIZE = 10;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-
     private RecyclerView recyclerView;
     private StoryListViewAdapter mStoryListViewAdapter;
-
+    private LinearLayoutManager mLayoutManager;
     private FloatingActionButton createStoryButton;
     private MenuItem logout_menu_item;
-
     private MainActivity mActivity;
+    private int PAGE = 1;
+    private boolean is_loading_more = false;
+    private boolean is_reach_end = false;
+
+
+    private String search_query = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +84,17 @@ public class MainActivity extends AppCompatActivity {
         //Search
         recyclerView = (RecyclerView) findViewById(R.id.search_recycler);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
         mStoryListViewAdapter = new StoryListViewAdapter(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mStoryListViewAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                load_story();
+            }
+        });
 
         createStoryButton = (FloatingActionButton) findViewById(R.id.createStoryButton);
         createStoryButton.setOnClickListener(new View.OnClickListener() {
@@ -140,39 +154,14 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //TODO RecyclerView is terrible. It should be updated.
+                is_loading_more = false;
+                is_reach_end = false;
+                PAGE = 1;
                 removeRequests(REQUEST_TAG_SEARCH);
-
-                final JSONObject requestBody = new JSONObject();
-                try {
-                    requestBody.put(FIELD_QUERY, searchView.getQuery().toString());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                addRequest(API_SEARCH, requestBody, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    mStoryListViewAdapter.clearElements();
-                                    JSONArray array = response.getJSONArray(FIELD_RESULTS);
-                                    for (int i = 0; i < array.length(); i++)
-                                        mStoryListViewAdapter.addElement(array.getJSONObject(i));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                            }
-                        }, REQUEST_TAG_SEARCH);
-
-
-                return false;
+                mStoryListViewAdapter.clearElements();
+                search_query = query;
+                load_story();
+                return true;
             }
 
             @Override
@@ -199,6 +188,56 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+
+    }
+
+    private void load_story() {
+        final JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put(FIELD_QUERY, search_query);
+            requestBody.put(FIELD_SIZE, SIZE);
+            requestBody.put(FIELD_PAGE, PAGE);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        int totalItemCount = mLayoutManager.getItemCount();
+        int lastVisibleIndex = mLayoutManager.findLastVisibleItemPosition();
+
+
+        boolean loadMore = lastVisibleIndex == totalItemCount - 1;
+
+        String log = "";
+        if (loadMore) log += " load more";
+        if (is_reach_end) log += " reach end";
+        if (is_loading_more) log += " loading";
+        if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
+            PAGE++;
+            is_loading_more = true;
+            addRequest(API_SEARCH, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    JSONArray array;
+                    try {
+                        array = response.getJSONArray(FIELD_RESULTS);
+                        for (int i = 0; i < array.length(); i++)
+                            mStoryListViewAdapter.addElement(array.getJSONObject(i));
+                        if (array.length() == 0)
+                            is_reach_end = true;
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    is_loading_more = false;
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }, REQUEST_TAG_SEARCH);
+        }
 
     }
 

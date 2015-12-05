@@ -14,7 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.adapter.RecyclerViewAdaptor_Comments;
+import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
@@ -45,7 +45,7 @@ public class StoryShowActivity extends AppCompatActivity {
     TextView lastUpdatedAt;
     RecyclerView rcw;
     LinearLayoutManager mLayoutManager;
-    RecyclerViewAdaptor_Comments adaptor;
+    StoryViewWithCommentAdapter adaptor;
     Bundle bundle;
 
     @Override
@@ -67,7 +67,7 @@ public class StoryShowActivity extends AppCompatActivity {
         rcw = (RecyclerView) findViewById(R.id.comment_recycler);
         rcw.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        adaptor = new RecyclerViewAdaptor_Comments(this);
+        adaptor = new StoryViewWithCommentAdapter(this);
         rcw.setLayoutManager(mLayoutManager);
         rcw.setAdapter(adaptor);
         rcw.addOnScrollListener(new RecyclerView.OnScrollListener() {

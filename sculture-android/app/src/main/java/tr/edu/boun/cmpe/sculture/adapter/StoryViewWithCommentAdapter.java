@@ -17,13 +17,13 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.activity.StoryShowActivity;
 
-public class RecyclerViewAdaptor_Comments extends RecyclerView.Adapter<RecyclerViewAdaptor_Comments.ViewHolder> {
+public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<StoryViewWithCommentAdapter.ViewHolder> {
     private Activity mActivity;
     private final ArrayList<JSONObject> comments = new ArrayList<>();
     private long user_id;
     //private JSONArray comments;
 
-    public RecyclerViewAdaptor_Comments(StoryShowActivity activity) {
+    public StoryViewWithCommentAdapter(StoryShowActivity activity) {
         this.mActivity = activity;
     }
 
@@ -59,15 +59,15 @@ public class RecyclerViewAdaptor_Comments extends RecyclerView.Adapter<RecyclerV
     }
 
 
-    /*public RecyclerViewAdaptor_Comments(JSONArray comments, Activity activity) {
+    /*public StoryViewWithCommentAdapter(JSONArray comments, Activity activity) {
         this.comments = comments;
         this.mActivity = activity;
     }
 */
 
     @Override
-    public RecyclerViewAdaptor_Comments.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
+    public StoryViewWithCommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                     int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_comment, parent, false);
         // set the view's size, margins, paddings and layout parameters

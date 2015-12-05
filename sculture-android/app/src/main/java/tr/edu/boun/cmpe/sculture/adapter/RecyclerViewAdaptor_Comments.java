@@ -69,7 +69,7 @@ public class RecyclerViewAdaptor_Comments extends RecyclerView.Adapter<RecyclerV
     public RecyclerViewAdaptor_Comments.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                              int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_comment, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder(v);
     }

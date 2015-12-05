@@ -37,7 +37,7 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     @Override
     public StoryListViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                               int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.searched_story, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_searched_story, parent, false);
         return new ViewHolder(v);
     }
 

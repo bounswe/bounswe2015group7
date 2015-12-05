@@ -24,6 +24,7 @@ import static tr.edu.boun.cmpe.sculture.Constants.API_USER_LOGIN;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_REGISTER;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_EMAIL;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PASSWORD;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_LOGIN;
@@ -179,8 +180,11 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                                 String email = response.getString(FIELD_EMAIL);
                                 String username = response.getString(FIELD_USERNAME);
                                 String access_token = response.getString(FIELD_ACCESS_TOKEN);
-                                baseApplication.setUserInfo(access_token, username, email);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                long user_id = response.getLong(FIELD_ID);
+                                baseApplication.setUserInfo(access_token, username, email, user_id);
+                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(i);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 //TODO Error handling
@@ -236,8 +240,11 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                                 String email = response.getString(FIELD_EMAIL);
                                 String username = response.getString(FIELD_USERNAME);
                                 String access_token = response.getString(FIELD_ACCESS_TOKEN);
-                                baseApplication.setUserInfo(access_token, username, email);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                long user_id = response.getLong(FIELD_ID);
+                                baseApplication.setUserInfo(access_token, username, email, user_id);
+                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(i);
                             } catch (JSONException e) {
                                 //TODO Error handling
                                 e.printStackTrace();

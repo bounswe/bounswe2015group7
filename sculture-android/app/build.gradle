@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         applicationId "tr.edu.boun.cmpe.sculture"
@@ -26,6 +26,9 @@ android {
         }
         windowsHostedNetwork {
             buildConfigField "String", "API_BASE_URL", "\"http://192.168.137.1\""
+        }
+        localHost{
+            buildConfigField "String", "API_BASE_URL", "\"http://192.168.1.2:8080\""
         }
     }
 }

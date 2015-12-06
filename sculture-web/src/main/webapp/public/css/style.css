@@ -1,12 +1,15 @@
 
 body {
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    font-weight: 300;
-    color: #888;
-    line-height: 30px;
-    text-align: center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: 300;
+	color: #888;
+	line-height: 30px;
+	text-align: center;
 }
+.glyphicon-thumbs-up { color: #1abc9c; font-size: 20px; }
+.glyphicon-thumbs-down { color: #e74c3c; font-size: 20px; padding-left: 5px; }
+
 
 strong { font-weight: 500; }
 
@@ -83,6 +86,14 @@ img { max-width: 100%; }
 	line-height: 20px;
 }
 
+.arrow-up {
+	width: 0;
+	height: 0;
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+
+	border-bottom: 15px solid black;
+}
 
 /***** Content *****/
 

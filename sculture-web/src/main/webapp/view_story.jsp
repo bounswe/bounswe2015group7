@@ -97,7 +97,7 @@
             <!-- Title -->
             <%
                 String title = request.getParameter("story-title");
-//                String date = request.getParameter("storyCreationDate");
+                //                String date = request.getParameter("storyCreationDate");
                 String content = request.getParameter("story-content");
                 String tags = request.getParameter("story-tags");
 
@@ -119,10 +119,14 @@
 
                   <!-- Post Content -->
             <p><% out.print(content); %>
+                <span class="center-block">
+                    <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"></span>
+                    <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"></span>
+                </span>
+
             <hr>
 
             <!-- Blog Comments -->
-
             <!-- Comments Form -->
             <div class="well">
                 <h4>Leave a Comment:</h4>
@@ -140,50 +144,24 @@
             <!-- Posted Comments -->
 
             <!-- Comment -->
+            <%String[] commentNames = request.getAttribute("comment_names");%>
+            <%String[] commentDates = request.getAttribute("comment_dates");%>
+            <%String[] commentBodies = request.getAttribute("comment_bodies");%>
+            <%for(int i = 0; i < commentBodies.length; i++) {%>
             <div class="media">
                 <a class="pull-left" href="#">
                     <img class="media-object" src="http://placehold.it/64x64" alt="">
                 </a>
-
                 <div class="media-body">
-                    <h4 class="media-heading" align="left"> Josh Adams
-                        <small>November 9, 2015 at 9:30 PM</small>
+                    <h4 class="media-heading" align="left"> <%out.print(commentNames[i]);%>
+                        <small><%out.print(commentDates[i]);%>/small>
                     </h4>
-                    Amazing pictures! I was also at the Selcuk Efes Camel Wrestling Festival last year, it was such a
-                    fascinating experience. I heard that this tradition was popular in my hometown in Texas during the
-                    1850s! How crazy is that?
+                    <%out.print(commentBodies[i]);%>
                 </div>
+
             </div>
+            <%}%>
 
-            <!-- Comment -->
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="http://placehold.it/64x64" alt="">
-                </a>
-
-                <div class="media-body">
-                    <h4 class="media-heading" align="left"> Justin Graham
-                        <small>August 25, 2014 at 9:30 PM</small>
-                    </h4>
-                    I’ve been to a camel market in Egypt, but I didn't know they also had camel wrestling! Does the
-                    festival go on throughout the year? I would love to see it!
-                    <!-- Nested Comment -->
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" src="http://placehold.it/64x64" alt="">
-                        </a>
-
-                        <div class="media-body">
-                            <h4 class="media-heading" align="left"> Narin Mahmuti
-                                <small>August 25, 2014 at 9:30 PM</small>
-                            </h4>
-                            From what I have heard they have camel wrestling in other countries so maybe in Egypt as
-                            well. Sadly, the festival goes on only for three months of the year, while they are on heat.
-                        </div>
-                    </div>
-                    <!-- End Nested Comment -->
-                </div>
-            </div>
 
         </div>
 
@@ -374,6 +352,14 @@
                     $(this).addClass("slide");
                 }
             });
+        });
+        $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
+            var $this = $(this),
+                    c = $this.data('count');
+            if (!c) c = 0;
+            c++;
+            $this.data('count',c);
+            $('#'+this.id+'-bs3').html(c);
         });
     })
 </script>

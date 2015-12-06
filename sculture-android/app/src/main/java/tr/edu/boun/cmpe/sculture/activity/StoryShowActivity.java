@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.CommentListResponse;
+import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
@@ -99,8 +100,8 @@ public class StoryShowActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     CommentListResponse commentListResponse = new CommentListResponse(response);
-                    for (int i = 0; i < commentListResponse.result.size(); i++)
-                        mAdapter.addComment(commentListResponse.result.get(i));
+                    for (CommentResponse comment : commentListResponse.result)
+                        mAdapter.addComment(comment);
                     if (commentListResponse.result.size() == 0)
                         is_reach_end = true;
                     is_loading_more = false;

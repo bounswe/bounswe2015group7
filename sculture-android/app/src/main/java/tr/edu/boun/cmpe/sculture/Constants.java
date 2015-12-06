@@ -33,28 +33,14 @@ public class Constants {
     public static final String FIELD_USERNAME = "username";
     public static final String FIELD_EMAIL = "email";
     public static final String FIELD_PASSWORD = "password";
-    public static final String FIELD_ACCESS_TOKEN = "access_token";
     public static final String FIELD_QUERY = "query";
     public static final String FIELD_SIZE = "size";
     public static final String FIELD_PAGE = "page";
-    public static final String FIELD_RESULTS = "result";
     public static final String FIELD_ID = "id";
     public static final String FIELD_TITLE = "title";
-    public static final String FIELD_CREATION_DATE = "creation_date";
-    public static final String FIELD_UPDATE_DATE = "update_date";
-    public static final String FIELD_LAST_EDITOR = "last_editor";
     public static final String FIELD_TAGS = "tags";
-    public static final String FIELD_POSITIVE_VODE = "positive_vote";
-    public static final String FIELD_NEGATIVE_VOTE = "negative_vote";
-    public static final String FIELD_REPORT_COUNT = "report_count";
-    public static final String FIELD_OWNER = "owner";
     public static final String FIELD_CONTENT = "content";
-    public static final String FIELD_COMMENT_ID = "comment_id";
     public static final String FIELD_STORY_ID = "story_id";
-    public static final String FIELD_OWNER_ID = "owner_id";
-    public static final String FIELD_OWNER_USERNAME = "owner_username";
-    public static final String FIELD_CREATE_DATE = "create_date";
-    public static final String FIELD_LAST_EDIT_DATE = "last_edit_date";
 
     //BUNDLE KEYS
     public static final String BUNDLE_STORY_ID = "story_id";

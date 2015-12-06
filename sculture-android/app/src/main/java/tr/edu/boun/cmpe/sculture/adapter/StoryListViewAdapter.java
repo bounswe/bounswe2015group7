@@ -8,26 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.activity.StoryShowActivity;
+import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_LAST_EDITOR;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_OWNER;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_UPDATE_DATE;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
 
 public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdapter.ViewHolder> {
     private final Activity mActivity;
-    private final ArrayList<JSONObject> stories = new ArrayList<>();
+    private final ArrayList<BaseStoryResponse> stories = new ArrayList<>();
 
 
     public StoryListViewAdapter(Activity activity) {
@@ -43,35 +35,28 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        try {
-            JSONObject obj = stories.get(position);
-            holder.story_title.setText(obj.getString(FIELD_TITLE));
-            holder.story_id = obj.getLong(FIELD_ID);
 
-            long date = obj.getLong(FIELD_UPDATE_DATE);
-            String s = mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(date), obj.getJSONObject(FIELD_LAST_EDITOR).getString(FIELD_USERNAME));
-
-            holder.story_update_date.setText(s);
-
-            String s2 = mActivity.getString(R.string.written_by_username, obj.getJSONObject(FIELD_OWNER).getString(FIELD_USERNAME));
-
-            holder.story_creator.setText(s2);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        BaseStoryResponse story = stories.get(position);
+        holder.story_title.setText(story.title);
+        holder.story_id = story.id;
+        String s = mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username);
+        holder.story_update_date.setText(s);
+        String s2 = mActivity.getString(R.string.written_by_username, story.owner.username);
+        holder.story_creator.setText(s2);
     }
+
 
     @Override
     public int getItemCount() {
         return stories.size();
     }
 
-    public void addElement(JSONObject story) {
+    public void addElement(BaseStoryResponse story) {
         stories.add(story);
         this.notifyDataSetChanged();
     }
 
-    private void removeElement(JSONObject story) {
+    private void removeElement(BaseStoryResponse story) {
         stories.remove(story);
         removeElement(stories.indexOf(story));
     }

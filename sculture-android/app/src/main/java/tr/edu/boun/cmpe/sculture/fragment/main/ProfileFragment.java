@@ -17,19 +17,19 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.activity.LoginRegistrationActivity;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
+import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_STORIES;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_RESULTS;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
@@ -141,17 +141,14 @@ public class ProfileFragment extends Fragment {
             addRequest(API_USER_STORIES, requestBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    JSONArray array;
-                    try {
-                        array = response.getJSONArray(FIELD_RESULTS);
-                        for (int i = 0; i < array.length(); i++)
-                            mStoryListViewAdapter.addElement(array.getJSONObject(i));
-                        if (array.length() == 0)
-                            is_reach_end = true;
+                    SearchResponse searchResponse = new SearchResponse(response);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    for (BaseStoryResponse story : searchResponse.result)
+                        mStoryListViewAdapter.addElement(story);
+
+                    if (searchResponse.result.size() == 0)
+                        is_reach_end = true;
+
                     is_loading_more = false;
                 }
             }, new Response.ErrorListener() {

@@ -32,32 +32,14 @@ public class Utils {
     }
 
     /**
-     * Converts milliseconds timestamp to string such as (seconds ago, 1 month ago etc.(
+     * Converts date to string such as (seconds ago, 1 month ago etc.
      *
-     * @param milliseconds Unix timestamp milliseconds resolution
-     * @return Pretty date string
-     */
-    public static String timestampToPrettyString(long milliseconds) {
-        Date date = new Date();
-        date.setTime(milliseconds);
-
-        PrettyTime p = new PrettyTime();
-
-        return p.format(date);
-
-    }
-
-    /**
-     * Converts milliseconds timestamp to string such as (seconds ago, 1 month ago etc.(
-     *
-     * @param date Unix timestamp milliseconds resolution
+     * @param date Date
      * @return Pretty date string
      */
     public static String timestampToPrettyString(Date date) {
         PrettyTime p = new PrettyTime();
-
         return p.format(date);
-
     }
 
     /**

@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,12 +35,13 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.fragment.main.HomeFragment;
 import tr.edu.boun.cmpe.sculture.fragment.main.ProfileFragment;
+import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_QUERY;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_RESULTS;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
@@ -208,27 +208,20 @@ public class MainActivity extends AppCompatActivity {
 
         boolean loadMore = lastVisibleIndex == totalItemCount - 1;
 
-        String log = "";
-        if (loadMore) log += " load more";
-        if (is_reach_end) log += " reach end";
-        if (is_loading_more) log += " loading";
+
         if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
             PAGE++;
             is_loading_more = true;
             addRequest(API_SEARCH, requestBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    JSONArray array;
-                    try {
-                        array = response.getJSONArray(FIELD_RESULTS);
-                        for (int i = 0; i < array.length(); i++)
-                            mStoryListViewAdapter.addElement(array.getJSONObject(i));
-                        if (array.length() == 0)
-                            is_reach_end = true;
+                    SearchResponse searchResponse = new SearchResponse(response);
+                    for (BaseStoryResponse story : searchResponse.result)
+                        mStoryListViewAdapter.addElement(story);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    if (searchResponse.result.size() == 0)
+                        is_reach_end = true;
+
                     is_loading_more = false;
                 }
             }, new Response.ErrorListener() {

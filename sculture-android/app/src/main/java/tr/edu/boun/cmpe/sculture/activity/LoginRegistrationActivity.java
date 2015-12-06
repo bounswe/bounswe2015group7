@@ -18,11 +18,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.models.response.LoginResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_LOGIN;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_REGISTER;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_EMAIL;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PASSWORD;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
@@ -175,16 +175,11 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try {
-                                String email = response.getString(FIELD_EMAIL);
-                                String username = response.getString(FIELD_USERNAME);
-                                String access_token = response.getString(FIELD_ACCESS_TOKEN);
-                                baseApplication.setUserInfo(access_token, username, email);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                //TODO Error handling
-                            }
+                            LoginResponse loginResponse = new LoginResponse(response);
+                            baseApplication.setUserInfo(loginResponse.access_token, loginResponse.username, loginResponse.email, loginResponse.id);
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
                         }
                     },
                     new Response.ErrorListener() {
@@ -219,7 +214,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
             removeRequests(REQUEST_TAG_LOGIN);
             removeRequests(REQUEST_TAG_REGISTER);
 
-            JSONObject requestBody = new JSONObject();
+            final JSONObject requestBody = new JSONObject();
             try {
                 requestBody.put(FIELD_EMAIL, email);
                 requestBody.put(FIELD_PASSWORD, password);
@@ -232,16 +227,11 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try {
-                                String email = response.getString(FIELD_EMAIL);
-                                String username = response.getString(FIELD_USERNAME);
-                                String access_token = response.getString(FIELD_ACCESS_TOKEN);
-                                baseApplication.setUserInfo(access_token, username, email);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } catch (JSONException e) {
-                                //TODO Error handling
-                                e.printStackTrace();
-                            }
+                            LoginResponse loginResponse = new LoginResponse(response);
+                            baseApplication.setUserInfo(loginResponse.access_token, loginResponse.username, loginResponse.email, loginResponse.id);
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
                         }
                     },
                     new Response.ErrorListener() {

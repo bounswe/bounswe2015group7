@@ -29,4 +29,8 @@
     <string name="prompt_tags">Tags</string>
     <string name="action_add_media">Add Image</string>
     <string name="already_logged">All ready logged in</string>
+    <string name="comment">Comment</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

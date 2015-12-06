@@ -25,6 +25,8 @@ import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryImageViewAdapter;
+import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 import tr.edu.boun.cmpe.sculture.view.TagView;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_CREATE;
@@ -82,7 +84,7 @@ public class StoryCreateActivity extends AppCompatActivity {
 
         //If it is edit, pre-fill the view
         if (isEdit) {
-            JSONObject requestBody = new JSONObject();
+            final JSONObject requestBody = new JSONObject();
             try {
                 requestBody.put(FIELD_ID, storyId);
             } catch (JSONException e) {
@@ -91,16 +93,14 @@ public class StoryCreateActivity extends AppCompatActivity {
             addRequest(API_STORY_GET, requestBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    try {
-                        titleText.setText(response.getString(FIELD_TITLE));
-                        contentText.setText(response.getString(FIELD_CONTENT));
-                        JSONArray tagsAr = response.getJSONArray(FIELD_TAGS);
-                        for (int i = 0; i < tagsAr.length(); i++)
-                            completionView.addObject((String) tagsAr.get(i));
+                    FullStoryResponse storyResponse = new FullStoryResponse(response);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    titleText.setText(storyResponse.title);
+                    contentText.setText(storyResponse.content);
+
+                    for (String string : storyResponse.tags)
+                        completionView.addObject(string);
+
                     //TODO Get media files and put on recycler view
                 }
             }, new Response.ErrorListener() {
@@ -140,15 +140,10 @@ public class StoryCreateActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-
-                            Intent intent = new Intent(mActivity, StoryShowActivity.class);
-                            intent.putExtra(BUNDLE_STORY_ID, response.getLong(FIELD_ID));
-                            mActivity.startActivity(intent);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            //TODO ERROR HANDLING
-                        }
+                        BaseStoryResponse baseStoryResponse = new BaseStoryResponse(response);
+                        Intent intent = new Intent(mActivity, StoryShowActivity.class);
+                        intent.putExtra(BUNDLE_STORY_ID, baseStoryResponse.id);
+                        mActivity.startActivity(intent);
                     }
                 },
                 new Response.ErrorListener() {

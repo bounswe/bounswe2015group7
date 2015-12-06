@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,29 +14,42 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.activity.LoginRegistrationActivity;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
+import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_STORIES;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
 
-    //TODO DELETE THIS AFTER REST CONNECTION
-    private final ArrayList<JSONObject> stories = new ArrayList<>();
     private TextView username;
     private TextView email;
     private RecyclerView story_list_recycler;
     private RelativeLayout loggedInLayout;
     private RelativeLayout loggedOutLayout;
+
+    LinearLayoutManager mLayoutManager;
+    StoryListViewAdapter mStoryListViewAdapter;
+
+    private int PAGE = 1;
+    private boolean is_loading_more = false;
+    private boolean is_reach_end = false;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -54,45 +68,14 @@ public class ProfileFragment extends Fragment {
 
 
         story_list_recycler = (RecyclerView) view.findViewById(R.id.profile_story_list);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        StoryListViewAdapter mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
         story_list_recycler.setLayoutManager(mLayoutManager);
         story_list_recycler.setAdapter(mStoryListViewAdapter);
 
-
-        //TODO DELETE AFTER REST CONNECTION
-        for (int i = 0; i < 20; i++) {
-            try {
-                JSONObject jsonObject = new JSONObject("{\n" +
-                        "  \"id\": 1,\n" +
-                        "  \"title\": \"das" + i + "\",\n" +
-                        "  \"creation_date\": 1448236800000,\n" +
-                        "  \"update_date\": 1448236800000,\n" +
-                        "  \"last_editor\": {\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"username\": \"john\"\n" +
-                        "  },\n" +
-                        "  \"owner\": {\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"username\": \"john\"\n" +
-                        "  },\n" +
-                        "  \"tags\": [\n" +
-                        "    \"tag1\",\n" +
-                        "    \"tag2\"\n" +
-                        "  ],\n" +
-                        "  \"positive_vote\": 0,\n" +
-                        "  \"negative_vote\": 0,\n" +
-                        "  \"report_count\": 0,\n" +
-                        "  \"content\": \"content\"\n" +
-                        "}");
-                stories.add(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
         setRecyclerListeners();
+
+        load_story();
         Button login_register_button = (Button) view.findViewById(R.id.login_register);
         login_register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,41 +108,56 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setRecyclerListeners() {
-
         story_list_recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            LinearLayoutManager layoutManager;
-            StoryListViewAdapter adapter;
-            private boolean is_loading_more = false;
-            private boolean is_reach_end = false;
-            private int page = 0;
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                adapter = (StoryListViewAdapter) recyclerView.getAdapter();
-
-                int totalItemCount = layoutManager.getItemCount();
-                int lastVisibleIndex = layoutManager.findLastVisibleItemPosition();
-
-
-                boolean loadMore = lastVisibleIndex == totalItemCount - 1;
-
-                //loading is used to see if its already loading, you have to manually manipulate this boolean variable
-                if (loadMore && !is_loading_more && !is_reach_end) {
-                    //TODO connect REST here
-                    for (int i = page * 5; i < (page + 1) * 5; i++) {
-                        if (i == stories.size()) {
-                            is_reach_end = true;
-                            break;
-                        }
-                        adapter.addElement(stories.get(i));
-                    }
-                    if (!is_reach_end)
-                        page++;
-                }
+                load_story();
             }
         });
     }
 
+    private void load_story() {
+
+        int totalItemCount = mLayoutManager.getItemCount();
+        int lastVisibleIndex = mLayoutManager.findLastVisibleItemPosition();
+
+        boolean loadMore = lastVisibleIndex == totalItemCount - 1;
+
+        if (is_reach_end)
+            Log.i("HERE", "HERE");
+        if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
+            is_loading_more = true;
+            JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put(FIELD_ID, baseApplication.getUSER_ID());
+                requestBody.put(FIELD_PAGE, PAGE);
+                requestBody.put(FIELD_SIZE, 10);
+                Log.i("HEREd", "" + baseApplication.getUSER_ID());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PAGE++;
+            addRequest(API_USER_STORIES, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    SearchResponse searchResponse = new SearchResponse(response);
+
+                    for (BaseStoryResponse story : searchResponse.result)
+                        mStoryListViewAdapter.addElement(story);
+
+                    if (searchResponse.result.size() == 0)
+                        is_reach_end = true;
+
+                    is_loading_more = false;
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }, null);
+        }
+
+    }
 }

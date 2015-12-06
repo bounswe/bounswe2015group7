@@ -11,6 +11,7 @@ import static tr.edu.boun.cmpe.sculture.Constants.PREFS_NAME;
 import static tr.edu.boun.cmpe.sculture.Constants.PREF_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Constants.PREF_EMAIL;
 import static tr.edu.boun.cmpe.sculture.Constants.PREF_USERNAME;
+import static tr.edu.boun.cmpe.sculture.Constants.PREF_USER_ID;
 
 public class BaseApplication extends Application {
     public static BaseApplication baseApplication;
@@ -20,7 +21,7 @@ public class BaseApplication extends Application {
     private String TOKEN = "";
     private String USERNAME = "";
     private String EMAIL = "";
-
+    private long USER_ID = -1;
     private boolean isLoggedIn = false;
 
     @Override
@@ -37,10 +38,11 @@ public class BaseApplication extends Application {
             String email = settings.getString(PREF_EMAIL, "");
             String username = settings.getString(PREF_USERNAME, "");
             String token = settings.getString(PREF_ACCESS_TOKEN, "");
-            if (email.equals("") || token.equals("") || username.equals(""))
+            long user_id = settings.getLong(PREF_USER_ID, -1);
+            if (email.equals("") || token.equals("") || username.equals("") || user_id == -1)
                 Toast.makeText(getApplicationContext(), getString(R.string.loginAdvice), Toast.LENGTH_LONG).show();
             else {
-                setUserInfo(token, username, email);
+                setUserInfo(token, username, email, user_id);
             }
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.userLogin) + USERNAME, Toast.LENGTH_SHORT).show();
@@ -54,17 +56,19 @@ public class BaseApplication extends Application {
      * @param username Username of the user.
      * @param email    Email address of the user.
      */
-    public void setUserInfo(String token, String username, String email) {
+    public void setUserInfo(String token, String username, String email, long user_id) {
         this.TOKEN = token;
         this.USERNAME = username;
         this.EMAIL = email;
         this.isLoggedIn = true;
+        this.USER_ID = user_id;
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(PREF_EMAIL, EMAIL);
         editor.putString(PREF_ACCESS_TOKEN, TOKEN);
         editor.putString(PREF_USERNAME, USERNAME);
+        editor.putLong(PREF_USER_ID, USER_ID);
         editor.apply();
 
     }
@@ -86,12 +90,14 @@ public class BaseApplication extends Application {
         this.USERNAME = "";
         this.EMAIL = "";
         this.isLoggedIn = false;
+        this.USER_ID = -1;
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(PREF_EMAIL, "");
         editor.putString(PREF_ACCESS_TOKEN, "");
         editor.putString(PREF_USERNAME, "");
+        editor.putLong(PREF_USER_ID, -1);
         editor.apply();
     }
 
@@ -110,5 +116,9 @@ public class BaseApplication extends Application {
 
     public String getUSERNAME() {
         return USERNAME;
+    }
+
+    public long getUSER_ID() {
+        return USER_ID;
     }
 }

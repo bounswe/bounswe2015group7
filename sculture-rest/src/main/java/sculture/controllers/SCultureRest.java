@@ -1,9 +1,8 @@
 package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResourceLoader;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -12,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import sculture.Utils;
+import sculture.dao.*;
+import sculture.exceptions.*;
+import sculture.lucene.SearchEngine;
+import sculture.models.requests.*;
+import sculture.models.response.*;
 import sculture.dao.CommentDao;
 import sculture.dao.StoryDao;
 import sculture.dao.TagDao;
@@ -66,9 +70,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static sculture.Utils.checkEmailSyntax;
-import static sculture.Utils.checkPasswordSyntax;
-import static sculture.Utils.checkUsernameSyntax;
+import static sculture.Utils.*;
 
 @RestController
 public class SCultureRest {
@@ -225,7 +227,7 @@ public class SCultureRest {
 
     final java.util.Random rand = new java.util.Random();
 
-    // consider using a Map<String,Boolean> to say whether the identifier is being used or not 
+    // consider using a Map<String,Boolean> to say whether the identifier is being used or not
     final Set<String> identifiers = new HashSet<String>();
 
     public String randomIdentifier() {
@@ -340,16 +342,18 @@ public class SCultureRest {
         }
         storyDao.create(story);
 
-        if (requestBody.getTags() != null) {
-            List<String> tags = requestBody.getTags();
-
-            for (String tag : tags) {
-                TagStory tagStory = new TagStory();
-                tagStory.setTag_title(tag);
-                tagStory.setStory_id(story.getStory_id());
-                tagStoryDao.update(tagStory);
-            }
+        List<String> tags = requestBody.getTags();
+        String tag_index = "";
+        for (String tag : tags) {
+            TagStory tagStory = new TagStory();
+            tagStory.setTag_title(tag);
+            tagStory.setStory_id(story.getStory_id());
+            tag_index += tag + ", ";
+            tagStoryDao.update(tagStory);
         }
+
+        SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
@@ -398,8 +402,8 @@ public class SCultureRest {
         }
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
-    
-    
+
+
     // TODO
     @RequestMapping("/story/get")
     public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody) {
@@ -423,7 +427,8 @@ public class SCultureRest {
         if (page < 1)
             page = 1;
 
-        List<Long> story_ids = tagStoryDao.getStoryIdsByTag(requestBody.getQuery(), page, size);
+
+        List<Long> story_ids = SearchEngine.search(requestBody.getQuery(), page, size);
 
         List<BaseStoryResponse> responses = new LinkedList<>();
         for (long id : story_ids) {

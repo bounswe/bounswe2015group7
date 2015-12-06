@@ -8,6 +8,7 @@ import sculture.models.tables.relations.VoteStory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -78,10 +79,15 @@ public class StoryDao {
      * Return the stories of a specific owner.
      */
     @SuppressWarnings("unchecked")
-    public List<Story> getByOwner(long owner_id) {
-        return (List<Story>) entityManager.createQuery(
-                "from Story where owner_id = :owner_id ")
-                .setParameter("owner_id", owner_id).getResultList();
+    public List<Story> getByOwner(long owner_id, int page, int size) {
+
+        Query query = entityManager.createQuery(
+                "from Story where owner_id = :owner_id ");
+        query.setParameter("owner_id", owner_id);
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+
+        return query.getResultList();
     }
 
     /**

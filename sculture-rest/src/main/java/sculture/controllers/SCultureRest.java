@@ -34,12 +34,7 @@ import sculture.models.requests.TagGetRequestBody;
 import sculture.models.requests.UserFollowRequestBody;
 import sculture.models.requests.UserGetRequestBody;
 import sculture.models.requests.UserUpdateRequestBody;
-import sculture.models.response.BaseStoryResponse;
-import sculture.models.response.CommentResponse;
-import sculture.models.response.FullStoryResponse;
-import sculture.models.response.LoginResponse;
-import sculture.models.response.SearchResponse;
-import sculture.models.response.TagResponse;
+import sculture.models.response.*;
 import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
 import sculture.models.tables.Tag;
@@ -182,20 +177,24 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
     public SearchResponse user_get(@RequestBody StoriesGetRequestBody requestBody) {
-        long id = requestBody.getId();
+        //TODO Exception handling
         int page = requestBody.getPage();
         int size = requestBody.getSize();
-        List<Story> storyList = storyDao.getByOwner(id);
-        List<BaseStoryResponse> baseStoryResponseList = new ArrayList<BaseStoryResponse>();
-        for (Story story : storyList) {
-            baseStoryResponseList.add(new BaseStoryResponse(story));
-        }
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+
+        long id = requestBody.getId();
+
+        List<Story> storyList = storyDao.getByOwner(id, page, size);
+
         SearchResponse searchResponse = new SearchResponse();
-        if (page != 0 && size != 0) {
-            searchResponse.setResult(baseStoryResponseList.subList(page * size, page * size + size));
-        } else {
-            searchResponse.setResult(baseStoryResponseList);
+        List<BaseStoryResponse> responses = new ArrayList<>();
+        for (Story story : storyList) {
+            responses.add(new BaseStoryResponse(story, tagStoryDao, userDao));
         }
+        searchResponse.setResult(responses);
         return searchResponse;
     }
 
@@ -279,8 +278,7 @@ public class SCultureRest {
             tagStoryDao.update(tagStory);
         }
 
-        List<String> tag_titles = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
-        return new BaseStoryResponse(story, tag_titles, current_user.getUsername(), current_user.getUsername());
+        return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
     // TODO
@@ -293,7 +291,7 @@ public class SCultureRest {
         User owner = userDao.getById(story.getOwner_id());
         User editor = userDao.getById(story.getLast_editor_id());
 
-        return new FullStoryResponse(story, tag_titles, owner.getUsername(), editor.getUsername());
+        return new FullStoryResponse(story, tagStoryDao, userDao);
     }
 
     @RequestMapping("/search")
@@ -310,12 +308,8 @@ public class SCultureRest {
 
         List<BaseStoryResponse> responses = new LinkedList<>();
         for (long id : story_ids) {
-            List<String> tags = tagStoryDao.getTagTitlesByStoryId(id);
             Story story = storyDao.getById(id);
-            User owner = userDao.getById(story.getOwner_id());
-            User editor = userDao.getById(story.getLast_editor_id());
-
-            responses.add(new BaseStoryResponse(story, tags, owner.getUsername(), editor.getUsername()));
+            responses.add(new BaseStoryResponse(story, tagStoryDao, userDao));
         }
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResult(responses);
@@ -326,9 +320,7 @@ public class SCultureRest {
     @RequestMapping("/comment/get")
     public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
         Comment comment = commentDao.getById(requestBody.getCommentId());
-        CommentResponse commentResponse = new CommentResponse(comment);
-        commentResponse.setOwner_username(userDao.getById(comment.getOwner_id()).getUsername());
-        return new CommentResponse(comment);
+        return new CommentResponse(comment, userDao);
     }
 
     @RequestMapping("/story/report")
@@ -342,18 +334,28 @@ public class SCultureRest {
 
         Story ResponseStory = storyDao.voteStory(requestBody.getStory_id(), requestBody.getIsPositive(), requestBody.getUser_id());
 
-        return new BaseStoryResponse(ResponseStory);
+        return new BaseStoryResponse(ResponseStory, tagStoryDao, userDao);
     }
 
     @RequestMapping("/comment/list")
-    public List<CommentResponse> commentList(@RequestBody CommentListRequestBody requestBody) {
-        List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id());
-        List<CommentResponse> responses = new LinkedList<CommentResponse>();
+    public CommentListResponse commentList(@RequestBody CommentListRequestBody requestBody) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
 
-        for (int i = 0; i < comments.size(); i++) {
-            responses.add(new CommentResponse(comments.get(i)));
+        List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id(), page, size);
+        List<CommentResponse> responses = new LinkedList<>();
+
+        for (Comment comment : comments) {
+            responses.add(new CommentResponse(comment, userDao));
         }
-        return responses;
+
+        CommentListResponse commentListResponse = new CommentListResponse();
+        commentListResponse.setResult(responses);
+        return commentListResponse;
 
 
     }

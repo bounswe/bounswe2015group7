@@ -32,6 +32,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.StoryShowActivity" />
         <activity android:name=".activity.ImageShowActivity"></activity>
+        <activity android:name=".activity.ProfilePageActivity" />
     </application>
 
 </manifest>

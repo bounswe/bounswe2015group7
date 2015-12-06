@@ -1,15 +1,14 @@
-package tr.edu.boun.cmpe.sculture.fragment.main;
+package tr.edu.boun.cmpe.sculture.activity;
 
-
-import android.content.Intent;
+/**
+ * Created by SahaOperasyon2 on 06.12.2015.
+ */
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.activity.LoginRegistrationActivity;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
@@ -31,18 +29,16 @@ import static tr.edu.boun.cmpe.sculture.Constants.API_USER_STORIES;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
+import static tr.edu.boun.cmpe.sculture.Constants.PREF_USER_ID;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ProfileFragment extends Fragment {
-    private static ProfileFragment profileFragment;
-    private TextView username;
-    private TextView email;
-    private RecyclerView story_list_recycler;
-    private RelativeLayout loggedInLayout;
-    private RelativeLayout loggedOutLayout;
+public class ProfilePageActivity extends AppCompatActivity {
+
+    TextView username;
+    TextView email;
+    RecyclerView story_list_recycler;
+    RelativeLayout loggedInLayout;
+    Button follow;
 
     LinearLayoutManager mLayoutManager;
     StoryListViewAdapter mStoryListViewAdapter;
@@ -51,67 +47,62 @@ public class ProfileFragment extends Fragment {
     private boolean is_loading_more = false;
     private boolean is_reach_end = false;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    long currentUserID;
+    long visitedUserID;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        profileFragment = this;
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_page);
 
-        loggedInLayout = (RelativeLayout) view.findViewById(R.id.profile_layout_loggedIn);
-        loggedOutLayout = (RelativeLayout) view.findViewById(R.id.profile_layout_loggedOut);
 
-        username = (TextView) view.findViewById(R.id.profile_username);
-        email = (TextView) view.findViewById(R.id.profile_email);
+        loggedInLayout = (RelativeLayout) findViewById(R.id.profile_layout_loggedIn);
 
-        story_list_recycler = (RecyclerView) view.findViewById(R.id.profile_story_list);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
+        username = (TextView) findViewById(R.id.profile_username);
+        email = (TextView) findViewById(R.id.profile_email);
+
+        follow = (Button) findViewById(R.id.follow);
+
+        story_list_recycler = (RecyclerView) findViewById(R.id.profile_story_list);
+        mLayoutManager = new LinearLayoutManager(this);
+        mStoryListViewAdapter = new StoryListViewAdapter(this);
         story_list_recycler.setLayoutManager(mLayoutManager);
         story_list_recycler.setAdapter(mStoryListViewAdapter);
 
         setRecyclerListeners();
 
         load_story();
-        Button login_register_button = (Button) view.findViewById(R.id.login_register);
-        login_register_button.setOnClickListener(new View.OnClickListener() {
+
+
+        final JSONObject requestBody = new JSONObject();
+        try {
+            currentUserID = requestBody.getLong(PREF_USER_ID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject requestBody2 = new JSONObject(username.getText().toString());
+            visitedUserID = requestBody2.getLong(username.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(currentUserID == visitedUserID)
+            follow.setVisibility(View.GONE);
+
+        follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginRegistrationActivity.class);
-                startActivity(intent);
+                JSONObject rb = new JSONObject();
+                try {
+                    requestBody.put(API_USER_STORIES, visitedUserID);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        return view;
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!baseApplication.checkLogin()) {
-            loggedOutLayout.setVisibility(View.VISIBLE);
-            loggedInLayout.setVisibility(View.GONE);
-        } else {
-            loggedOutLayout.setVisibility(View.GONE);
-            loggedInLayout.setVisibility(View.VISIBLE);
-
-
-            username.setText(baseApplication.getUSERNAME());
-            email.setText(baseApplication.getEMAIL());
-        }
-
-    }
-
-    public static void reset() {
-        //TODO Find a better way to refresh this fragment
-        profileFragment.PAGE = 1;
-        profileFragment.is_loading_more = false;
-        profileFragment.is_reach_end = false;
-        profileFragment.mStoryListViewAdapter.clearElements();
     }
 
     private void setRecyclerListeners() {

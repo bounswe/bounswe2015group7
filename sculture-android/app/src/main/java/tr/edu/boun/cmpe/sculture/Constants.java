@@ -49,6 +49,12 @@ public class Constants {
     public static final String FIELD_REPORT_COUNT = "report_count";
     public static final String FIELD_OWNER = "owner";
     public static final String FIELD_CONTENT = "content";
+    public static final String FIELD_COMMENT_ID = "comment_id";
+    public static final String FIELD_STORY_ID = "story_id";
+    public static final String FIELD_OWNER_ID = "owner_id";
+    public static final String FIELD_OWNER_USERNAME = "owner_username";
+    public static final String FIELD_CREATE_DATE = "create_date";
+    public static final String FIELD_LAST_EDIT_DATE = "last_edit_date";
 
     //BUNDLE KEYS
     public static final String BUNDLE_STORY_ID = "story_id";

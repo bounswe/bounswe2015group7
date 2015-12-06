@@ -48,6 +48,19 @@ public class Utils {
     }
 
     /**
+     * Converts milliseconds timestamp to string such as (seconds ago, 1 month ago etc.(
+     *
+     * @param date Unix timestamp milliseconds resolution
+     * @return Pretty date string
+     */
+    public static String timestampToPrettyString(Date date) {
+        PrettyTime p = new PrettyTime();
+
+        return p.format(date);
+
+    }
+
+    /**
      * Create a request with access_token and add it to queue. When the request done the listener will be triggered.
      *
      * @param url           The url of the request. Use API url constants.

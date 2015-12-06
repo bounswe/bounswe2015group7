@@ -2,38 +2,12 @@ package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
-import sculture.dao.CommentDao;
-import sculture.dao.StoryDao;
-import sculture.dao.TagDao;
-import sculture.dao.TagStoryDao;
-import sculture.dao.UserDao;
-import sculture.exceptions.InvalidAccessTokenException;
-import sculture.exceptions.InvalidEmailException;
-import sculture.exceptions.InvalidPasswordException;
-import sculture.exceptions.InvalidUsernameException;
-import sculture.exceptions.UserAlreadyExistsException;
-import sculture.exceptions.UserNotExistException;
-import sculture.exceptions.WrongPasswordException;
-import sculture.models.requests.CommentGetRequestBody;
-import sculture.models.requests.CommentListRequestBody;
-import sculture.models.requests.LoginRequestBody;
-import sculture.models.requests.RegisterRequestBody;
-import sculture.models.requests.SearchRequestBody;
-import sculture.models.requests.StoriesGetRequestBody;
-import sculture.models.requests.StoryCreateRequestBody;
-import sculture.models.requests.StoryGetRequestBody;
-import sculture.models.requests.StoryReportRequestBody;
-import sculture.models.requests.StoryVoteRequestBody;
-import sculture.models.requests.TagGetRequestBody;
-import sculture.models.requests.UserFollowRequestBody;
-import sculture.models.requests.UserGetRequestBody;
-import sculture.models.requests.UserUpdateRequestBody;
+import sculture.dao.*;
+import sculture.exceptions.*;
+import sculture.lucene.SearchEngine;
+import sculture.models.requests.*;
 import sculture.models.response.*;
 import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
@@ -46,9 +20,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import static sculture.Utils.checkEmailSyntax;
-import static sculture.Utils.checkPasswordSyntax;
-import static sculture.Utils.checkUsernameSyntax;
+import static sculture.Utils.*;
 
 @RestController
 public class SCultureRest {
@@ -270,13 +242,16 @@ public class SCultureRest {
         storyDao.create(story);
 
         List<String> tags = requestBody.getTags();
-
+        String tag_index = "";
         for (String tag : tags) {
             TagStory tagStory = new TagStory();
             tagStory.setTag_title(tag);
             tagStory.setStory_id(story.getStory_id());
+            tag_index += tag + ", ";
             tagStoryDao.update(tagStory);
         }
+
+        SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
 
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
@@ -304,7 +279,8 @@ public class SCultureRest {
         if (page < 1)
             page = 1;
 
-        List<Long> story_ids = tagStoryDao.getStoryIdsByTag(requestBody.getQuery(), page, size);
+
+        List<Long> story_ids = SearchEngine.search(requestBody.getQuery(), page, size);
 
         List<BaseStoryResponse> responses = new LinkedList<>();
         for (long id : story_ids) {

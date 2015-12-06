@@ -20,10 +20,7 @@ public class UserDao {
      * Save the user in the database.
      */
     public void create(User user) {
-        if (getByEmail(user.getEmail()) != null) {
-            entityManager.persist(user);
-        } else throw new UserAlreadyExistsException();
-        return;
+        entityManager.persist(user);
     }
 
     public void follow(User user, long id, boolean isFollow) {

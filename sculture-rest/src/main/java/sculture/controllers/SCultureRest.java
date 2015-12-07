@@ -321,6 +321,7 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
+        story.setMedia(requestBody.getMedia().toString());
 
         storyDao.create(story);
 

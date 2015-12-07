@@ -5,6 +5,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,6 @@ import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
 import sculture.models.requests.CommentGetRequestBody;
 import sculture.models.requests.CommentListRequestBody;
-import sculture.models.requests.ImageGetRequestBody;
 import sculture.models.requests.LoginRequestBody;
 import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
@@ -245,9 +245,9 @@ public class SCultureRest {
 
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-    @RequestMapping(method = RequestMethod.GET, value = "/image", produces = "image/jpg")
-    public Resource image_get(@RequestBody ImageGetRequestBody requestBod) {
-        return resourceLoader.getResource("/image/" + requestBod.getId() + ".jpg");
+    @RequestMapping(method = RequestMethod.GET, value = "/image/get/{id}", produces = "image/jpg")
+    public Resource image_get(@PathVariable String name) {
+        return resourceLoader.getResource("/image/" + name + ".jpg");
     }
 
 

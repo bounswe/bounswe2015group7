@@ -231,7 +231,7 @@ public class SCultureRest {
         return builder.toString();
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/image/upload", method = RequestMethod.POST)
     public
     @ResponseBody
     String handleFileUpload(
@@ -246,8 +246,8 @@ public class SCultureRest {
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
     @RequestMapping(method = RequestMethod.GET, value = "/image/get/{id}", produces = "image/jpg")
-    public Resource image_get(@PathVariable String name) {
-        return resourceLoader.getResource("/image/" + name + ".jpg");
+    public Resource image_get(@PathVariable String id) {
+        return resourceLoader.getResource("/image/" + id + ".jpg");
     }
 
 

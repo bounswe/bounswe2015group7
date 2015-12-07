@@ -1,80 +1,146 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MenuItem;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
+import tr.edu.boun.cmpe.sculture.models.response.CommentListResponse;
+import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
+import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+
+import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
+import static tr.edu.boun.cmpe.sculture.Constants.FIELD_STORY_ID;
+import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
+import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 public class StoryShowActivity extends AppCompatActivity {
 
-    TextView title;
-    TextView content;
-    TextView tags;
-    TextView storyOwner;
-    TextView createdAt;
-    TextView lastEditor;
-    TextView lastUpdatedAt;
+    private static final int SIZE = 10;
+
+    Bundle bundle;
+    long story_id;
+
+
+    private RecyclerView recyclerView;
+    private StoryViewWithCommentAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private FloatingActionButton createStoryButton;
+    private MenuItem logout_menu_item;
+    private MainActivity mActivity;
+    private int PAGE = 1;
+    private boolean is_loading_more = false;
+    private boolean is_reach_end = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_show);
-        Bundle bundle = getIntent().getExtras();
-        title = (TextView) findViewById(R.id.story_title);
-        content = (TextView) findViewById(R.id.storyContent);
-        tags = (TextView) findViewById(R.id.storyTags);
-        storyOwner = (TextView) findViewById(R.id.storyOwner);
-        createdAt = (TextView) findViewById(R.id.storyCreatedAt);
-        lastEditor = (TextView) findViewById(R.id.storyLastEditor);
-        lastUpdatedAt = (TextView) findViewById(R.id.story_update_date);
-        if (bundle.getString("id") != null) {
-            getStory(bundle.getString("id"));
+        bundle = getIntent().getExtras();
+        if (bundle != null)
+            story_id = bundle.getLong(BUNDLE_STORY_ID);
+
+        Log.i("HERE", "" + story_id);
+        //Search
+        recyclerView = (RecyclerView) findViewById(R.id.story_recycler_view);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new StoryViewWithCommentAdapter(this);
+
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                load_comment();
+            }
+        });
+        getStory(story_id);
+    }
+
+    private void load_comment() {
+        int totalItemCount = mLayoutManager.getItemCount();
+        int lastVisibleIndex = mLayoutManager.findLastVisibleItemPosition();
+
+
+        boolean loadMore = lastVisibleIndex == totalItemCount - 1;
+
+
+        if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
+            is_loading_more = true;
+            final JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put(FIELD_STORY_ID, story_id);
+                requestBody.put(FIELD_SIZE, SIZE);
+                requestBody.put(FIELD_PAGE, PAGE);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PAGE++;
+
+            addRequest(API_COMMENT_LIST, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    CommentListResponse commentListResponse = new CommentListResponse(response);
+                    for (CommentResponse comment : commentListResponse.result)
+                        mAdapter.addComment(comment);
+                    if (commentListResponse.result.size() == 0)
+                        is_reach_end = true;
+                    is_loading_more = false;
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }, REQUEST_TAG_SEARCH);
+        }
+    }
+
+
+    public void getStory(long id) {
+
+        final JSONObject requestObject = new JSONObject();
+        try {
+            requestObject.put(FIELD_ID, id);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
+        addRequest(API_STORY_GET, requestObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        FullStoryResponse story = new FullStoryResponse(response);
+                        mAdapter.addStory(story);
+                        load_comment();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                },
+                REQUEST_TAG_STORY_GET);
     }
-
-
-    public void getStory(String id) {
-
-        // TODO get story request
-
-
-//        ParseCloud.callFunctionInBackground("story_get", param, new FunctionCallback<HashMap>() {
-//
-//                    @Override
-//                    public void done(HashMap item, ParseException e) {
-//                        if (e == null) {
-//
-//
-//
-//                            ArrayList<String> story = new ArrayList<String>();
-//                            title.setText((String) item.get("title"));
-//                            ArrayList<String> tags2 = (ArrayList<String>) item.get("tags");
-//                            String all = "";
-//                            for (String tagsAll : tags2) {
-//                                all += tagsAll + " ";
-//                            }
-//
-//                            tags.setText(all);
-//                            content.setText("" + (String) item.get("content"));
-//
-//                            storyOwner.setText("Story Owner: " + (String) item.get("ownerId"));//ps.getObjectId());
-//                            String cr = "" + item.get("createdAt");
-//                            createdAt.setText("Story creation Time: " + cr.substring(0, 10) + " " + cr.substring(11, 19));
-//                            cr = "" + item.get("updatedAt");
-//                            lastEditor.setText("Last Editor:" + (String) item.get("lastEditorId").toString());
-//                            lastUpdatedAt.setText("Last Update Time: " + cr.substring(0, 10) + " " + cr.substring(11, 19));
-//
-//
-//
-//                        } else
-//                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        );
-    }
-
 
 
 }

@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -19,28 +17,29 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.requests.JsonObjectWithParamsRequest;
+import tr.edu.boun.cmpe.sculture.models.response.LoginResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_LOGIN;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_REGISTER;
-import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_EMAIL;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PASSWORD;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_LOGIN;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_REGISTER;
-import static tr.edu.boun.cmpe.sculture.Utils.*;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
+import static tr.edu.boun.cmpe.sculture.Utils.isEmailValid;
+import static tr.edu.boun.cmpe.sculture.Utils.isPasswordValid;
+import static tr.edu.boun.cmpe.sculture.Utils.isUserNameValid;
+import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
 public class LoginRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int STATUS_LOGIN = 1;
     private static final int STATUS_REGISTRATION = 2;
     private static int STATUS = STATUS_LOGIN;
-
+    private final RequestQueue requestQueue = baseApplication.mRequestQueue;
     private TextInputLayout passwordConfirmationInputLayout;
     private TextInputLayout emailInputLayout;
     private TextInputLayout usernameInputLayout;
@@ -50,10 +49,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
     private EditText mNameView;
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
-
-    private RequestQueue requestQueue = baseApplication.mRequestQueue;
-
-    LoginRegistrationActivity mActivity;
+    private LoginRegistrationActivity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +57,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_login_registration);
         mActivity = this;
         if (baseApplication.checkLogin()) {
-            Toast.makeText(this, "All ready logged in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.already_logged, Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             return;
@@ -161,29 +157,29 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         }
 
         if (!isError) {
-            HashMap<String, String> params = new HashMap<>();
-            params.put(FIELD_EMAIL, email);
-            params.put(FIELD_PASSWORD, password);
-            params.put(FIELD_USERNAME, username);
 
 
-            requestQueue.cancelAll(REQUEST_TAG_REGISTER);
-            requestQueue.cancelAll(REQUEST_TAG_LOGIN);
+            removeRequests(REQUEST_TAG_LOGIN);
+            removeRequests(REQUEST_TAG_REGISTER);
 
-            JsonObjectWithParamsRequest registerRequest = new JsonObjectWithParamsRequest(Request.Method.POST, API_USER_REGISTER, params,
+            JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put(FIELD_EMAIL, email);
+                requestBody.put(FIELD_PASSWORD, password);
+                requestBody.put(FIELD_USERNAME, username);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            addRequest(API_USER_REGISTER, requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try {
-                                String email = response.getString(FIELD_EMAIL);
-                                String username = response.getString(FIELD_USERNAME);
-                                String access_token = response.getString(FIELD_ACCESS_TOKEN);
-                                baseApplication.setUserInfo(access_token, username, email);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                //TODO Error handling
-                            }
+                            LoginResponse loginResponse = new LoginResponse(response);
+                            baseApplication.setUserInfo(loginResponse.access_token, loginResponse.username, loginResponse.email, loginResponse.id);
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
                         }
                     },
                     new Response.ErrorListener() {
@@ -192,11 +188,8 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                             //TODO Error handling
                             Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
                         }
-                    });
-            registerRequest.setTag(REQUEST_TAG_REGISTER);
-
-
-            requestQueue.add(registerRequest);
+                    },
+                    REQUEST_TAG_REGISTER);
         }
     }
 
@@ -206,7 +199,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
 
         boolean isError = false;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             isError = true;
         }
@@ -216,25 +209,29 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
             isError = true;
         }
         if (!isError) {
-            requestQueue.cancelAll(REQUEST_TAG_REGISTER);
-            requestQueue.cancelAll(REQUEST_TAG_LOGIN);
-            HashMap<String, String> params = new HashMap<>();
-            params.put(FIELD_EMAIL, email);
-            params.put(FIELD_PASSWORD, password);
-            JsonObjectWithParamsRequest loginRequest = new JsonObjectWithParamsRequest(Request.Method.POST, API_USER_LOGIN, params,
+
+
+            removeRequests(REQUEST_TAG_LOGIN);
+            removeRequests(REQUEST_TAG_REGISTER);
+
+            final JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put(FIELD_EMAIL, email);
+                requestBody.put(FIELD_PASSWORD, password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            addRequest(API_USER_LOGIN, requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try {
-                                String email = response.getString(FIELD_EMAIL);
-                                String username = response.getString(FIELD_USERNAME);
-                                String access_token = response.getString(FIELD_ACCESS_TOKEN);
-                                baseApplication.setUserInfo(access_token, username, email);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } catch (JSONException e) {
-                                //TODO Error handling
-                                e.printStackTrace();
-                            }
+                            LoginResponse loginResponse = new LoginResponse(response);
+                            baseApplication.setUserInfo(loginResponse.access_token, loginResponse.username, loginResponse.email, loginResponse.id);
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
                         }
                     },
                     new Response.ErrorListener() {
@@ -243,9 +240,8 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                             //TODO Error handling
                             Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
                         }
-                    });
-            loginRequest.setTag(REQUEST_TAG_LOGIN);
-            requestQueue.add(loginRequest);
+                    },
+                    REQUEST_TAG_LOGIN);
         }
     }
 }

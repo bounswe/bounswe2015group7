@@ -1,3 +1,4 @@
+
 # Created by https://www.gitignore.io/api/java,maven,intellij
 
 ### Java ###
@@ -28,7 +29,7 @@ buildNumber.properties
 
 
 ### Intellij ###
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 
 *.iml
 
@@ -40,6 +41,7 @@ buildNumber.properties
 # .idea/workspace.xml
 # .idea/tasks.xml
 # .idea/dictionaries
+# .idea/shelf
 
 # Sensitive or high-churn files:
 # .idea/dataSources.ids
@@ -74,4 +76,5 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+fabric.properties
 

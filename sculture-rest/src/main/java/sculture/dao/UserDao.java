@@ -1,7 +1,9 @@
 package sculture.dao;
 
 import org.springframework.stereotype.Repository;
-import sculture.models.User;
+import sculture.exceptions.UserAlreadyExistsException;
+import sculture.models.tables.User;
+import sculture.models.tables.relations.RelationFollowUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,14 +14,27 @@ import java.util.List;
 @Repository
 @Transactional
 public class UserDao {
-    
-    
-    
+
+
     /**
      * Save the user in the database.
      */
     public void create(User user) {
         entityManager.persist(user);
+    }
+
+    public void follow(User user, long id, boolean isFollow) {
+        RelationFollowUser relationFollowUser = new RelationFollowUser();
+        relationFollowUser.setFOLLOWER_USER_ID(user.getUser_id());
+        relationFollowUser.setFOLLOWED_USER_ID(id);
+        if (!isFollow) {
+            if (entityManager.contains(relationFollowUser))
+                entityManager.remove(relationFollowUser);
+            else
+                entityManager.remove(entityManager.merge(relationFollowUser));
+        } else {
+            entityManager.persist(relationFollowUser);
+        }
         return;
     }
 
@@ -53,6 +68,16 @@ public class UserDao {
     }
 
     /**
+     * Return the user having the access_token email.
+     */
+    public User getByAccessToken(String access_token) {
+        return (User) entityManager.createQuery(
+                "from User where access_token = :access_token ")
+                .setParameter("access_token", access_token)
+                .getSingleResult();
+    }
+
+    /**
      * Return the user having the passed id.
      */
     public User getById(long id) {
@@ -67,6 +92,14 @@ public class UserDao {
         return;
     }
 
+    public User getByUsername(String username) {
+        return (User) entityManager.createQuery(
+                "from User where username = :username ")
+                .setParameter("username", username)
+                .getSingleResult();
+
+    }
+
     // ------------------------
     // PRIVATE FIELDS
     // ------------------------
@@ -75,5 +108,6 @@ public class UserDao {
     // setup on DatabaseConfig class.
     @PersistenceContext
     private EntityManager entityManager;
+
 
 } // class UserDao

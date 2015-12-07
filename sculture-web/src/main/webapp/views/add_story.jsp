@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 
 <head>
@@ -34,68 +34,74 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
+            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-             <ul class="nav navbar-nav navbar-right">
-                           <li>
-                               <div class="top-big-link">
-                                   <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
-                               </div>
-                           </li>
-                           <% boolean isLoggedIn = request.getAttribute("isLoggedIn"); %>
-                              <% if (isLoggedIn) { %>
-                           <li>
-                               <div class="top-big-link">
-                                   <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
-                               </div>
-                           </li>
-                           <% } else { %>
-                           <li>
-                               <div class="top-big-link">
-                                   <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-login">Sign in</a>
-                               </div>
-                           </li>
-                           <li>
-                               <div class="top-link">
-                                   <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-register">Sign up</a>
-                               </div>
-                           </li>
-                           <% } %>
-                       </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                    </div>
+                </li>
+                <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% if (isLoggedIn.booleanValue()) { %>
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                    </div>
+                </li>
+                <% } else { %>
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-login">Sign in</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="top-link">
+                        <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-register">Sign up</a>
+                    </div>
+                </li>
+                <% } %>
+            </ul>
         </div>
     </div>
 </nav>
 <div class="jumbotron text-center">
     <br>
- <% String username = request.getAttribute("username"); %>
+    <% String username = (String)request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
 </div>
 
 <div class="container">
     <div class="row">
-        <form role="form" method="post" action="/{{credentials.objectId}}/addstory">
+        <form role="form" method="post" action="/addstory">
             <div class="col-md-8 col-md-offset-2">
                 <div class="form-group">
                     <label for="story-title">Title</label>
+
                     <div class="input-group">
-                        <input type="text" class="form-control" name="story-title" id="story-title" placeholder="Enter title" required>
+                        <input type="text" class="form-control" name="story-title" id="story-title"
+                               placeholder="Enter title" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="story-content">Content</label>
+
                     <div class="input-group">
-                        <textarea name="story-content" id="story-content" class="form-control" placeholder="Enter your story" rows="5" required></textarea>
+                        <textarea name="story-content" id="story-content" class="form-control"
+                                  placeholder="Enter your story" rows="5" required></textarea>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="story-tags">Tags</label>
+
                     <div class="input-group">
-                        <input type="text" class="form-control" id="story-tags" name="story-tags" placeholder="Seperate tags by whitespace">
+                        <input type="text" class="form-control" id="story-tags" name="story-tags"
+                               placeholder="Seperate tags by whitespace">
                         <span class="input-group-addon"></span>
                     </div>
                 </div>
@@ -115,7 +121,9 @@
 
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
+
     <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>
+
     <p><span class="glyphicon glyphicon-envelope"></span> info@sculture.com</p>
 </div>
 

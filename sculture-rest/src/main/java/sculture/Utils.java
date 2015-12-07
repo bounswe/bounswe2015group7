@@ -4,6 +4,8 @@ package sculture;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     public static String password_hash(String password) {
@@ -27,5 +29,30 @@ public class Utils {
 
     public static String access_token_generate() {
         return UUID.randomUUID().toString();
+    }
+
+    public static boolean isValidEmail(String enteredEmail) {
+        String EMAIL_REGIX = "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(EMAIL_REGIX);
+        Matcher matcher = pattern.matcher(enteredEmail);
+        return ((!enteredEmail.isEmpty()) && (enteredEmail != null) && (matcher.matches()));
+    }
+
+    public static boolean checkEmailSyntax(String email) {
+        if (email == null || email.isEmpty() || isValidEmail(email))
+            return false;
+        return true;
+    }
+
+    public static boolean checkPasswordSyntax(String password) {
+        if (password == null || password.isEmpty() || password.length() < 6)
+            return false;
+        return true;
+    }
+
+    public static boolean checkUsernameSyntax(String username) {
+        if (username == null || username.isEmpty())
+            return false;
+        return true;
     }
 }

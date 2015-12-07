@@ -1,9 +1,8 @@
 package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.FileSystemResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -246,7 +245,7 @@ public class SCultureRest {
         return imageResponse;
     }
 
-    private ResourceLoader resourceLoader = new DefaultResourceLoader();
+    private FileSystemResourceLoader resourceLoader = new FileSystemResourceLoader();
 
     @RequestMapping(method = RequestMethod.GET, value = "/image/get/{id}", produces = "image/jpg")
     public Resource image_get(@PathVariable String id) {

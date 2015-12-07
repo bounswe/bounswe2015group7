@@ -1,9 +1,11 @@
 package com.sculture;
 
+import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sculture.helpers.Story;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +29,7 @@ public class SearchAll extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Story story = new Story();
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -43,17 +46,14 @@ public class SearchAll extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
+
         if (jsonResponse != null) {
-            request.setAttribute("isLoggedIn", true);
-            request.setAttribute("username", jsonResponse.getBody().getObject().get("username"));
-            request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
-        } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
+            Gson gson = new Gson();
+            story = gson.fromJson(jsonResponse.getBody().getArray().get(0).toString(), Story.class);
         }
 
 
-        request.getRequestDispatcher("/add_story.jsp").forward(request, response);
+        request.getRequestDispatcher("/search_result.jsp").forward(request, response);
     }
 
 }

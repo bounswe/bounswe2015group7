@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sculture.Utils;
 import sculture.dao.CommentDao;
 import sculture.dao.StoryDao;
@@ -34,13 +37,22 @@ import sculture.models.requests.TagGetRequestBody;
 import sculture.models.requests.UserFollowRequestBody;
 import sculture.models.requests.UserGetRequestBody;
 import sculture.models.requests.UserUpdateRequestBody;
-import sculture.models.response.*;
+import sculture.models.response.BaseStoryResponse;
+import sculture.models.response.CommentListResponse;
+import sculture.models.response.CommentResponse;
+import sculture.models.response.FullStoryResponse;
+import sculture.models.response.LoginResponse;
+import sculture.models.response.SearchResponse;
+import sculture.models.response.TagResponse;
 import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
 import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -196,6 +208,26 @@ public class SCultureRest {
         }
         searchResponse.setResult(responses);
         return searchResponse;
+    }
+
+    @RequestMapping(value="/upload", method=RequestMethod.POST)
+    public @ResponseBody
+    String handleFileUpload(@RequestParam("name") String name,
+                                                 @RequestParam("file") MultipartFile file){
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File(name)));
+                stream.write(bytes);
+                stream.close();
+                return "You successfully uploaded " + name + "!";
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")

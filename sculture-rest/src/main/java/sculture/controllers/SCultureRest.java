@@ -26,6 +26,7 @@ import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
 import sculture.models.requests.CommentGetRequestBody;
 import sculture.models.requests.CommentListRequestBody;
+import sculture.models.requests.CommentNewRequestBody;
 import sculture.models.requests.LoginRequestBody;
 import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
@@ -376,6 +377,27 @@ public class SCultureRest {
     @RequestMapping("/comment/get")
     public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
         Comment comment = commentDao.getById(requestBody.getCommentId());
+        return new CommentResponse(comment, userDao);
+    }
+
+    @RequestMapping("/comment/new")
+    public CommentResponse commentGet(@RequestBody CommentNewRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            current_user = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new InvalidAccessTokenException();
+        }
+
+        Comment comment = new Comment();
+        Date date = new Date();
+        comment.setContent(requestBody.getContent());
+        comment.setCreate_date(date);
+        comment.setOwner_id(current_user.getUser_id());
+        comment.setStory_id(requestBody.getStoryId());
+        commentDao.create(comment);
         return new CommentResponse(comment, userDao);
     }
 

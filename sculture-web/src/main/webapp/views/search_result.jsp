@@ -99,12 +99,14 @@ Story[] results = request.getAttribute("results");
             <div class="panel">
                 <div class="panel-body">
                     <!--/stories-->
-                    <% for (int i = 0; i < username.size(); i++) { %>
+                    <% for (int i = 0; i < results.length; i++) { %>
 
                       <div class="row">
                         <br>
                         <div class="col-md-2 col-sm-3 text-center">
-                            <a class="story-title" href="#"><img alt="" src="http://api.randomuser.me/portraits/thumb/men/58.jpg" style="width:100px;height:100px" class="img-circle"></a>
+                            <a class="story-title" href="#">
+                                <%out.println("<img alt=\"\" src=\"" + results[i].mainPhotoURL + "\" style=\"width:100px;height:100px\" class=\"img-circle\"");%>
+                            </a>
                         </div>
                         <div class="col-md-10 col-sm-9">
                             <h3 align="left"><a href="#"></a> <% out.print(results[i].getTitle());%> </h3>
@@ -119,7 +121,7 @@ Story[] results = request.getAttribute("results");
                                         out.print(content.substring(0,500) + "...";
                                     }
                                     %></p>
-                                    <small style="font-family:courier,'new courier';" class="text-muted"> <% out.print(results[i].getDate());%> • <a href="#" class="text-muted">Read More</a></small>
+                                    <small style="font-family:courier,'new courier';" class="text-muted"> <% out.print(results[i].getDate());%> • <% out.print("<a href=\"" + results[i].getUrl + "\" class=\"text-muted\">");%>Read More</a></small>
                                     </h4></div>
                                 <div class="col-xs-3"></div>
                             </div>
@@ -135,7 +137,7 @@ Story[] results = request.getAttribute("results");
 
 
                     <!--/stories-->
-                    <a href="/" class="btn btn-primary pull-right btnNext">More <i class="glyphicon glyphicon-chevron-right"></i></a>
+                    <a href="#" class="btn btn-primary pull-right btnNext">More <i class="glyphicon glyphicon-chevron-right"></i></a>
                 </div>
             </div>
         </div><!--/col-12-->

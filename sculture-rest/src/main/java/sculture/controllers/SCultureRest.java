@@ -322,7 +322,12 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
-        story.setMedia(requestBody.getMedia().toString());
+        String str = "";
+        for (String media : requestBody.getMedia()) {
+            str += media;
+            str += ",";
+        }
+        story.setMedia(str.substring(0, str.length() - 1));
 
         storyDao.create(story);
 

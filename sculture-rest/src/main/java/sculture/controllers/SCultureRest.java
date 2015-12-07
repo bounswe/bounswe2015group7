@@ -43,6 +43,7 @@ import sculture.models.response.BaseStoryResponse;
 import sculture.models.response.CommentListResponse;
 import sculture.models.response.CommentResponse;
 import sculture.models.response.FullStoryResponse;
+import sculture.models.response.ImageResponse;
 import sculture.models.response.LoginResponse;
 import sculture.models.response.SearchResponse;
 import sculture.models.response.TagResponse;
@@ -234,13 +235,15 @@ public class SCultureRest {
     @RequestMapping(value = "/image/upload", method = RequestMethod.POST)
     public
     @ResponseBody
-    String handleFileUpload(
+    ImageResponse handleFileUpload(
             @RequestBody byte[] file) throws Exception {
         String randomIdentifier = randomIdentifier();
         FileOutputStream fos = new FileOutputStream("/image/" + randomIdentifier + ".jpg");
         fos.write(file);
         fos.close();
-        return "success";
+        ImageResponse imageResponse = new ImageResponse();
+        imageResponse.setId(randomIdentifier);
+        return imageResponse;
     }
 
     private ResourceLoader resourceLoader = new DefaultResourceLoader();

@@ -44,11 +44,6 @@
                 </li>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="top-big-link">
                         <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-login">Sign in</a>
                     </div>
                 </li>
@@ -67,51 +62,112 @@
     <h3a>Looking good!</h3a>
 </div>
 
+
+<!-- Page Content -->
 <div class="container">
+
+    <!-- Portfolio Item Heading -->
     <div class="row">
-        <form role="form" method="post" action="/{{credentials.objectId}}/addstory">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="form-group">
-                    <label for="story-title">Title</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="story-title" id="story-title" placeholder="Enter title" required>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="story-content">Content</label>
-                    <div class="input-group">
-                        <textarea name="story-content" id="story-content" class="form-control" placeholder="Enter your story" rows="5" required></textarea>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                    </div>
-                </div>
-
-                <fieldset class="form-group">
-                    <label for="exampleInputFile">Upload a photo</label>
-                    <div align="center">
-                        <input type="file" class="form-control-file" id="exampleInputFile" style="center">
-                    </div>
-                </fieldset>
-
-                <div class="form-group">
-                    <label for="story-tags">Tags</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="story-tags" name="story-tags" placeholder="Seperate tags by whitespace">
-                        <span class="input-group-addon"></span>
-                    </div>
-                </div>
-
-                <div container>
-                    Fields with * are required
-                    <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
-                </div>
-
-            </div>
-        </form>
+        <div class="col-lg-12">
+            <h1 class="page-header" align="left">Story Of The Day
+                <small>Item Subheading</small>
+            </h1>
+        </div>
     </div>
-</div>
-<br>
-<br><br>
+    <!-- /.row -->
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+
+        <div class="col-md-8">
+            <img class="img-responsive" src="http://placehold.it/750x500" alt="">
+        </div>
+
+        <div class="col-md-4">
+            <h3>Some Story</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+        </div>
+
+    </div>
+    <!-- /.row -->
+    <hr>
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Most Popular Stories</h3>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Page Features -->
+    <div class="row text-center">
+
+        <div class="col-md-3 col-sm-6 hero-feature">
+            <div class="thumbnail">
+                <img src="http://placehold.it/800x500" alt="">
+                <div class="caption">
+                    <h3>Feature Label</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary">Read More</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 hero-feature">
+            <div class="thumbnail">
+                <img src="http://placehold.it/800x500" alt="">
+                <div class="caption">
+                    <h3>Feature Label</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary">Read More</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 hero-feature">
+            <div class="thumbnail">
+                <img src="http://placehold.it/800x500" alt="">
+                <div class="caption">
+                    <h3>Feature Label</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary">Read More</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 hero-feature">
+            <div class="thumbnail">
+                <img src="http://placehold.it/800x500" alt="">
+                <div class="caption">
+                    <h3>Feature Label</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary">Read More</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div id="contact" class="container-fluid bg-grey">
@@ -119,4 +175,3 @@
     <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>
     <p><span class="glyphicon glyphicon-envelope"></span> info@sculture.com</p>
 </div>
-

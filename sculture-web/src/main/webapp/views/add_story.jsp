@@ -91,6 +91,7 @@
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="story-tags">Tags</label>
                     <div class="input-group">

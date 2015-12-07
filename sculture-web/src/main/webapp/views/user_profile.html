@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Sculture - share your culture!</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="public/js/sweetalert.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/font-awesome.css">
+    <link rel="stylesheet" href="public/css/form-elements.css">
+    <link rel="stylesheet" href="public/css/sweetalert.css">
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/homepage_style.css">
+    <link rel="stylesheet" href="public/css/storystyle.css">
+
+
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Search</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+
+<hr class="">
+<div class="container target" align="left">
+    <div class="row">
+        <div class="col-sm-10">
+            <h1 class="">Username</h1>
+
+            <button type="button" class="btn btn-success" style="height:40px;width:300px">Follow</button>
+            <br><br>
+            <button type="button" class="btn btn-info" style="height:40px;width:300px">Send message</button>
+            <br>
+
+        </div>
+        <div class="col-sm-2" align="right"><a href="/users" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="http://www.rlsandbox.com/img/profile.jpg" align="left"></a>
+
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-3">
+            <!--left col-->
+            <div class="panel panel-default">
+            <ul class="list-group">
+                <div class="panel-heading">Profile</div>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Joined</strong></span> 2.13.2014</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Last seen</strong></span> Yesterday</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> Joseph
+                    Doe</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Username </strong></span> Pet Sitter
+
+                </li>
+            </ul>
+                </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Promoted?
+
+                </div>
+                <div class="panel-body"><i style="color:green" class="fa fa-check-square"></i> Yes, I am a promoted user.
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i>
+
+                </div>
+                <div class="panel-body"><a href="http://bootply.com" class="">blabla.tumblr.com</a>
+
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Activity</div>
+                <ul class="list-group">
+                    <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i>
+
+                    </li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Shares</strong></span> 125</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Likes</strong></span> 13</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> 37</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> 78</li>
+                </ul>
+            </div>
+        </div>
+        <!--/col-3-->
+        <div class="col-sm-9" contenteditable="false" style="">
+            <div class="panel panel-default">
+                <div class="panel-heading">User Bio</div>
+                <div class="panel-body"> A long description about me.
+
+                </div>
+            </div>
+            <div class="panel panel-default target">
+                <div class="panel-heading" contenteditable="false">My Posts</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="300x200" src="http://lorempixel.com/600/200/people">
+                                <div class="caption">
+                                    <h3>
+                                        Post 1
+                                    </h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
+                                    </p>
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="300x200" src="http://lorempixel.com/600/200/city">
+                                <div class="caption">
+                                    <h3>
+                                        Post 2
+                                    </h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
+                                    </p>
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="300x200" src="http://lorempixel.com/600/200/sports">
+                                <div class="caption">
+                                    <h3>
+                                        Post 3
+                                    </h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
+                                    </p>
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+         </div>
+
+
+        <div id="push"></div>
+    </div>
+
+
+    <script src="/plugins/bootstrap-select.min.js"></script>
+    <script src="/codemirror/jquery.codemirror.js"></script>
+    <script src="/beautifier.js"></script>
+    <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-40413119-1', 'bootply.com');
+          ga('send', 'pageview');
+        </script>
+    <script>
+        jQuery.fn.shake = function(intShakes, intDistance, intDuration, foreColor) {
+            this.each(function() {
+                if (foreColor && foreColor!="null") {
+                    $(this).css("color",foreColor);
+                }
+                $(this).css("position","relative");
+                for (var x=1; x<=intShakes; x++) {
+                $(this).animate({left:(intDistance*-1)}, (((intDuration/intShakes)/4)))
+                .animate({left:intDistance}, ((intDuration/intShakes)/2))
+                .animate({left:0}, (((intDuration/intShakes)/4)));
+                $(this).css("color","");
+            }
+          });
+        return this;
+        };
+        </script>
+    <script>
+        $(document).ready(function() {
+
+            $('.tw-btn').fadeIn(3000);
+            $('.alert').delay(5000).fadeOut(1500);
+
+            $('#btnLogin').click(function(){
+                $(this).text("...");
+                $.ajax({
+                    url: "/loginajax",
+                    type: "post",
+                    data: $('#formLogin').serialize(),
+                    success: function (data) {
+                        //console.log('data:'+data);
+                        if (data.status==1&&data.user) { //logged in
+                            $('#menuLogin').hide();
+                            $('#lblUsername').text(data.user.username);
+                            $('#menuUser').show();
+                            /*
+                            $('#completeLoginModal').modal('show');
+                            $('#btnYes').click(function() {
+                                window.location.href="/";
+                            });
+                            */
+                        }
+                        else {
+                            $('#btnLogin').text("Login");
+                            prependAlert("#spacer",data.error);
+                            $('#btnLogin').shake(4,6,700,'#CC2222');
+                            $('#username').focus();
+                        }
+                    },
+                    error: function (e) {
+                        $('#btnLogin').text("Login");
+                        console.log('error:'+JSON.stringify(e));
+                    }
+                });
+            });
+            $('#btnRegister').click(function(){
+                $(this).text("Wait..");
+                $.ajax({
+                    url: "/signup?format=json",
+                    type: "post",
+                    data: $('#formRegister').serialize(),
+                    success: function (data) {
+                        console.log('data:'+JSON.stringify(data));
+                        if (data.status==1) {
+                            $('#btnRegister').attr("disabled","disabled");
+                            $('#formRegister').text('Thanks. You can now login using the Login form.');
+                        }
+                        else {
+                            prependAlert("#spacer",data.error);
+                            $('#btnRegister').shake(4,6,700,'#CC2222');
+                            $('#btnRegister').text("Sign Up");
+                            $('#inputEmail').focus();
+                        }
+                    },
+                    error: function (e) {
+                        $('#btnRegister').text("Sign Up");
+                        console.log('error:'+e);
+                    }
+                });
+            });
+
+            $('.loginFirst').click(function(){
+                $('#navLogin').trigger('click');
+                return false;
+            });
+
+            $('#btnForgotPassword').on('click',function(){
+                $.ajax({
+                    url: "/resetPassword",
+                    type: "post",
+                    data: $('#formForgotPassword').serializeObject(),
+                    success: function (data) {
+                        if (data.status==1){
+                            prependAlert("#spacer",data.msg);
+                            return true;
+                        }
+                        else {
+                            prependAlert("#spacer","Your password could not be reset.");
+                            return false;
+                        }
+                    },
+                    error: function (e) {
+                        console.log('error:'+e);
+                    }
+                });
+            });
+
+            $('#btnContact').click(function(){
+
+                $.ajax({
+                    url: "/contact",
+                    type: "post",
+                    data: $('#formContact').serializeObject(),
+                    success: function (data) {
+                        if (data.status==1){
+                            prependAlert("#spacer","Thanks. We got your message and will get back to you shortly.");
+                             $('#contactModal').modal('hide');
+                            return true;
+                        }
+                        else {
+                            prependAlert("#spacer",data.error);
+                            return false;
+                        }
+                    },
+                    error: function (e) {
+                        console.log('error:'+e);
+                    }
+                });
+                return false;
+            });
+
+            /*
+            $('.nav .dropdown-menu input').on('click touchstart',function(e) {
+                e.stopPropagation();
+            });
+            */
+
+
+
+
+
+        });
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+        var prependAlert = function(appendSelector,msg){
+            $(appendSelector).after('<div class="alert alert-info alert-block affix" id="msgBox" style="z-index:1300;margin:14px!important;">'+msg+'</div>');
+            $('.alert').delay(3500).fadeOut(1000);
+        }
+        </script>
+    <!-- Quantcast Tag -->
+    <script type="text/javascript">
+        var _qevents = _qevents || [];
+
+        (function() {
+        var elem = document.createElement('script');
+        elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+        elem.async = true;
+        elem.type = "text/javascript";
+        var scpt = document.getElementsByTagName('script')[0];
+        scpt.parentNode.insertBefore(elem, scpt);
+        })();
+
+        _qevents.push({
+        qacct:"p-0cXb7ATGU9nz5"
+        });
+        </script>
+    <noscript>
+        &amp;amp;amp;amp;amp;amp;amp;lt;div style="display:none;"&amp;amp;amp;amp;amp;amp;amp;gt;
+        &amp;amp;amp;amp;amp;amp;amp;lt;img src="//pixel.quantserve.com/pixel/p-0cXb7ATGU9nz5.gif" border="0" height="1" width="1" alt="Quantcast"/&amp;amp;amp;amp;amp;amp;amp;gt;
+        &amp;amp;amp;amp;amp;amp;amp;lt;/div&amp;amp;amp;amp;amp;amp;amp;gt;
+    </noscript>
+    <!-- End Quantcast tag -->
+    <div id="completeLoginModal" class="modal hide">
+        <div class="modal-header">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+            <h3>Do you want to proceed?</h3>
+        </div>
+        <div class="modal-body">
+            <p>This page must be refreshed to complete your login.</p>
+            <p>You will lose any unsaved work once the page is refreshed.</p>
+            <br><br>
+            <p>Click "No" to cancel the login process.</p>
+            <p>Click "Yes" to continue...</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" id="btnYes" class="btn danger">Yes, complete login</a>
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
+        </div>
+    </div>
+    <div id="forgotPasswordModal" class="modal hide">
+        <div class="modal-header">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+            <h3>Password Lookup</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form form-horizontal" id="formForgotPassword">
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">Email</label>
+                    <div class="controls">
+                        <input name="_csrf" id="token" type="hidden" value="CkMEALL0JBMf5KSrOvu9izzMXCXtFQ/Hs6QUY=">
+                        <input type="email" name="email" id="inputEmail" placeholder="you@youremail.com" required="">
+                        <span class="help-block"><small>Enter the email address you used to sign-up.</small></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer pull-center">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+            <a href="#" data-dismiss="modal" id="btnForgotPassword" class="btn btn-success">Reset Password</a>
+        </div>
+
+    </div>
+    <div id="upgradeModal" class="modal hide">
+        <div class="modal-header">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+            <h4>Would you like to upgrade?</h4>
+        </div>
+        <div class="modal-body">
+            <p class="text-center"><strong></strong></p>
+            <h1 class="text-center">$4<small>/mo</small></h1>
+            <p class="text-center"><small>Unlimited plys. Unlimited downloads. No Ads.</small></p>
+            <p class="text-center"><img src="/assets/i_visa.png" width="50" alt="visa"> <img src="/assets/i_mc.png" width="50" alt="mastercard"> <img src="/assets/i_amex.png" width="50" alt="amex"> <img src="/assets/i_discover.png" width="50" alt="discover"> <img src="/assets/i_paypal.png" width="50" alt="paypal"></p>
+        </div>
+        <div class="modal-footer pull-center">
+            <a href="/upgrade" class="btn btn-block btn-huge btn-success"><strong>Upgrade Now</strong></a>
+            <a href="#" data-dismiss="modal" class="btn btn-block btn-huge">No Thanks, Maybe Later</a>
+        </div>
+    </div>
+    <div id="contactModal" class="modal hide">
+        <div class="modal-header">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+            <h3>Contact Us</h3>
+            <p>suggestions, questions or feedback</p>
+        </div>
+        <div class="modal-body">
+            <form class="form form-horizontal" id="formContact">
+                <input name="_csrf" id="token" type="hidden" value="CkMEALL0JBMf5KSrOvu9izzMXCXtFQ/Hs6QUY=">
+                <div class="control-group">
+                    <label class="control-label" for="inputSender">Name</label>
+                    <div class="controls">
+                        <input type="text" name="sender" id="inputSender" class="input-large" placeholder="Your name">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputMessage">Message</label>
+                    <div class="controls">
+                        <textarea name="notes" rows="5" id="inputMessage" class="input-large" placeholder="Type your message here"></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">Email</label>
+                    <div class="controls">
+                        <input type="text" name="email" id="inputEmail" class="input-large" placeholder="you@youremail.com (for reply)" required="">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer pull-center">
+            <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+            <a href="#" data-dismiss="modal" aria-hidden="true" id="btnContact" role="button" class="btn btn-success">Send</a>
+        </div>
+    </div>
+
+
+
+
+    <script src="/plugins/bootstrap-pager.js"></script>
+</div>
+
+</div>
+
+
+
+
+
+
+<div id="contact" class="container-fluid bg-grey">
+    <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
+    <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>
+    <p><span class="glyphicon glyphicon-envelope"></span> info@sculture.com</p>
+</div>
+
+<!-- LOGIN -->
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="modal-login-label">Sign in to Sculture</h3>
+                <p>Enter your username and password to sign in:</p>
+            </div>
+
+            <div class="modal-body">
+
+                <form role="form" action="/login" method="post" class="login-form">
+                    <div class="form-group">
+                        <label class="sr-only" for="form-username">E-mail</label>
+                        <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-password">Password</label>
+                        <input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+                    </div>
+                    <button type="submit" class="btn">Sign in!</button>
+                    <div style="text-align: center;">
+                        <br> Or sign in using: <br>
+                        <a class="btn btn-link-1" href="#">
+                            <i class="fa fa-facebook"></i> Facebook
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- REGISTER -->
+<div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="modal-register-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="modal-register-label">Register to Sculture</h3>
+                <p>Fill out the fields below:</p>
+            </div>
+
+            <div class="modal-body">
+
+                <form role="form" action="/signup" method="post" class="register-form">
+                    <div class="form-group">
+                        <label class="sr-only" for="form-email">E-mail</label>
+                        <input type="text" name="form-email" placeholder="Enter your email" class="form-email form-control" id="form-email">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-username">Username</label>
+                        <input type="text" name="form-username" placeholder="Enter your username" class="form-bane form-control" id="form-username">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-password">Password</label>
+                        <input type="password" name="form-password" placeholder="Enter your password" class="form-password form-control" id="form-password">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-retypedpassword">Password</label>
+                        <input type="password" name="form-retypedpassword" placeholder="Retype your password..." class="form-retypedpassword form-control" id="form-retypedpassword">
+                    </div>
+                    <button type="submit" class="btn">Sign up!</button>
+                    <div style="text-align: center;">
+                        <br> Or sign up using: <br>
+                        <a class="btn btn-link-1" href="#">
+                            <span><i class="fa fa-facebook"></i> Facebook</span>
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Javascript -->
+<script src="public/js/jquery-1.11.1.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/jquery.backstretch.min.js"></script>
+<script src="public/js/scripts.js"></script>
+<script>
+    $(document).ready(function(){
+        // Add smooth scrolling to all links in navbar + footer link
+        $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+
+            // Prevent default anchor click behavior
+            //   event.preventDefault();
+
+            // Store hash
+            var hash = this.hash;
+
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top
+            }, 900, function(){
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+            });
+        });
+
+        // Slide in elements on scroll
+        $(window).scroll(function() {
+            $(".slideanim").each(function(){
+                var pos = $(this).offset().top;
+
+                var winTop = $(window).scrollTop();
+                if (pos < winTop + 600) {
+                    $(this).addClass("slide");
+                }
+            });
+        });
+    })
+</script>
+</body>
+
+</html>

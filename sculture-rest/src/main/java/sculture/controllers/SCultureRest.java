@@ -210,10 +210,12 @@ public class SCultureRest {
         return searchResponse;
     }
 
-    @RequestMapping(value="/upload", method=RequestMethod.POST)
-    public @ResponseBody
-    String handleFileUpload(@RequestParam("name") String name,
-                                                 @RequestParam("file") MultipartFile file){
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String handleFileUpload(
+            @RequestParam("file") MultipartFile file) {
+        String name = "image";
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();

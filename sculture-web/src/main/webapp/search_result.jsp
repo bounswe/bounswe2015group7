@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+ <%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*" %>
 
 <html lang="en">
 
@@ -37,48 +37,47 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
-                    </div>
-                </li>
-                <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-                <% if (isLoggedIn.booleanValue()) { %>
-                <li>
-                    <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
-                    </div>
-                </li>
-                <% } else { %>
-                <li>
-                    <div class="top-big-link">
-                        <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-login">Sign in</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="top-link">
-                        <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-register">Sign up</a>
-                    </div>
-                </li>
-                <% } %>
-            </ul>
+           <ul class="nav navbar-nav navbar-right">
+               <li>
+                   <div class="top-big-link">
+                       <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                   </div>
+               </li>
+               <% boolean isLoggedIn = request.getAttribute("isLoggedIn"); %>
+                  <% if (isLoggedIn) { %>
+               <li>
+                   <div class="top-big-link">
+                       <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                   </div>
+               </li>
+               <% } else { %>
+               <li>
+                   <div class="top-big-link">
+                       <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-login">Sign in</a>
+                   </div>
+               </li>
+               <li>
+                   <div class="top-link">
+                       <a class="btn btn-link-2 launch-modal" href="#" data-modal-id="modal-register">Sign up</a>
+                   </div>
+               </li>
+               <% } %>
+           </ul>
 
         </div>
     </div>
 </nav>
 <div class="jumbotron text-center">
     <br>
-    <% String username = (String) request.getAttribute("username"); %>
+    <% String username = request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
     <form class="form-inline" action="/search" method="post">
         <br> <br>
-        <input type="text" name="main-search" id="main-search" class="form-control" size="50"
-               placeholder="Search stories" required>
+        <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>
     <br>
     <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
@@ -88,7 +87,7 @@
 
 <%-- here we assumed that there is a Story class with attributes title, content, tags and date created  --%>
 <%
-    Story[] results = request.getAttribute("results");
+Story[] results = request.getAttribute("results");
 
 %>
 <h1>We found <%results.length%>results for your search</h1>
@@ -100,34 +99,29 @@
             <div class="panel">
                 <div class="panel-body">
                     <!--/stories-->
-                    <% for (int i = 0; i < username.size(); i++) { %>
+                    <% for (int i = 0; i < results.length; i++) { %>
 
-                    <div class="row">
+                      <div class="row">
                         <br>
-
                         <div class="col-md-2 col-sm-3 text-center">
-                            <a class="story-title" href="#"><img alt=""
-                                                                 src="http://api.randomuser.me/portraits/thumb/men/58.jpg"
-                                                                 style="width:100px;height:100px"
-                                                                 class="img-circle"></a>
+                            <a class="story-title" href="#">
+                                <%out.println("<img alt=\"\" src=\"" + results[i].mainPhotoURL + "\" style=\"width:100px;height:100px\" class=\"img-circle\"");%>
+                            </a>
                         </div>
                         <div class="col-md-10 col-sm-9">
-                            <h3 align="left"><a href="#"></a> <% out.print(results[i].getTitle());%></h3>
-
+                            <h3 align="left"><a href="#"></a> <% out.print(results[i].getTitle());%> </h3>
                             <div class="row">
                                 <div class="col-xs-9">
-                                    <p><%
+                                    <p> <%
 
-                                        String content = results[i].getContent();
-                                        if (content.length < 500) {
-                                            out.print(content);
-                                        } else {
-                                            out.print(content.substring(0, 500) + "...";
-                                        }
+                                    String content = results[i].getContent();
+                                    if(content.length<500){
+                                        out.print(content);
+                                    }else{
+                                        out.print(content.substring(0,500) + "...";
+                                    }
                                     %></p>
-                                    <small style="font-family:courier,'new courier';" class="text-muted"><%
-                                        out.print(results[i].getDate());%> • <a href="#" class="text-muted">Read
-                                        More</a></small>
+                                    <small style="font-family:courier,'new courier';" class="text-muted"> <% out.print(results[i].getDate());%> • <% out.print("<a href=\"" + results[i].getUrl + "\" class=\"text-muted\">");%>Read More</a></small>
                                     </h4></div>
                                 <div class="col-xs-3"></div>
                             </div>
@@ -140,28 +134,26 @@
                     <% } %>
 
 
+
+
                     <!--/stories-->
-                    <a href="/" class="btn btn-primary pull-right btnNext">More <i
-                            class="glyphicon glyphicon-chevron-right"></i></a>
+                    <a href="#" class="btn btn-primary pull-right btnNext">More <i class="glyphicon glyphicon-chevron-right"></i></a>
                 </div>
             </div>
-        </div>
-        <!--/col-12-->
+        </div><!--/col-12-->
     </div>
 </div>
 
 
+
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
-
     <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>
-
     <p><span class="glyphicon glyphicon-envelope"></span> info@sculture.com</p>
 </div>
 
 <!-- LOGIN -->
-<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-label"
-     aria-hidden="true">
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -170,7 +162,6 @@
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
                 <h3 class="modal-title" id="modal-login-label">Sign in to Sculture</h3>
-
                 <p>Enter your username and password to sign in:</p>
             </div>
 
@@ -179,13 +170,11 @@
                 <form role="form" action="/login" method="post" class="login-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-username">Username</label>
-                        <input type="text" name="form-username" placeholder="Username..."
-                               class="form-email form-control" id="form-username">
+                        <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>
-                        <input type="password" name="form-password" placeholder="Password..."
-                               class="form-password form-control" id="form-password">
+                        <input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
                     </div>
                     <button type="submit" class="btn">Sign in!</button>
                     <div style="text-align: center;">
@@ -203,8 +192,7 @@
 </div>
 
 <!-- REGISTER -->
-<div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="modal-register-label"
-     aria-hidden="true">
+<div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="modal-register-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -213,7 +201,6 @@
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
                 <h3 class="modal-title" id="modal-register-label">Register to Sculture</h3>
-
                 <p>Fill out the fields below:</p>
             </div>
 
@@ -222,23 +209,19 @@
                 <form role="form" action="/signup" method="post" class="register-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-email">E-mail</label>
-                        <input type="text" name="form-email" placeholder="Enter your email"
-                               class="form-email form-control" id="form-email">
+                        <input type="text" name="form-email" placeholder="Enter your email" class="form-email form-control" id="form-email">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-username">Username</label>
-                        <input type="text" name="form-username" placeholder="Enter your username"
-                               class="form-bane form-control" id="form-username">
+                        <input type="text" name="form-username" placeholder="Enter your username" class="form-bane form-control" id="form-username">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>
-                        <input type="password" name="form-password" placeholder="Enter your password"
-                               class="form-password form-control" id="form-password">
+                        <input type="password" name="form-password" placeholder="Enter your password" class="form-password form-control" id="form-password">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-retypedpassword">Password</label>
-                        <input type="password" name="form-retypedpassword" placeholder="Retype your password..."
-                               class="form-retypedpassword form-control" id="form-retypedpassword">
+                        <input type="password" name="form-retypedpassword" placeholder="Retype your password..." class="form-retypedpassword form-control" id="form-retypedpassword">
                     </div>
                     <button type="submit" class="btn">Sign up!</button>
                     <div style="text-align: center;">
@@ -260,9 +243,9 @@
 <script src="public/js/jquery.backstretch.min.js"></script>
 <script src="public/js/scripts.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function(){
         // Add smooth scrolling to all links in navbar + footer link
-        $(".navbar a, footer a[href='#myPage']").on('click', function (event) {
+        $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
             // Prevent default anchor click behavior
             //   event.preventDefault();
@@ -274,7 +257,7 @@
             // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
             $('html, body').animate({
                 scrollTop: $(hash).offset().top
-            }, 900, function () {
+            }, 900, function(){
 
                 // Add hash (#) to URL when done scrolling (default click behavior)
                 window.location.hash = hash;
@@ -282,8 +265,8 @@
         });
 
         // Slide in elements on scroll
-        $(window).scroll(function () {
-            $(".slideanim").each(function () {
+        $(window).scroll(function() {
+            $(".slideanim").each(function(){
                 var pos = $(this).offset().top;
 
                 var winTop = $(window).scrollTop();

@@ -1,15 +1,16 @@
 package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import sculture.Utils;
 import sculture.dao.CommentDao;
 import sculture.dao.StoryDao;
@@ -25,6 +26,7 @@ import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
 import sculture.models.requests.CommentGetRequestBody;
 import sculture.models.requests.CommentListRequestBody;
+import sculture.models.requests.CommentNewRequestBody;
 import sculture.models.requests.LoginRequestBody;
 import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
@@ -41,6 +43,7 @@ import sculture.models.response.BaseStoryResponse;
 import sculture.models.response.CommentListResponse;
 import sculture.models.response.CommentResponse;
 import sculture.models.response.FullStoryResponse;
+import sculture.models.response.ImageResponse;
 import sculture.models.response.LoginResponse;
 import sculture.models.response.SearchResponse;
 import sculture.models.response.TagResponse;
@@ -50,13 +53,13 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -210,27 +213,46 @@ public class SCultureRest {
         return searchResponse;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+
+    final java.util.Random rand = new java.util.Random();
+
+    // consider using a Map<String,Boolean> to say whether the identifier is being used or not 
+    final Set<String> identifiers = new HashSet<String>();
+
+    public String randomIdentifier() {
+        StringBuilder builder = new StringBuilder();
+        while (builder.toString().length() == 0) {
+            int length = rand.nextInt(5) + 5;
+            for (int i = 0; i < length; i++)
+                builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+            if (identifiers.contains(builder.toString()))
+                builder = new StringBuilder();
+        }
+        return builder.toString();
+    }
+
+    @RequestMapping(value = "/image/upload", method = RequestMethod.POST)
     public
     @ResponseBody
-    String handleFileUpload(
-            @RequestParam("file") MultipartFile file) {
-        String name = "image";
-        if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File(name)));
-                stream.write(bytes);
-                stream.close();
-                return "You successfully uploaded " + name + "!";
-            } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
-            }
-        } else {
-            return "You failed to upload " + name + " because the file was empty.";
-        }
+    ImageResponse handleFileUpload(
+            @RequestBody byte[] file) throws Exception {
+        String randomIdentifier = randomIdentifier();
+        FileOutputStream fos = new FileOutputStream("/image/" + randomIdentifier + ".jpg");
+        fos.write(file);
+        fos.close();
+        ImageResponse imageResponse = new ImageResponse();
+        imageResponse.setId(randomIdentifier);
+        return imageResponse;
     }
+
+    private FileSystemResourceLoader resourceLoader = new FileSystemResourceLoader();
+
+    @RequestMapping(method = RequestMethod.GET, value = "/image/get/{id}", produces = "image/jpg")
+    public Resource image_get(@PathVariable String id) {
+        return resourceLoader.getResource("file:/image/" + id + ".jpg");
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {
@@ -300,6 +322,7 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
+        story.setMedia(requestBody.getMedia().toString());
 
         storyDao.create(story);
 
@@ -354,6 +377,27 @@ public class SCultureRest {
     @RequestMapping("/comment/get")
     public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
         Comment comment = commentDao.getById(requestBody.getCommentId());
+        return new CommentResponse(comment, userDao);
+    }
+
+    @RequestMapping("/comment/new")
+    public CommentResponse commentGet(@RequestBody CommentNewRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            current_user = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new InvalidAccessTokenException();
+        }
+
+        Comment comment = new Comment();
+        Date date = new Date();
+        comment.setContent(requestBody.getContent());
+        comment.setCreate_date(date);
+        comment.setOwner_id(current_user.getUser_id());
+        comment.setStory_id(requestBody.getStoryId());
+        commentDao.create(comment);
         return new CommentResponse(comment, userDao);
     }
 

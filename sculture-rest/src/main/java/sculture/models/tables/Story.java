@@ -42,6 +42,8 @@ public class Story {
     @NotNull
     private String title;
 
+    private String media;
+    
     public Story() {
     }
 
@@ -114,4 +116,11 @@ public class Story {
 
     public void setTitle(String title){this.title=title; }
 
+    public String getMedia() {
+        return media;
+    }
+
+    public void setMedia(String media) {
+        this.media = media;
+    }
 }

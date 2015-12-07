@@ -6,6 +6,7 @@ public class StoryCreateRequestBody {
     private String title;
     private String content;
     private ArrayList<String> tags;
+    private ArrayList<String> media;
 
     public String getContent() {
         return content;
@@ -29,5 +30,13 @@ public class StoryCreateRequestBody {
 
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
+    }
+
+    public ArrayList<String> getMedia() {
+        return media;
+    }
+
+    public void setMedia(ArrayList<String> media) {
+        this.media = media;
     }
 }

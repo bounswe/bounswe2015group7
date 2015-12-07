@@ -1,6 +1,9 @@
 package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,6 +26,7 @@ import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
 import sculture.models.requests.CommentGetRequestBody;
 import sculture.models.requests.CommentListRequestBody;
+import sculture.models.requests.ImageGetRequestBody;
 import sculture.models.requests.LoginRequestBody;
 import sculture.models.requests.RegisterRequestBody;
 import sculture.models.requests.SearchRequestBody;
@@ -51,8 +55,10 @@ import sculture.models.tables.relations.TagStory;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -206,16 +212,44 @@ public class SCultureRest {
         return searchResponse;
     }
 
+    final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+
+    final java.util.Random rand = new java.util.Random();
+
+    // consider using a Map<String,Boolean> to say whether the identifier is being used or not 
+    final Set<String> identifiers = new HashSet<String>();
+
+    public String randomIdentifier() {
+        StringBuilder builder = new StringBuilder();
+        while (builder.toString().length() == 0) {
+            int length = rand.nextInt(5) + 5;
+            for (int i = 0; i < length; i++)
+                builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+            if (identifiers.contains(builder.toString())
+            builder = new StringBuilder();
+        }
+        return builder.toString();
+    }
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public
     @ResponseBody
     String handleFileUpload(
             @RequestBody byte[] file) throws Exception {
-        FileOutputStream fos = new FileOutputStream("/image.jpg");
+        String randomIdentifier = randomIdentifier();
+        FileOutputStream fos = new FileOutputStream("/image/" + randomIdentifier + ".jpg");
         fos.write(file);
         fos.close();
         return "success";
     }
+
+    private ResourceLoader resourceLoader = new DefaultResourceLoader();
+
+    @RequestMapping(method = RequestMethod.GET, value = "/image", produces = "image/jpg")
+    public Resource image_get(@RequestBody ImageGetRequestBody requestBod) {
+        return resourceLoader.getResource("/image/" + requestBod.getId() + ".jpg");
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {

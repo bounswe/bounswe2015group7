@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import sculture.Utils;
 import sculture.dao.CommentDao;
 import sculture.dao.StoryDao;
@@ -50,8 +49,6 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -214,22 +211,11 @@ public class SCultureRest {
     public
     @ResponseBody
     String handleFileUpload(
-            @RequestParam("file") MultipartFile file) {
-        String name = "image";
-        if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File(name)));
-                stream.write(bytes);
-                stream.close();
-                return "You successfully uploaded " + name + "!";
-            } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
-            }
-        } else {
-            return "You failed to upload " + name + " because the file was empty.";
-        }
+            @RequestParam("file") byte[] file) throws Exception {
+        FileOutputStream fos = new FileOutputStream("/image.jpg");
+        fos.write(file);
+        fos.close();
+        return "success";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")

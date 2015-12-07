@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*" %>
+ <%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.Story" %>
 
 <html lang="en">
 
@@ -46,7 +46,7 @@
                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
                    </div>
                </li>
-               <% boolean isLoggedIn = request.getAttribute("isLoggedIn"); %>
+               <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
                   <% if (isLoggedIn) { %>
                <li>
                    <div class="top-big-link">
@@ -72,7 +72,7 @@
 </nav>
 <div class="jumbotron text-center">
     <br>
-    <% String username = request.getAttribute("username"); %>
+    <% String username = (String) request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
     <form class="form-inline" action="/search" method="post">
@@ -87,7 +87,7 @@
 
 <%-- here we assumed that there is a Story class with attributes title, content, tags and date created  --%>
 <%
-Story[] results = request.getAttribute("results");
+Story[] results = (Story[]) request.getAttribute("results");
 
 %>
 <h1>We found <%results.length%>results for your search</h1>
@@ -105,7 +105,7 @@ Story[] results = request.getAttribute("results");
                         <br>
                         <div class="col-md-2 col-sm-3 text-center">
                             <a class="story-title" href="#">
-                                <%out.println("<img alt=\"\" src=\"" + results[i].mainPhotoURL + "\" style=\"width:100px;height:100px\" class=\"img-circle\"");%>
+                                <%--<%out.println("<img alt=\"\" src=\"" + results[i].mainPhotoURL + "\" style=\"width:100px;height:100px\" class=\"img-circle\"");%>--%>
                             </a>
                         </div>
                         <div class="col-md-10 col-sm-9">
@@ -115,7 +115,7 @@ Story[] results = request.getAttribute("results");
                                     <p> <%
 
                                     String content = results[i].getContent();
-                                    if(content.length<500){
+                                    if(content.length()<500){
                                         out.print(content);
                                     }else{
                                         out.print(content.substring(0,500) + "...";

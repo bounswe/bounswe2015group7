@@ -34,7 +34,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="/index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -95,6 +95,12 @@
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
+                <fieldset class="form-group">
+                    <label for="exampleInputFile">Upload a photo</label>
+                    <div align="center">
+                        <input type="file" class="form-control-file" id="exampleInputFile" style="center">
+                    </div>
+                </fieldset>
                 <div class="form-group">
                     <label for="story-tags">Tags</label>
 
@@ -116,8 +122,126 @@
 </div>
 <br>
 <br><br>
+<!-- LOGIN -->
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="modal-login-label">Sign in to Sculture</h3>
+                <p>Enter your username and password to sign in:</p>
+            </div>
 
+            <div class="modal-body">
+
+                <form role="form" action="/login" method="post" class="login-form">
+                    <div class="form-group">
+                        <label class="sr-only" for="form-username">E-mail</label>
+                        <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-password">Password</label>
+                        <input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+                    </div>
+                    <button type="submit" class="btn">Sign in!</button>
+                    <div style="text-align: center;">
+                        <br> Or sign in using: <br>
+                        <a class="btn btn-link-1" href="#">
+                            <i class="fa fa-facebook"></i> Facebook
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- REGISTER -->
+<div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="modal-register-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="modal-register-label">Register to Sculture</h3>
+                <p>Fill out the fields below:</p>
+            </div>
+
+            <div class="modal-body">
+
+                <form role="form" action="/signup" method="post" class="register-form">
+                    <div class="form-group">
+                        <label class="sr-only" for="form-email">E-mail</label>
+                        <input type="text" name="form-email" placeholder="Enter your email" class="form-email form-control" id="form-email">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-username">Username</label>
+                        <input type="text" name="form-username" placeholder="Enter your username" class="form-bane form-control" id="form-username">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-password">Password</label>
+                        <input type="password" name="form-password" placeholder="Enter your password" class="form-password form-control" id="form-password">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-retypedpassword">Password</label>
+                        <input type="password" name="form-retypedpassword" placeholder="Retype your password..." class="form-retypedpassword form-control" id="form-retypedpassword">
+                    </div>
+                    <button type="submit" class="btn">Sign up!</button>
+                    <div style="text-align: center;">
+                        <br> Or sign up using: <br>
+                        <a class="btn btn-link-1" href="#">
+                            <span><i class="fa fa-facebook"></i> Facebook</span>
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        // Add smooth scrolling to all links in navbar + footer link
+        $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+
+            // Prevent default anchor click behavior
+            //   event.preventDefault();
+
+            // Store hash
+            var hash = this.hash;
+
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top
+            }, 900, function(){
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+            });
+        });
+
+        // Slide in elements on scroll
+        $(window).scroll(function() {
+            $(".slideanim").each(function(){
+                var pos = $(this).offset().top;
+
+                var winTop = $(window).scrollTop();
+                if (pos < winTop + 600) {
+                    $(this).addClass("slide");
+                }
+            });
+        });
+    })
+</script>
 <div id="contact" class="container-fluid bg-grey">
     <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
 

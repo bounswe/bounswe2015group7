@@ -249,7 +249,7 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.GET, value = "/image/get/{id}", produces = "image/jpg")
     public Resource image_get(@PathVariable String id) {
-        return resourceLoader.getResource("/image/" + id + ".jpg");
+        return resourceLoader.getResource("file:/image/" + id + ".jpg");
     }
 
 

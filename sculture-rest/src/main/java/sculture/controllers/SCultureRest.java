@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import sculture.Utils;
@@ -211,7 +210,7 @@ public class SCultureRest {
     public
     @ResponseBody
     String handleFileUpload(
-            @RequestParam("file") byte[] file) throws Exception {
+            @RequestBody byte[] file) throws Exception {
         FileOutputStream fos = new FileOutputStream("/image.jpg");
         fos.write(file);
         fos.close();

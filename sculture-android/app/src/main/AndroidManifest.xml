@@ -33,6 +33,8 @@
         <activity android:name=".activity.StoryShowActivity" />
         <activity android:name=".activity.ImageShowActivity"></activity>
         <activity android:name=".activity.ProfilePageActivity" />
+        <activity android:name=".activity.TagActivity" />
+        <activity android:name=".activity.TagDescCreateActivity" />
     </application>
 
 </manifest>

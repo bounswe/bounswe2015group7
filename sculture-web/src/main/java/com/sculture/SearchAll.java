@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 @WebServlet(name = "searchall")
@@ -47,12 +48,16 @@ public class SearchAll extends HttpServlet {
             e.printStackTrace();
         }
 
+        ArrayList<Story> stories = new ArrayList<Story>();
         if (jsonResponse != null) {
-            Gson gson = new Gson();
-            story = gson.fromJson(jsonResponse.getBody().getArray().get(0).toString(), Story.class);
+            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
+                Object object = jsonResponse.getBody().getArray().get(i);
+                Gson gson = new Gson();
+                story = gson.fromJson(object.toString(), Story.class);
+                stories.add(story);
+            }
         }
-
-
+        request.setAttribute("results", stories);
         request.getRequestDispatcher("/search_result.jsp").forward(request, response);
     }
 

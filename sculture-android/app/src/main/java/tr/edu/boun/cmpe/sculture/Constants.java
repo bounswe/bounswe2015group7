@@ -46,6 +46,8 @@ public class Constants {
     //BUNDLE KEYS
     public static final String BUNDLE_STORY_ID = "story_id";
     public static final String BUNDLE_IS_EDIT = "is_edit";
+    public static final String BUNDLE_MEDIA_IDS = "media_ids";
+    public static final String BUNDLE_INDEX = "index";
 
     //HEADER FIELDS
     public static final String HEADER_ACCESS_TOKEN = "access-token";

@@ -42,6 +42,7 @@ public class Story {
     @NotNull
     private String title;
 
+    @Column(name = "report_count", nullable = true) //Default automatically 0
     private String media;
     
     public Story() {

@@ -23,13 +23,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-  <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../public/css/font-awesome.css">
-  <link rel="stylesheet" href="../public/css/form-elements.css">
-  <link rel="stylesheet" href="../public/css/sweetalert.css">
-  <link rel="stylesheet" href="../public/css/style.css">
-  <link rel="stylesheet" href="../public/css/homepage_style.css">
-  <link rel="stylesheet" href="../public/css/storystyle.css">
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.css">
+  <link rel="stylesheet" href="/public/css/form-elements.css">
+  <link rel="stylesheet" href="/public/css/sweetalert.css">
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/homepage_style.css">
+  <link rel="stylesheet" href="/public/css/storystyle.css">
 
 
 </head>
@@ -43,7 +43,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="/"><img src="../public/images/logo.png" style="width:204px;height:58px"></a>
+      <a href="/index"><img src="/public/images/logo.png" style="width:204px;height:58px"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
@@ -85,14 +85,14 @@
       <div class="col-sm-10">
         <% User user = request.getAttribute("relatedUser");%>
         <h1 class=""><% out.print(user.username);%></h1>
-
-        <button type="button" class="btn btn-success" style="height:50px;width:300px">Follow</button>
+        <% out.print("<button href=\"" + user.followURL + "\"type=\"button\" class=\"btn btn-success\" style=\"height:50px;width:300px\"> Follow </button>");%>
         <br><br>
 
 
       </div>
 
-      <div class="col-sm-2" align="right"><a href="#" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="<%out.print(user.mainPhotoUrl);%>" align="left"></a>
+      <div class="col-sm-2" align="right"><a href="#" class="pull-left">
+        <% out.print("<img class=\"img-circle img-responsive\" src=\"" + user.mainPhotoUrl + "\" align=\"left\" alt=\"\">");%>
       </div>
     </div>
     <br>
@@ -125,9 +125,9 @@
         <div class="panel panel-default">
           <div class="panel-heading">Activity</div>
           <ul class="list-group">
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Likes</strong></span> out.print(user.likes.length);</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> out.print(user.stories.length);</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> out.print(user.stories.length); </li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Likes</strong></span> 123</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> 44 </li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> <% out.print(user.stories.length);%> </li>
           </ul>
         </div>
       </div>
@@ -141,7 +141,7 @@
               <% for (int i = 0; i < user.stories.length; i++) { %>
               <div class="col-md-4">
                 <div class="thumbnail">
-                  <img alt="300x200" src="<% out.print(user.stories[i].mainPhotoUrl);%>">
+                  <%out.print("<img alt=\"300x200\" src=\"" + user.stories[i].mainPhotoUrl+ "\">");%>
                   <div class="caption">
                     <h3>
                       <% out.print(user.stories[i].title);%>

@@ -402,6 +402,7 @@ public class SCultureRest {
         comment.setCreate_date(date);
         comment.setOwner_id(current_user.getUser_id());
         comment.setStory_id(requestBody.getStoryId());
+        comment.setLast_edit_date(date);
         commentDao.create(comment);
         return new CommentResponse(comment, userDao);
     }

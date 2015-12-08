@@ -1,3 +1,4 @@
+<%@ page import="com.sculture.helpers.Story" %>
 <%@ page import="java.util.ArrayList" %>
 !DOCTYPE html>
 <html lang="en">
@@ -43,7 +44,7 @@
                         <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
                     </div>
                 </li>
-                <% boolean isLoggedIn = request.getAttribute(isLoggedIn); %>
+                <% boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn"); %>
                 <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
@@ -102,14 +103,14 @@
     <div class="row">
 
         <div class="col-md-8">
-            <% Story topStory = request.getAttribute("topStory");%>
-            <% out.print("<img src=\"" + topStory.mainPhotoUrl + "\" class=\"img-responsive\" alt=\"\">");%>
+            <% Story topStory = (Story) request.getAttribute("topStory");%>
+            <%--<% out.print("<img src=\"" + topStory.g + "\" class=\"img-responsive\" alt=\"\">");%>--%>
         </div>
 
         <div class="col-md-4">
-            <% String title = topStory.title; %>
-            <% String content = topStory.content; %>
-            <h3><% out.print("<a href=\"" + topStory.getUrl + ">" + title + "</a>");%></h3>
+            <% String title = topStory.getTitle(); %>
+            <% String content = topStory.getContent(); %>
+            <h3><% out.print("<a href=\"" + topStory.getStory_id() + ">" + title + "</a>");%></h3>
             <p><% out.print(content); %></p>
         </div>
 
@@ -126,22 +127,22 @@
     </div>
     <!-- /.row -->
 
-        <% ArrayList<Story> popular = request.getAttribute("popularStories"); %>
+        <% ArrayList<Story> popular = (ArrayList<Story>) request.getAttribute("popularStories"); %>
 
     <!-- Page Features -->
     <div class="row text-center">
-        <% for (int i = 0; i < popular.length; i++) { %>
+        <% for (int i = 0; i < popular.size(); i++) { %>
         <div class="col-md-3 col-sm-6 hero-feature">
             <div class="thumbnail">
-                <% out.print("<img src=\"" + popular.get(i).mainPhotoUrl + "\" alt=\"\">");%>
+                <%--<% out.print("<img src=\"" + popular.get(i).mainPhotoUrl + "\" alt=\"\">");%>--%>
 
                 <div class="caption">
-                    <% String popularTitle = popular.get(i).title; %>
+                    <% String popularTitle = popular.get(i).getTitle(); %>
                     <h3><% out.print(popularTitle); %></h3>
-                    <% String popularContent = popular.get(i).content; %>
+                    <% String popularContent = popular.get(i).getContent(); %>
                     <p><% out.print(popularContent); %></p>
                     <p>
-                        <% out.print("<a href=\"" + popular.get(i).getUrl + "class=\"btn btn-primary\"> Read More </a>");%>
+                        <% out.print("<a href=\"" + popular.get(i).getStory_id() + "class=\"btn btn-primary\"> Read More </a>");%>
                     </p>
                 </div>
             </div>

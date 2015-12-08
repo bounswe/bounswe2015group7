@@ -69,6 +69,12 @@
                 android:text="@string/updated_time"
                 android:textSize="12sp" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/story_media_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/story_media_height"
+                android:layout_below="@id/story_update" />
+
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

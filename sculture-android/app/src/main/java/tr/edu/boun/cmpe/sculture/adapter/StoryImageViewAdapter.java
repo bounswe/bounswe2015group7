@@ -8,16 +8,27 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
+import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import tr.edu.boun.cmpe.sculture.BaseApplication;
+import tr.edu.boun.cmpe.sculture.BuildConfig;
 import tr.edu.boun.cmpe.sculture.R;
 
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
-    private final ArrayList<Uri> uris;
+    private ArrayList<Uri> uris = null;
+    private boolean is_create;
+    private List<String> urls = null;
 
-    public StoryImageViewAdapter(ArrayList<Uri> uris) {
+    public StoryImageViewAdapter(ArrayList<Uri> uris, List<String> urls, boolean is_create) {
+        //TODO This class could be better
         this.uris = uris;
+        this.urls = urls;
+        this.is_create = is_create;
     }
+
 
     @Override
     public StoryImageViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -27,13 +38,26 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.imageView.setImageURI(uris.get(position));
-        holder.uri = uris.get(position);
+        if (is_create) {
+            holder.local_imageView.setVisibility(View.VISIBLE);
+            holder.local_imageView.setImageURI(uris.get(position));
+            holder.imageView.setVisibility(View.GONE);
+            holder.uri = uris.get(position);
+        } else {
+            holder.imageView.setVisibility(View.VISIBLE);
+            holder.imageView.setImageUrl(BuildConfig.API_BASE_URL + "/image/get/" + urls.get(position), BaseApplication.baseApplication.mImageLoader);
+            holder.local_imageView.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return uris.size();
+        if (urls != null)
+            return urls.size();
+        else if (uris != null)
+            return uris.size();
+        return 0;
     }
 
     public void addElement(Uri uri) {
@@ -53,14 +77,28 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView imageView;
+        public final NetworkImageView imageView;
+        public final ImageView local_imageView;
         public final ImageButton button;
         public Uri uri;
 
         public ViewHolder(View v) {
             super(v);
-            imageView = (ImageView) v.findViewById(R.id.image);
+            imageView = (NetworkImageView) v.findViewById(R.id.image);
+            if (is_create) {
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO Add image view activity here
+                    }
+                });
+            }
+            local_imageView = (ImageView) v.findViewById(R.id.image_local);
+
             button = (ImageButton) v.findViewById(R.id.button);
+            if (!is_create) {
+                button.setVisibility(View.GONE);
+            }
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

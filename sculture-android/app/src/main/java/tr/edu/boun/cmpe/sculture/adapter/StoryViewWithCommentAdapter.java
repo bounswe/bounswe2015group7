@@ -1,6 +1,7 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.app.Activity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.Log;
@@ -11,8 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
@@ -36,9 +45,11 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         private TextView writer;
         private TextView tags;
         private TextView update;
-
+        private RecyclerView recyclerView;
+        private StoryImageViewAdapter adapter;
         private long owner_id;
         private long editor_id;
+        private List<String> media_ids = new ArrayList<>();
 
         public StoryViewHolder(View itemView) {
             super(itemView);
@@ -47,7 +58,13 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             writer = (TextView) itemView.findViewById(R.id.story_creation);
             tags = (TextView) itemView.findViewById(R.id.storyTags);
             update = (TextView) itemView.findViewById(R.id.story_update);
+            recyclerView = (RecyclerView) itemView.findViewById(R.id.story_media_recycler);
 
+            LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
+            llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(llm);
+            adapter = new StoryImageViewAdapter(null, media_ids, false);
+            recyclerView.setAdapter(adapter);
             writer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,6 +94,33 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (comment.getText().toString().equals(""))
+                        return;
+                    JSONObject request = new JSONObject();
+                    try {
+                        request.put("storyId", story.id);
+                        request.put("content", comment.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    comment.setText("");
+                    Utils.addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            CommentResponse commentResponse = new CommentResponse(response);
+                            addComment(commentResponse);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null && error.networkResponse.data != null) {
+                                VolleyError e = new VolleyError(new String(error.networkResponse.data));
+                                Log.i("ERROR", e.toString());
+                            } else Log.i("ERROR", error.toString());
+                            //TODO ERROR HANDLING
+                        }
+                    }, null);
+
                     Log.i("CLICK", "Comment submit clicked");
                     //TODO CONNECT API
                 }
@@ -186,6 +230,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 viewHolder.owner_id = story.owner.id;
                 viewHolder.update.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
                 viewHolder.editor_id = story.last_editor.id;
+                viewHolder.media_ids.clear();
+                viewHolder.media_ids.addAll(story.media);
+
                 String tags = "";
 
                 //TODO Clickable tags
@@ -193,7 +240,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                     tags += story.tags.get(i) + ", ";
                 }
                 viewHolder.tags.setText(tags);
-
+                viewHolder.adapter.notifyDataSetChanged();
                 break;
             case 1:
                 break;

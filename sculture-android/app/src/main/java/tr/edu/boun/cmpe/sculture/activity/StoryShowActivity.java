@@ -1,12 +1,10 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MenuItem;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -38,17 +36,11 @@ public class StoryShowActivity extends AppCompatActivity {
     Bundle bundle;
     long story_id;
 
-
-    private RecyclerView recyclerView;
     private StoryViewWithCommentAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private FloatingActionButton createStoryButton;
-    private MenuItem logout_menu_item;
-    private MainActivity mActivity;
     private int PAGE = 1;
     private boolean is_loading_more = false;
     private boolean is_reach_end = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +52,7 @@ public class StoryShowActivity extends AppCompatActivity {
 
         Log.i("HERE", "" + story_id);
         //Search
-        recyclerView = (RecyclerView) findViewById(R.id.story_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.story_recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new StoryViewWithCommentAdapter(this);
 

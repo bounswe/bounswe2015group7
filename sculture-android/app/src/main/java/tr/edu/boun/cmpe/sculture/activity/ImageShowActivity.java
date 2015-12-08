@@ -20,12 +20,12 @@ import tr.edu.boun.cmpe.sculture.R;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
-public class Image_Show extends AppCompatActivity {
+public class ImageShowActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image__show);
+        setContentView(R.layout.activity_image_show);
         Bundle bundle = getIntent().getExtras();
         ArrayList<String> image_ids = null;
         int index = 0;
@@ -60,7 +60,7 @@ public class Image_Show extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            Context context = Image_Show.this;
+            Context context = ImageShowActivity.this;
             NetworkImageView imageView = new NetworkImageView(context);
 
             int padding = context.getResources().getDimensionPixelSize(

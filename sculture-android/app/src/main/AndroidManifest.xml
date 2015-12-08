@@ -31,7 +31,7 @@
             android:label="@string/title_activity_story_create"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.StoryShowActivity" />
-        <activity android:name=".activity.Image_Show"></activity>
+        <activity android:name=".activity.ImageShowActivity"></activity>
     </application>
 
 </manifest>

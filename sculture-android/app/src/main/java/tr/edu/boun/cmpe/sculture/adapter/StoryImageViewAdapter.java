@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.BuildConfig;
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.activity.Image_Show;
+import tr.edu.boun.cmpe.sculture.activity.ImageShowActivity;
 
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
@@ -94,7 +94,7 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), Image_Show.class);
+                        Intent intent = new Intent(v.getContext(), ImageShowActivity.class);
                         intent.putExtra(BUNDLE_MEDIA_IDS, urls);
                         intent.putExtra(BUNDLE_INDEX, index);
                         v.getContext().startActivity(intent);

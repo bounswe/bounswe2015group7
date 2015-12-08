@@ -70,7 +70,12 @@ public class MainServlet extends HttpServlet {
                 stories.add(story);
             }
         }
-        request.setAttribute("topStory",stories.get(0));
+        request.setAttribute("topStory", stories.get(0));
+        ArrayList<Story> popular = new ArrayList<Story>();
+        popular.add(stories.get(0));
+        popular.add(stories.get(1));
+        popular.add(stories.get(2));
+        request.setAttribute("popularStories", popular);
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }
 

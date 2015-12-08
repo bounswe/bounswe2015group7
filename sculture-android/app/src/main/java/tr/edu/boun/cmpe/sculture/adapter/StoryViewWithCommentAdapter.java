@@ -19,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
@@ -49,7 +48,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         private StoryImageViewAdapter adapter;
         private long owner_id;
         private long editor_id;
-        private List<String> media_ids = new ArrayList<>();
+        private ArrayList<String> media_ids = new ArrayList<>();
 
         public StoryViewHolder(View itemView) {
             super(itemView);

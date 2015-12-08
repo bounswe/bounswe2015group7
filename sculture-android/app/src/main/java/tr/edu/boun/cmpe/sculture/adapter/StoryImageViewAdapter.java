@@ -1,5 +1,6 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,18 +12,21 @@ import android.widget.ImageView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.BuildConfig;
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.activity.Image_Show;
+
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
     private ArrayList<Uri> uris = null;
     private boolean is_create;
-    private List<String> urls = null;
+    private ArrayList<String> urls = null;
 
-    public StoryImageViewAdapter(ArrayList<Uri> uris, List<String> urls, boolean is_create) {
+    public StoryImageViewAdapter(ArrayList<Uri> uris, ArrayList<String> urls, boolean is_create) {
         //TODO This class could be better
         this.uris = uris;
         this.urls = urls;
@@ -42,12 +46,13 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
             holder.local_imageView.setVisibility(View.VISIBLE);
             holder.local_imageView.setImageURI(uris.get(position));
             holder.imageView.setVisibility(View.GONE);
-            holder.uri = uris.get(position);
+
         } else {
             holder.imageView.setVisibility(View.VISIBLE);
             holder.imageView.setImageUrl(BuildConfig.API_BASE_URL + "/image/get/" + urls.get(position), BaseApplication.baseApplication.mImageLoader);
             holder.local_imageView.setVisibility(View.GONE);
         }
+        holder.index = position;
 
     }
 
@@ -80,15 +85,20 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
         public final NetworkImageView imageView;
         public final ImageView local_imageView;
         public final ImageButton button;
-        public Uri uri;
+        private int index = -1;
 
         public ViewHolder(View v) {
             super(v);
             imageView = (NetworkImageView) v.findViewById(R.id.image);
-            if (is_create) {
+            if (!is_create) {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), Image_Show.class);
+                        intent.putExtra(BUNDLE_MEDIA_IDS, urls);
+                        intent.putExtra(BUNDLE_INDEX, index);
+                        v.getContext().startActivity(intent);
+
                         //TODO Add image view activity here
                     }
                 });
@@ -102,7 +112,7 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeElement(uri);
+                    removeElement(index);
                 }
             });
         }

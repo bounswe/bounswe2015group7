@@ -1,3 +1,4 @@
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -96,19 +97,16 @@
 
             <!-- Title -->
             <%
-                String title = request.getParameter("story-title");
-                //                String date = request.getParameter("storyCreationDate");
-                String content = request.getParameter("story-content");
-                String tags = request.getParameter("story-tags");
+                Story story = request.getAttribute("story");
 
             %>
 
-            <h1><% out.print(title); %></h1>
+            <h1><% out.print(story.title); %></h1>
 
             <hr>
 
             <!-- Date/Time -->
-            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print("date"); %></p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(story.createdAt); %></p>
 
             <hr>
 
@@ -118,7 +116,7 @@
                   <hr>
 
                   <!-- Post Content -->
-            <p><% out.print(content); %>
+            <p><% out.print(story.content); %>
                 <span class="center-block">
                     <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"></span>
                     <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"></span>
@@ -144,19 +142,18 @@
             <!-- Posted Comments -->
 
             <!-- Comment -->
-            <%String[] commentNames = request.getAttribute("comment_names");%>
-            <%String[] commentDates = request.getAttribute("comment_dates");%>
-            <%String[] commentBodies = request.getAttribute("comment_bodies");%>
-            <%for(int i = 0; i < commentBodies.length; i++) {%>
+            <%ArrayList<Comment> comments= request.getAttribute("comments");%>
+
+            <%for(int i = 0; i < comments.size(); i++) {%>
             <div class="media">
                 <a class="pull-left" href="#">
                     <img class="media-object" src="http://placehold.it/64x64" alt="">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading" align="left"> <%out.print(commentNames[i]);%>
-                        <small><%out.print(commentDates[i]);%>/small>
+                    <h4 class="media-heading" align="left"> <%out.print(comments.get(i).name);%>
+                        <small><%out.print(comments.get(i).date);%>/small>
                     </h4>
-                    <%out.print(commentBodies[i]);%>
+                    <%out.print(comments.get(i).content);%>
                 </div>
 
             </div>
@@ -192,9 +189,10 @@
                 <div class="row">
                     <div class="col-lg">
                         <ul class="list-unstyled">
-                            <%--<% for (int i = 0; i < tags.length; i++) { %>--%>
-                            <li><a href=""><% out.print(tags); %> </a>
+                            <% for (int i = 0; i < story.tags; i++) { %>
+                            <li><a href="#"><% out.print(story.tags); %> </a>
                             </li>
+                            <%}%>
                         </ul>
                     </div>
                 </div>

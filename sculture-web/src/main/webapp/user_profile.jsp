@@ -138,16 +138,16 @@
           <div class="panel-heading" contenteditable="false">My Posts</div>
           <div class="panel-body">
             <div class="row">
-              <% for (int i = 0; i < user.stories.length; i++) { %>
+              <% for (int i = 0; i < user.stories.size(); i++) { %>
               <div class="col-md-4">
                 <div class="thumbnail">
-                  <%out.print("<img alt=\"300x200\" src=\"" + user.stories[i].mainPhotoUrl+ "\">");%>
+                  <%out.print("<img alt=\"300x200\" src=\"" + user.stories.get(i).mainPhotoUrl+ "\">");%>
                   <div class="caption">
                     <h3>
-                      <% out.print(user.stories[i].title);%>
+                      <% out.print(user.stories.get(i).title);%>
                     </h3>
                     <p>
-                      <% out.print(user.stories[i].content);%>
+                      <% out.print(user.stories.get(i).content);%>
                     </p>
                     <p>
 

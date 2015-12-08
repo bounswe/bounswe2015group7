@@ -1,3 +1,4 @@
+<%@ page import="java.util.ArrayList" %>
 !DOCTYPE html>
 <html lang="en">
 
@@ -125,22 +126,22 @@
     </div>
     <!-- /.row -->
 
-        <% Story[] popular = request.getAttribute("popularStories"); %>
+        <% ArrayList<Story> popular = request.getAttribute("popularStories"); %>
 
     <!-- Page Features -->
     <div class="row text-center">
         <% for (int i = 0; i < popular.length; i++) { %>
         <div class="col-md-3 col-sm-6 hero-feature">
             <div class="thumbnail">
-                <% out.print("<img src=\"" + popular[i].mainPhotoUrl + "\" alt=\"\">");%>
+                <% out.print("<img src=\"" + popular.get(i).mainPhotoUrl + "\" alt=\"\">");%>
 
                 <div class="caption">
-                    <% String popularTitle = popular[i].title; %>
+                    <% String popularTitle = popular.get(i).title; %>
                     <h3><% out.print(popularTitle); %></h3>
-                    <% String popularContent = popular[i].content; %>
+                    <% String popularContent = popular.get(i).content; %>
                     <p><% out.print(popularContent); %></p>
                     <p>
-                        <% out.print("<a href=\"" + popular[i].getUrl + "class=\"btn btn-primary\"> Read More </a>");%>
+                        <% out.print("<a href=\"" + popular.get(i).getUrl + "class=\"btn btn-primary\"> Read More </a>");%>
                     </p>
                 </div>
             </div>

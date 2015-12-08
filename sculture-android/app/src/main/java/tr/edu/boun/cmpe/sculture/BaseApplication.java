@@ -2,9 +2,12 @@ package tr.edu.boun.cmpe.sculture;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 import static tr.edu.boun.cmpe.sculture.Constants.PREFS_NAME;
@@ -17,6 +20,7 @@ public class BaseApplication extends Application {
     public static BaseApplication baseApplication;
 
     public RequestQueue mRequestQueue;
+    public ImageLoader mImageLoader;
 
     private String TOKEN = "";
     private String USERNAME = "";
@@ -29,6 +33,19 @@ public class BaseApplication extends Application {
         super.onCreate();
         baseApplication = this;
         mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        mImageLoader = new ImageLoader(this.mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
+
+            public void putBitmap(String url, Bitmap bitmap) {
+                mCache.put(url, bitmap);
+            }
+
+            public Bitmap getBitmap(String url) {
+                return mCache.get(url);
+            }
+        });
+
         autoLogin();
     }
 

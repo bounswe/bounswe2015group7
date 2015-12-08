@@ -1,6 +1,11 @@
 package tr.edu.boun.cmpe.sculture;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -8,6 +13,9 @@ import com.ocpsoft.pretty.time.PrettyTime;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -60,6 +68,34 @@ public class Utils {
             }
         };
         request.setTag(tag);
+        baseApplication.mRequestQueue.add(request);
+    }
+
+    public static void uploadImage(Uri uri, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        byte[] byteArray = new byte[0];
+        try {
+            ParcelFileDescriptor parcelFileDescriptor = baseApplication.getApplicationContext().getContentResolver().openFileDescriptor(uri, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            parcelFileDescriptor.close();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byteArray = stream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        final byte[] finalByteArray = byteArray;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, BuildConfig.API_BASE_URL + "/image/upload", listener, errorListener) {
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(HEADER_ACCESS_TOKEN, baseApplication.getTOKEN());
+                return params;
+            }
+            public byte[] getBody() {
+                return finalByteArray;
+            }
+        };
         baseApplication.mRequestQueue.add(request);
     }
 

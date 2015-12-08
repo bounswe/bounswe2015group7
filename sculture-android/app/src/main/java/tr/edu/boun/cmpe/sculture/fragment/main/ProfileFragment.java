@@ -37,7 +37,7 @@ import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
-
+    private static ProfileFragment profileFragment;
     private TextView username;
     private TextView email;
     private RecyclerView story_list_recycler;
@@ -58,6 +58,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        profileFragment = this;
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         loggedInLayout = (RelativeLayout) view.findViewById(R.id.profile_layout_loggedIn);
@@ -105,6 +106,14 @@ public class ProfileFragment extends Fragment {
             email.setText(baseApplication.getEMAIL());
         }
 
+    }
+
+    public static void reset() {
+        //TODO Find a better way to refresh this fragment
+        profileFragment.PAGE = 1;
+        profileFragment.is_loading_more = false;
+        profileFragment.is_reach_end = false;
+        profileFragment.mStoryListViewAdapter.clearElements();
     }
 
     private void setRecyclerListeners() {

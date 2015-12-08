@@ -107,19 +107,27 @@ public class TagActivity extends AppCompatActivity {
             }
         });
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("CLICK", "Save clicked");
+                //TODO save
+            }
+        });
+
         editTagDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (is_on_edit) {
                     tagDescription.setEnabled(false);
-                    editTagDesc.setText(mActivity.getString(R.string.edit));
+                    editTagDesc.setText("Edit");
                     tagDescription.setText(previous);
                     save.setVisibility(View.GONE);
                 } else {
                     previous = tagDescription.getText().toString();
                     tagDescription.setEnabled(true);
-                    editTagDesc.setText(mActivity.getString(R.string.cancel));
+                    editTagDesc.setText("Cancel");
                     save.setVisibility(View.VISIBLE);
                 }
                 is_on_edit = !is_on_edit;
@@ -150,7 +158,7 @@ public class TagActivity extends AppCompatActivity {
             is_looding_more = true;
             JSONObject requestBody = new JSONObject();
             try {
-                requestBody.put(FIELD_TITLE, baseApplication.getUSER_ID());
+                requestBody.put(FIELD_TITLE, BUNDLE_TAG_TITLE);
                 requestBody.put(FIELD_SIZE, 10);
             } catch (JSONException e) {
                 e.printStackTrace();

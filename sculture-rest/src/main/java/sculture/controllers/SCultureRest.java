@@ -435,6 +435,7 @@ public class SCultureRest {
             responses.add(new CommentResponse(comment, userDao));
         }*/
 
+        
         CommentListResponse commentListResponse = new CommentListResponse();
         commentListResponse.setResult(responses);
         return commentListResponse;

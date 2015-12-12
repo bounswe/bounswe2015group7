@@ -2,6 +2,7 @@ package tr.edu.boun.cmpe.sculture;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -14,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.fragment.main.ProfileFragment;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ImageResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_CREATE;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CONTENT;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TAGS;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
@@ -67,24 +70,28 @@ public class StoryUploader {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.i("HERE", response.toString());
                             ProfileFragment.reset();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse != null && error.networkResponse.data != null) {
-                                VolleyError e = new VolleyError(new String(error.networkResponse.data));
-                                Log.i("ERROR", e.toString());
-                            } else Log.i("ERROR", error.toString());
-                            //TODO ERROR HANDLING
+                            ErrorResponse errorResponse = new ErrorResponse(error);
+                            switch (errorResponse.error) {
+                                case ERROR_INVALID_ACCESS_TOKEN:
+                                    Toast.makeText(BaseApplication.baseApplication, R.string.access_toke_error, Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(BaseApplication.baseApplication, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                                    Log.e("CREATE", errorResponse.toString());
+                                    break;
+
+                            }
                         }
                     }, REQUEST_TAG_STORY_CREATE);
 
 
         } else {
-            Log.i("HERE", "uaa");
             Uri u = uris.get(0);
             uris.remove(0);
             Utils.uploadImage(u, new Response.Listener<JSONObject>() {
@@ -99,11 +106,10 @@ public class StoryUploader {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if (error.networkResponse != null && error.networkResponse.data != null) {
-                        VolleyError e = new VolleyError(new String(error.networkResponse.data));
-                        Log.i("ERROR", e.toString());
-                    } else Log.i("ERROR", error.toString());
-                    //TODO ERROR HANDLING
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+
+                    Toast.makeText(BaseApplication.baseApplication, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("UPLOAD", errorResponse.toString());
                 }
             });
         }

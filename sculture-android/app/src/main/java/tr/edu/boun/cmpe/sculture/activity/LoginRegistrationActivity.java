@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,11 +19,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.LoginResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_LOGIN;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_REGISTER;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_EMAIL;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_PASSWORD;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_USERNAME;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_USER_ALREADY_EXISTS;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_USER_NOT_EXIST;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_WRONG_PASSWORD;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_EMAIL;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PASSWORD;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_USERNAME;
@@ -185,8 +193,26 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //TODO Error handling
-                            Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
+                            ErrorResponse errorResponse = new ErrorResponse(error);
+
+                            switch (errorResponse.message) {
+                                case ERROR_USER_ALREADY_EXISTS:
+                                    mEmailView.setError(getResources().getString(R.string.user_exist));
+                                    break;
+                                case ERROR_INVALID_EMAIL:
+                                    mEmailView.setError(getString(R.string.error_invalid_email));
+                                    break;
+                                case ERROR_INVALID_PASSWORD:
+                                    mPasswordView.setError(getString(R.string.error_invalid_password));
+                                    break;
+                                case ERROR_INVALID_USERNAME:
+                                    mNameView.setError(getString(R.string.error_invalid_username));
+                                    break;
+                                default:
+                                    Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                                    Log.e("REGISTRATION", errorResponse.toString());
+                                    break;
+                            }
                         }
                     },
                     REQUEST_TAG_REGISTER);
@@ -205,7 +231,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         }
 
         if (!isEmailValid(email)) {
-            mNameView.setError(getString(R.string.error_field_required));
+            mEmailView.setError(getString(R.string.error_invalid_email));
             isError = true;
         }
         if (!isError) {
@@ -237,8 +263,26 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //TODO Error handling
-                            Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
+                            ErrorResponse errorResponse = new ErrorResponse(error);
+
+                            switch (errorResponse.message) {
+                                case ERROR_USER_NOT_EXIST:
+                                    mEmailView.setError(getResources().getString(R.string.user_not_exist));
+                                    break;
+                                case ERROR_INVALID_EMAIL:
+                                    mEmailView.setError(getString(R.string.error_invalid_email));
+                                    break;
+                                case ERROR_INVALID_PASSWORD:
+                                    mPasswordView.setError(getString(R.string.error_invalid_password));
+                                    break;
+                                case ERROR_WRONG_PASSWORD:
+                                    mPasswordView.setError(getString(R.string.wrong_password));
+                                    break;
+                                default:
+                                    Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                                    Log.e("LOGIN", errorResponse.toString());
+                                    break;
+                            }
                         }
                     },
                     REQUEST_TAG_LOGIN);

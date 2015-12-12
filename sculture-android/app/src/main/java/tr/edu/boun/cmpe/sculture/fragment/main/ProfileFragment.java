@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -24,6 +25,7 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.activity.LoginRegistrationActivity;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
@@ -161,6 +163,9 @@ public class ProfileFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+                    Toast.makeText(getActivity(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("USER PROFILE", errorResponse.toString());
 
                 }
             }, null);

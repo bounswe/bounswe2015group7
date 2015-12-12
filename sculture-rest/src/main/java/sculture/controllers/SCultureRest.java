@@ -317,24 +317,26 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
-        String str = "";
-        for (String media : requestBody.getMedia()) {
-            str += media;
-            str += ",";
+        if (requestBody.getMedia() != null) {
+            String str = "";
+            for (String media : requestBody.getMedia()) {
+                str += media;
+                str += ",";
+            }
+            story.setMedia(str.substring(0, str.length() - 1));
         }
-        story.setMedia(str.substring(0, str.length() - 1));
-
         storyDao.create(story);
 
-        List<String> tags = requestBody.getTags();
+        if (requestBody.getTags() != null) {
+            List<String> tags = requestBody.getTags();
 
-        for (String tag : tags) {
-            TagStory tagStory = new TagStory();
-            tagStory.setTag_title(tag);
-            tagStory.setStory_id(story.getStory_id());
-            tagStoryDao.update(tagStory);
+            for (String tag : tags) {
+                TagStory tagStory = new TagStory();
+                tagStory.setTag_title(tag);
+                tagStory.setStory_id(story.getStory_id());
+                tagStoryDao.update(tagStory);
+            }
         }
-
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 

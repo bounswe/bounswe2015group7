@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -12,6 +15,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.CommentListResponse;
@@ -20,6 +24,7 @@ import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_REPORT;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
@@ -50,8 +55,6 @@ public class StoryShowActivity extends AppCompatActivity {
         if (bundle != null)
             story_id = bundle.getLong(BUNDLE_STORY_ID);
 
-        Log.i("HERE", "" + story_id);
-        //Search
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.story_recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new StoryViewWithCommentAdapter(this);
@@ -134,5 +137,44 @@ public class StoryShowActivity extends AppCompatActivity {
                 REQUEST_TAG_STORY_GET);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_story_show, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_report:
+                //TODO This request will probably be changed.
+                JSONObject requestBody = new JSONObject();
+                try {
+                    requestBody.put("story_id", story_id);
+                    requestBody.put("user_id", BaseApplication.baseApplication.getUSER_ID());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                addRequest(API_STORY_REPORT, requestBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getApplicationContext(), R.string.report_success, Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //TODO Error handling
+                        try {
+                            Log.i("here", new String(error.networkResponse.data));
+                        } catch (NullPointerException ignored) {
+                        }
+                    }
+                }, null);
+
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

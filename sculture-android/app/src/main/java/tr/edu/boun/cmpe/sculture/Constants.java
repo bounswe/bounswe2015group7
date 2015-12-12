@@ -13,6 +13,8 @@ public class Constants {
     public static final String API_STORY_EDIT = API_BASE_URL + "/story/edit";
     public static final String API_USER_STORIES = API_BASE_URL + "/user/stories";
     public static final String API_COMMENT_NEW = API_BASE_URL + "/comment/new";
+    public static final String API_STORY_REPORT = API_BASE_URL + "/story/report";
+    public static final String API_STORY_VOTE = API_BASE_URL + "/story/vote";
     public static final String API_TAG_GET = API_BASE_URL + "/tag/get";
     public static final String API_TAG_CREATE = API_BASE_URL + "/tag/create";
     public static final String API_TAG_EDIT = API_BASE_URL + "/tag/edit";

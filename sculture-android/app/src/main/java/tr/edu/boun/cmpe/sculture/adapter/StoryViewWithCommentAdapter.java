@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
@@ -36,6 +39,8 @@ import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_VOTE;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
@@ -58,6 +63,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         private long owner_id;
         private long editor_id;
         private ArrayList<String> media_ids = new ArrayList<>();
+        private ImageButton likeButton;
+        private ImageButton dislikeButton;
+        private int likeStatus = 0;
 
         public StoryViewHolder(View itemView) {
             super(itemView);
@@ -67,6 +75,34 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             tags = (TextView) itemView.findViewById(R.id.storyTags);
             update = (TextView) itemView.findViewById(R.id.story_update);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.story_media_recycler);
+            likeButton = (ImageButton) itemView.findViewById(R.id.likeButton);
+            dislikeButton = (ImageButton) itemView.findViewById(R.id.dislikeButton);
+
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (likeStatus != 1) {
+                        sendVote(1);
+                    } else {
+                        sendVote(0);
+                    }
+                }
+            });
+
+            dislikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (likeStatus != -1) {
+                        sendVote(-1);
+                    } else {
+                        sendVote(0);
+                    }
+                }
+            });
+
+
+            //TODO Retrieve initial vote status, missing API
 
             LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
             llm.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -88,6 +124,55 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 }
             });
         }
+
+
+        private void sendVote(final int l) {
+            setVote(l);
+            final int previous_status = likeStatus;
+            JSONObject requestObject = new JSONObject();
+            try {
+                requestObject.put("story_id", story.id);
+                requestObject.put("user_id", baseApplication.getUSER_ID());
+                if (l == -1)
+                    requestObject.put("isPositive", false);
+                else if (l == 1)
+                    requestObject.put("isPositive", true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //TODO this controller will probably be changed
+            addRequest(API_STORY_VOTE, requestObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Toast.makeText(BaseApplication.baseApplication, R.string.vote_success, Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //TODO Error handling
+                    try {
+                        Log.e("HERE", new String(error.networkResponse.data));
+                        setVote(previous_status);
+                    } catch (NullPointerException ignored) {
+                    }
+                }
+            }, null);
+
+        }
+
+        private void setVote(int l) {
+            likeButton.setImageResource(R.drawable.thumb_up_inactive);
+            dislikeButton.setImageResource(R.drawable.thumb_down_inactive);
+
+            if (l == -1)
+                dislikeButton.setImageResource(R.drawable.thumb_down_active);
+            else if (l == 1)
+                likeButton.setImageResource(R.drawable.thumb_up_active);
+
+            likeStatus = l;
+        }
+
+
     }
 
     class CommentEditViewHolder extends RecyclerView.ViewHolder {
@@ -112,7 +197,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                         e.printStackTrace();
                     }
                     comment.setText("");
-                    Utils.addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
+                    addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             CommentResponse commentResponse = new CommentResponse(response);

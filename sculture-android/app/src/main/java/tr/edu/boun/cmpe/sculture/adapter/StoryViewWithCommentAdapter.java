@@ -231,9 +231,21 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 viewHolder.title.setText(story.title);
                 viewHolder.content.setText(story.content);
-                viewHolder.writer.setText(story.owner.username);
+
+                SpannableString spannable_username = new SpannableString(story.owner.username);
+                spannable_username.setSpan(new ActivitySpan("" + story.owner.id + "    " + story.owner.username), 0, story.owner.username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.writer.setText(spannable_username);
+                viewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
+
                 viewHolder.owner_id = story.owner.id;
-                viewHolder.update.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
+
+                spannable_username = new SpannableString(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
+                int start_index = 12 + Utils.timestampToPrettyString(story.update_date).length();
+                int finish_index = 12 + Utils.timestampToPrettyString(story.update_date).length() + story.last_editor.username.length();
+                spannable_username.setSpan(new ActivitySpan(story.last_editor.username), start_index, finish_index,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.update.setText(spannable_username);
+                viewHolder.update.setMovementMethod(LinkMovementMethod.getInstance());
+
                 viewHolder.editor_id = story.last_editor.id;
                 viewHolder.media_ids.clear();
                 viewHolder.media_ids.addAll(story.media);
@@ -270,7 +282,12 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 commentViewHolder.comment_id = commentResponse.comment_id;
                 commentViewHolder.owner_id = commentResponse.owner_id;
-                commentViewHolder.writer.setText(commentResponse.owner_username);
+
+                SpannableString span_comment_owner = new SpannableString(commentResponse.owner_username);
+                span_comment_owner.setSpan(new ActivitySpan(commentResponse.owner_username),0,commentResponse.owner_username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                commentViewHolder.writer.setText(span_comment_owner);
+                commentViewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
+
                 commentViewHolder.comment.setText(commentResponse.content);
                 commentViewHolder.time.setText(Utils.timestampToPrettyString(commentResponse.last_edit_date));
 

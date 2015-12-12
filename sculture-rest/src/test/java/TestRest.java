@@ -1,4 +1,3 @@
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -7,13 +6,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import sculture.Application;
 
-
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static sculture.Utils.checkEmailSyntax;
 
 /**
  * Created by bilal on 29/11/15.
  */
-
 public class TestRest {
 
     static Application application;
@@ -43,5 +43,12 @@ public class TestRest {
         assertEquals(jsonResponse.getBody().getObject().getString("username"), "test-user");
         assertEquals(jsonResponse.getBody().getObject().getString("password"), "test-password");
         assertEquals(jsonResponse.getBody().getObject().getString("email"), "test-password@test.com");
+    }
+    @Test
+    public void validateEmail(){
+        assertFalse(checkEmailSyntax(null));
+        assertFalse(checkEmailSyntax(""));
+        assertFalse(checkEmailSyntax("bilal"));
+        assertTrue(checkEmailSyntax("bilal@bilal.com"));
     }
 }

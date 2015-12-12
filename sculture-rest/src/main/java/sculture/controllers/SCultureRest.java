@@ -54,12 +54,7 @@ import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -432,10 +427,13 @@ public class SCultureRest {
 
         List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id(), page, size);
         List<CommentResponse> responses = new LinkedList<>();
-
-        for (Comment comment : comments) {
-            responses.add(new CommentResponse(comment, userDao));
+        Collections.sort(comments);
+        for (int i = comments.size() ; i>=0 ; i++){
+            responses.add(new CommentResponse(comments.get(i), userDao));
         }
+        /*for (Comment comment : comments) {
+            responses.add(new CommentResponse(comment, userDao));
+        }*/
 
         CommentListResponse commentListResponse = new CommentListResponse();
         commentListResponse.setResult(responses);

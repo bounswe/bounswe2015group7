@@ -1,3 +1,4 @@
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -6,11 +7,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import sculture.Application;
 
+
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by bilal on 29/11/15.
  */
+
 public class TestRest {
 
     static Application application;

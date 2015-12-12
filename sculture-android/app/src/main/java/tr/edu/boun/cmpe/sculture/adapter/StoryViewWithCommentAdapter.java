@@ -1,8 +1,13 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -186,13 +192,35 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 viewHolder.owner_id = story.owner.id;
                 viewHolder.update.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
                 viewHolder.editor_id = story.last_editor.id;
-                String tags = "";
+
 
                 //TODO Clickable tags
+                String tags = "";
+                String tag = "";
+                SpannableString spannable1 = null;
+                SpannableString spannable2 = null;
+
+                //TODO Clickable tags
+                int[] wordLengths = new int[story.tags.size()];
                 for (int i = 0; i < story.tags.size(); i++) {
-                    tags += story.tags.get(i) + ", ";
+                    if(i== story.tags.size()-1){
+                        tags += story.tags.get(i);
+                    }else{
+                        tags += story.tags.get(i) + ", ";
+                    }
+
+                    wordLengths[i] = story.tags.get(i).length();
                 }
-                viewHolder.tags.setText(tags);
+                SpannableString spannable = new SpannableString(tags);
+                int first = 0;
+                for (int i = 0; i < wordLengths.length;i++){
+                    spannable.setSpan(new ActivitySpan(story.tags.get(i)),first,first+wordLengths[i], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    first +=  wordLengths[i] +2;
+                }
+
+                //spannable.setSpan(new ActivitySpan(tags));
+                viewHolder.tags.setText(spannable);
+                viewHolder.tags.setMovementMethod(LinkMovementMethod.getInstance());
 
                 break;
             case 1:
@@ -238,4 +266,19 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         comments.add(commentResponse);
         this.notifyItemInserted(comments.size() + 2);
     }
+    public class ActivitySpan extends ClickableSpan {
+        String keyword;
+        public ActivitySpan(String keyword) {
+            super();
+            this.keyword = keyword;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Context context = v.getContext();
+            Toast.makeText(mActivity.getApplicationContext(), keyword, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

@@ -193,7 +193,7 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new TagResponse(tag);
+        return new TagResponse(tag,userDao.getById(tag.getLast_editor_id()).getUsername());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")

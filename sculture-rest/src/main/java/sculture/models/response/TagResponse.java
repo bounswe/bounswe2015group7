@@ -10,14 +10,28 @@ public class TagResponse {
     private String description;
     private boolean is_location;
     private long last_editor_id;
+    private String last_editor_name;
     private Date last_edit_date;
 
-    public TagResponse(Tag tag) {
+    public TagResponse(Tag tag,String last_editor_name) {
+        this.last_editor_name = last_editor_name;
         this.tag_title = tag.getTag_title();
         this.description = tag.getTag_description();
         this.is_location = tag.is_location();
         this.last_editor_id = tag.getLast_editor_id();
         this.last_edit_date = tag.getLast_edit_date();
+    }
+
+    public String getLast_editor_name() {
+        return last_editor_name;
+    }
+
+    public void setLast_editor_name(String last_editor_name) {
+        this.last_editor_name = last_editor_name;
+    }
+
+    public boolean is_location() {
+        return is_location;
     }
 
     public boolean getIs_location() {

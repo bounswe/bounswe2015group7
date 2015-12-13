@@ -65,6 +65,22 @@ public class TestRest {
         map.put("Content-Type", "application/json");
         map.put("access-token",access_token);
         jsonObject = new JSONObject();
+        jsonObject.put("story_id",1);
+        jsonObject.put("title","title1");
+        jsonObject.put("content","content1");
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/story/edit")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(200, jsonResponse.getStatus());
+
+
+
+        map = new HashMap<String,String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token",access_token);
+        jsonObject = new JSONObject();
         jsonObject.put("story_id","1");
         jsonObject.put("isPositive","true");
         jsonObject.put("user_id","1");
@@ -84,6 +100,20 @@ public class TestRest {
         jsonObject.put("user_id","1");
         jsonNode = new JsonNode(jsonObject.toString());
         jsonResponse = Unirest.post("http://127.0.0.1:8080/story/vote")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(200, jsonResponse.getStatus());
+
+
+        map = new HashMap<String,String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token",access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("story_id","1");
+        jsonObject.put("user_id","1");
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/story/report")
                 .headers(map)
                 .body(jsonNode)
                 .asJson();

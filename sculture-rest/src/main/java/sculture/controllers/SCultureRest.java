@@ -22,6 +22,8 @@ import sculture.exceptions.InvalidAccessTokenException;
 import sculture.exceptions.InvalidEmailException;
 import sculture.exceptions.InvalidPasswordException;
 import sculture.exceptions.InvalidUsernameException;
+import sculture.models.requests.StoryEditRequestBody;
+import sculture.models.response.StoryReportResponse;
 import sculture.models.response.SuccessResponse;
 import sculture.exceptions.UserAlreadyExistsException;
 import sculture.exceptions.UserNotExistException;
@@ -351,6 +353,53 @@ public class SCultureRest {
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
+    public BaseStoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            current_user = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
+            throw new InvalidAccessTokenException();
+        }
+
+        //TODO Exception handling
+
+        Date date = new Date();
+        Story story = new Story();
+
+        story.setStory_id(requestBody.getStory_id());
+        story.setTitle(requestBody.getTitle());
+        story.setContent(requestBody.getContent());
+        story.setOwner_id(current_user.getUser_id());
+        story.setCreate_date(date);
+        story.setLast_edit_date(date);
+        story.setLast_editor_id(current_user.getUser_id());
+        if (requestBody.getMedia() != null) {
+            String str = "";
+            for (String media : requestBody.getMedia()) {
+                str += media;
+                str += ",";
+            }
+            story.setMedia(str.substring(0, str.length() - 1));
+        }
+        storyDao.edit(story);
+
+        if (requestBody.getTags() != null) {
+            List<String> tags = requestBody.getTags();
+
+            for (String tag : tags) {
+                TagStory tagStory = new TagStory();
+                tagStory.setTag_title(tag);
+                tagStory.setStory_id(story.getStory_id());
+                tagStoryDao.update(tagStory);
+            }
+        }
+        return new BaseStoryResponse(story, tagStoryDao, userDao);
+    }
+    
+    
     // TODO
     @RequestMapping("/story/get")
     public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody) {
@@ -416,9 +465,9 @@ public class SCultureRest {
     }
 
     @RequestMapping("/story/report")
-    public boolean storyReport(@RequestBody StoryReportRequestBody requestBody) {
+    public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody) {
         storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
-        return true;
+        return new StoryReportResponse(storyDao.reportCount(requestBody.getStory_id()));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/vote")

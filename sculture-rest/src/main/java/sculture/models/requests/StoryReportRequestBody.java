@@ -1,7 +1,5 @@
 package sculture.models.requests;
 
-import sculture.dao.UserDao;
-
 /**
  * Created by gmzrmks on 29.11.2015.
  */
@@ -10,6 +8,7 @@ public class StoryReportRequestBody {
     private long user_id;
 
     private long story_id;
+
 
     public long getUser_id(){return this.user_id ;}
 

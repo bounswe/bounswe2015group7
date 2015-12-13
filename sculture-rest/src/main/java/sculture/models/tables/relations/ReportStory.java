@@ -14,6 +14,7 @@ public class ReportStory {
 
     @Id
     private long id;
+    
 
     @NotNull
     private long user_id;
@@ -21,6 +22,14 @@ public class ReportStory {
     @NotNull
     private long story_id;
 
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setStory_id(long story_id) {
+        this.story_id = story_id;
+    }
+    
     public long getUser_id() {
         return this.user_id;
     }

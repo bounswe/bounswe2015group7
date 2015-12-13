@@ -46,13 +46,6 @@ public class GetStory extends HttpServlet {
         String requestURL = request.getRequestURL().toString();
         String story_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
         HttpResponse<JsonNode> jsonResponse = null;
-        boolean isAllDigit = false;
-        try {
-            Integer.parseInt(story_id);
-            isAllDigit = true;
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
         try {
             JSONObject jsonObject = new JSONObject();
 //            if(isAllDigit){
@@ -86,7 +79,6 @@ public class GetStory extends HttpServlet {
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {
-            e.printStackTrace();
         }
         ArrayList<Comment> comments = new ArrayList<Comment>();
         CommentListResponse commentListResponse = new CommentListResponse();
@@ -103,7 +95,7 @@ public class GetStory extends HttpServlet {
         }
         request.setAttribute("story", story);
         request.setAttribute("comments", commentListResponse.getResult());
-        System.out.println(story_id);
+        System.out.println("DSFGKJAHFIAYDHGFIUASDYGBF: "+story.getId());
         request.getRequestDispatcher("/view_story.jsp").forward(request, response);
     }
 

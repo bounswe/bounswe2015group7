@@ -15,6 +15,9 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="public/js/sweetalert.min.js"></script>
+    <script src="/public/js/scripts.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
+    <script src="/public/js/jquery.backstretch.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -133,7 +136,7 @@
                     <div class="form-group">
                         <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
-                        <input type="hidden" name="story_id" id="story_id" value="<%story.getId();%>" class="form-control"></textarea>
+                        <input type="hidden" name="story_id" id="story_id" value="<%out.print(story.getId());%>" class="form-control"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -152,7 +155,7 @@
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading" align="left"> <%out.print(comments.get(i).getOwner_username());%>
-                        <small><%out.print(comments.get(i).getCreate_date());%>/small>
+                        <small><%out.print(comments.get(i).getCreate_date());%>
                     </h4>
                     <%out.print(comments.get(i).getContent());%>
                 </div>
@@ -340,7 +343,9 @@
                 window.location.hash = hash;
             });
         });
-
+        var story_id = <%story.getId();%>;
+        // TODO: get user_id correctly
+        var user_id = <%request.getSession().getAttribute("userid");%>;
         // Slide in elements on scroll
         $(window).scroll(function () {
             $(".slideanim").each(function () {
@@ -352,13 +357,25 @@
                 }
             });
         });
-        $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
-            var $this = $(this),
-                    c = $this.data('count');
-            if (!c) c = 0;
-            c++;
-            $this.data('count',c);
-            $('#'+this.id+'-bs3').html(c);
+        $(".glyphicon-thumbs-up").click(function(){
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://52.28.216.93:9000/story/vote',
+                data: {
+                    "story_id": story_id,
+                    "isPositive" : true,
+                    "user_id": user_id
+                },
+                success: function () {
+                    var $this = $(this),
+                            c = $this.data('count');
+                    if (!c) c = 0;
+                    c++;
+                    $this.data('count',c);
+                    $('#'+this.id+'-bs3').html(c);
+                }
+            });
         });
     })
 </script>

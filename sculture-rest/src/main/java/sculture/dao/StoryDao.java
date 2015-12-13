@@ -26,6 +26,11 @@ public class StoryDao {
         return;
     }
 
+    public void edit(Story story) {
+        entityManager.merge(story);
+        return;
+    }
+
     public void reportStory(long userId, long storyId) {
         ReportStory reportStory = new ReportStory();
         reportStory.setReporting_user_id(userId);

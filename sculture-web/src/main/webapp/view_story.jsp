@@ -131,9 +131,9 @@
 
                 <form action="/addcomment" method="POST" role="form">
                     <div class="form-group">
-                        <input type="text" id="form-commentbody" class="form-control" rows="3"></textarea>
+                        <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
-                        <input type="hidden" id="story_id" value="<%story.getId();%>" class="form-control"></textarea>
+                        <input type="hidden" name="story_id" id="story_id" value="<%story.getId();%>" class="form-control"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>

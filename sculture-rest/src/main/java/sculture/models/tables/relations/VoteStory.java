@@ -18,7 +18,7 @@ public class VoteStory {
     @NotNull
     private long user_id;
 
-    private boolean vote_is_positive;
+    private int vote;
 
     public long getStory_id() {
         return story_id;
@@ -36,11 +36,11 @@ public class VoteStory {
         this.user_id = user_id;
     }
 
-    public boolean isVote_is_positive() {
-        return vote_is_positive;
+    public int getVote() {
+        return vote;
     }
 
-    public void setVote_is_positive(boolean vote_is_positive) {
-        this.vote_is_positive = vote_is_positive;
+    public void setVote(int vote) {
+        this.vote = vote;
     }
 }

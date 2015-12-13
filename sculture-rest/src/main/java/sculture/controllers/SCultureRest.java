@@ -4,53 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
-import sculture.dao.CommentDao;
-import sculture.dao.StoryDao;
-import sculture.dao.TagDao;
-import sculture.dao.TagStoryDao;
-import sculture.dao.UserDao;
-import sculture.dao.VoteStoryDao;
-import sculture.exceptions.InvalidAccessTokenException;
-import sculture.exceptions.InvalidEmailException;
-import sculture.exceptions.InvalidPasswordException;
-import sculture.exceptions.InvalidUsernameException;
-import sculture.models.requests.StoryEditRequestBody;
-import sculture.models.response.StoryReportResponse;
-import sculture.models.response.SuccessResponse;
-import sculture.exceptions.UserAlreadyExistsException;
-import sculture.exceptions.UserNotExistException;
-import sculture.exceptions.WrongPasswordException;
-import sculture.models.requests.CommentGetRequestBody;
-import sculture.models.requests.CommentListRequestBody;
-import sculture.models.requests.CommentNewRequestBody;
-import sculture.models.requests.LoginRequestBody;
-import sculture.models.requests.RegisterRequestBody;
-import sculture.models.requests.SearchRequestBody;
-import sculture.models.requests.StoriesGetRequestBody;
-import sculture.models.requests.StoryCreateRequestBody;
-import sculture.models.requests.StoryGetRequestBody;
-import sculture.models.requests.StoryReportRequestBody;
-import sculture.models.requests.StoryVoteRequestBody;
-import sculture.models.requests.TagGetRequestBody;
-import sculture.models.requests.UserFollowRequestBody;
-import sculture.models.requests.UserGetRequestBody;
-import sculture.models.requests.UserUpdateRequestBody;
-import sculture.models.response.BaseStoryResponse;
-import sculture.models.response.CommentListResponse;
-import sculture.models.response.CommentResponse;
-import sculture.models.response.FullStoryResponse;
-import sculture.models.response.ImageResponse;
-import sculture.models.response.LoginResponse;
-import sculture.models.response.SearchResponse;
-import sculture.models.response.TagResponse;
+import sculture.dao.*;
+import sculture.exceptions.*;
+import sculture.models.requests.*;
+import sculture.models.response.*;
 import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
 import sculture.models.tables.Tag;
@@ -58,17 +17,9 @@ import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static sculture.Utils.checkEmailSyntax;
-import static sculture.Utils.checkPasswordSyntax;
-import static sculture.Utils.checkUsernameSyntax;
+import static sculture.Utils.*;
 
 @RestController
 public class SCultureRest {
@@ -398,19 +349,14 @@ public class SCultureRest {
         }
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
-    
-    
-    // TODO
+
     @RequestMapping("/story/get")
-    public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody) {
-        //TODO Exception handling
+    public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
+
         Story story = storyDao.getById(requestBody.getId());
-        List<String> tag_titles = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
 
-        User owner = userDao.getById(story.getOwner_id());
-        User editor = userDao.getById(story.getLast_editor_id());
-
-        return new FullStoryResponse(story, tagStoryDao, userDao);
+        return new FullStoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
     @RequestMapping("/search")
@@ -471,10 +417,10 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/vote")
-    public SuccessResponse storyVote(@RequestBody StoryVoteRequestBody requestBody) {
-
-        voteStoryDao.vote(requestBody.getStory_id(), requestBody.getUser_id(), requestBody.getIsPositive());
-       return new SuccessResponse(voteStoryDao.getVoteNumber(requestBody.getStory_id()));
+    public VoteResponse storyVote(@RequestBody StoryVoteRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Story story = voteStoryDao.vote(current_user.getUser_id(), requestBody.getStory_id(), requestBody.getVote());
+        return new VoteResponse(requestBody.getVote(), story);
     }
 
     @RequestMapping("/comment/list")
@@ -500,8 +446,25 @@ public class SCultureRest {
         CommentListResponse commentListResponse = new CommentListResponse();
         commentListResponse.setResult(responses);
         return commentListResponse;
-
-
     }
 
+    /**
+     * Returns current user by using access-token
+     *
+     * @param headers The headers which contains access-token
+     * @param notnull Whether the current_user can be null or not, if true it will not return null instead throw an exception
+     * @return Current user
+     */
+    private User getCurrentUser(HttpHeaders headers, boolean notnull) {
+        User current_user = null;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            current_user = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException ignored) {
+            if (notnull)
+                throw new InvalidAccessTokenException();
+        }
+        return current_user;
+    }
 }

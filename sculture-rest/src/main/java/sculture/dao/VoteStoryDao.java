@@ -1,6 +1,7 @@
 package sculture.dao;
 
 import org.springframework.stereotype.Repository;
+import sculture.models.tables.User;
 import sculture.models.tables.relations.VoteStory;
 
 import javax.persistence.EntityManager;
@@ -17,6 +18,13 @@ public class VoteStoryDao {
         voteStory.setUser_id(user_id);
         voteStory.setVote_is_positive(vote_is_positive);
         entityManager.merge(voteStory);
+    }
+
+    public int getVoteNumber(long story_id) {
+       return entityManager.createQuery(
+                "from VoteStory where story_id = :story_id ")
+                .setParameter("story_id", story_id).getResultList().size();
+
     }
 
     // An EntityManager will be automatically injected from entityManagerFactory

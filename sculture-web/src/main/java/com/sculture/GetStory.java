@@ -43,13 +43,21 @@ public class GetStory extends HttpServlet {
             request.setAttribute("username", request.getSession().getAttribute("username"));
             request.setAttribute("isLoggedIn", true);
         }
-
-
+        String requestURL = request.getRequestURL().toString();
+        String story_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
         HttpResponse<JsonNode> jsonResponse = null;
+        boolean isAllDigit = false;
+        try {
+            Integer.parseInt(story_id);
+            isAllDigit = true;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", "4");
-
+//            if(isAllDigit){
+                jsonObject.put("id", story_id);
+  //          }
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/story/get")
                     .header("Content-Type", "application/json")
@@ -70,7 +78,7 @@ public class GetStory extends HttpServlet {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("page", "1");
             jsonObject.put("size", "10");
-            jsonObject.put("story_id", "4");
+            jsonObject.put("story_id", story_id);
 
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/comment/list")
@@ -95,10 +103,7 @@ public class GetStory extends HttpServlet {
         }
         request.setAttribute("story", story);
         request.setAttribute("comments", commentListResponse.getResult());
-        for (int i = 0; i < comments.size(); i++) {
-            System.out.println(comments.get(i).toString());
-        }
-        System.out.println("SDLJKFHSDKFLJGHSFIUYHGFDIOULGSNDFOLKGI");
+        System.out.println(story_id);
         request.getRequestDispatcher("/view_story.jsp").forward(request, response);
     }
 

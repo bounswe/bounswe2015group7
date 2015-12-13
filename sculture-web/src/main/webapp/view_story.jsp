@@ -1,6 +1,6 @@
-<!DOCTYPE html>
 <%@ page import="java.util.ArrayList" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.BaseStoryResponse" import="com.sculture.helpers.CommentListResponse" %>
+<%@ page language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.BaseStoryResponse" %>
+<!DOCTYPE html>
 
 
 <html lang="en">
@@ -19,12 +19,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="public/css/font-awesome.css">
-    <link rel="stylesheet" href="public/css/sweetalert.css">
-    <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="public/css/homepage_style.css">
-    <link rel="stylesheet" href="public/css/storystyle.css">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/font-awesome.css">
+    <link rel="stylesheet" href="/public/css/sweetalert.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/homepage_style.css">
+    <link rel="stylesheet" href="/public/css/storystyle.css">
 
 
 </head>
@@ -38,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="/index"><img src="/public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -129,10 +129,11 @@
             <div class="well">
                 <h4>Leave a Comment:</h4>
 
-                <form role="form">
+                <form action="/addcomment" method="POST" role="form">
                     <div class="form-group">
-                        <textarea class="form-control" rows="3"></textarea>
+                        <input type="text" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
+                        <input type="hidden" id="story_id" value="<%story.getId();%>" class="form-control"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>

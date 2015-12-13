@@ -127,8 +127,9 @@
                                     %></p>
                                     <small style="font-family:courier,'new courier';" class="text-muted"><%
                                         out.print(results.get(i).getCreate_date());%> •
-                                        <a href="/get/story/1"> Read More</a></small>
-                                    </h4></div>
+                                        <%String refUrl = "/get/story/" + results.get(i).getStory_id();%>
+                                        <a href="<%out.print(refUrl);%>"> Read More</a></small>
+                                    </div>
                                 <div class="col-xs-3"></div>
                             </div>
                             <br><br>

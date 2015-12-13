@@ -17,10 +17,12 @@ import sculture.dao.StoryDao;
 import sculture.dao.TagDao;
 import sculture.dao.TagStoryDao;
 import sculture.dao.UserDao;
+import sculture.dao.VoteStoryDao;
 import sculture.exceptions.InvalidAccessTokenException;
 import sculture.exceptions.InvalidEmailException;
 import sculture.exceptions.InvalidPasswordException;
 import sculture.exceptions.InvalidUsernameException;
+import sculture.exceptions.SuccessResponse;
 import sculture.exceptions.UserAlreadyExistsException;
 import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
@@ -54,7 +56,13 @@ import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -65,6 +73,9 @@ public class SCultureRest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private VoteStoryDao voteStoryDao;
 
     @Autowired
     private StoryDao storyDao;
@@ -411,11 +422,11 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/vote")
-    public BaseStoryResponse storyVote(@RequestBody StoryVoteRequestBody requestBody) {
+    public SuccessResponse storyVote(@RequestBody StoryVoteRequestBody requestBody) {
 
-        Story ResponseStory = storyDao.voteStory(requestBody.getStory_id(), requestBody.getIsPositive(), requestBody.getUser_id());
+        voteStoryDao.vote(requestBody.getStory_id(), requestBody.getUser_id(), requestBody.getIsPositive());
 
-        return new BaseStoryResponse(ResponseStory, tagStoryDao, userDao);
+        return new SuccessResponse();
     }
 
     @RequestMapping("/comment/list")
@@ -430,7 +441,7 @@ public class SCultureRest {
         List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id(), page, size);
         List<CommentResponse> responses = new LinkedList<>();
         Collections.sort(comments);
-        for (int i = comments.size()-1 ; i>=0 ; i--){
+        for (int i = comments.size() - 1; i >= 0; i--) {
             responses.add(new CommentResponse(comments.get(i), userDao));
         }
         /*for (Comment comment : comments) {

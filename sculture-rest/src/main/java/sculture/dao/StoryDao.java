@@ -37,28 +37,6 @@ public class StoryDao {
         return;
     }
 
-    public Story voteStory(long storyId, boolean isPositive, long userId) {
-        VoteStory relationVoteStoryUser = new VoteStory();
-        relationVoteStoryUser.setStory_id(storyId);
-        relationVoteStoryUser.setUser_id(userId);
-        relationVoteStoryUser.setVote_is_positive(isPositive);
-        Story story = getById(storyId);
-
-        if (entityManager.contains(relationVoteStoryUser)) {
-            return story;
-        }else{
-            entityManager.persist(relationVoteStoryUser);
-
-            if (isPositive) {
-                story.setPositive_vote(story.getPositive_vote() + 1);
-            } else {
-                story.setNegative_vote(story.getNegative_vote() + 1);
-            }
-            entityManager.merge(story);
-        }
-        return story;
-    }
-
     /**
      * Delete the story from the database.
      */

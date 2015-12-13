@@ -77,7 +77,7 @@
     <% String username = (String)request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="Sculture-web/search" method="post">
+    <form class="form-inline" action="/search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>
@@ -113,9 +113,10 @@
 
         <div class="col-md-4">
             <% String title = topStory.getTitle(); %>
-            <% String content = topStory.getContent(); %>
+            <%String refUrl1 = "/get/story/" + topStory.getStory_id();%>
+            <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></small>
             <h3><% out.print("<a href=\"" + topStory.getStory_id() + ">" + title + "</a>");%></h3>
-            <p><% out.print(content); %></p>
+            <p><% out.print(topStory.getContent()); %></p>
         </div>
 
     </div>
@@ -146,7 +147,8 @@
                     <% String popularContent = popular.get(i).getContent(); %>
                     <p><% out.print(popularContent); %></p>
                     <p>
-                        <% out.print("<a href=\"" + popular.get(i).getStory_id() + "class=\"btn btn-primary\"> Read More </a>");%>
+                        <%String refUrl = "/get/story/" + popular.get(i).getStory_id();%>
+                        <a href="<%out.print(refUrl);%>"> Read More</a></small>
                     </p>
                 </div>
             </div>

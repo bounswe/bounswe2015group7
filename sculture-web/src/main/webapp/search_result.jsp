@@ -41,7 +41,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="/index"><img src="/public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -95,7 +95,7 @@
     ArrayList<Story> results = (ArrayList<Story>) request.getAttribute("results");
 
 %>
-<h1>We found <%out.print(results.size()); %>results for your search</h1>
+<h1>We found <%out.print(results.size()); %> results for your search</h1>
 <br>
 
 <div class="container">

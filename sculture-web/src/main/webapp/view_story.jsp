@@ -14,7 +14,6 @@
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="public/js/sweetalert.min.js"></script>
     <script src="/public/js/scripts.js"></script>
     <script src="/public/js/bootstrap.min.js"></script>
     <script src="/public/js/jquery.backstretch.min.js"></script>
@@ -114,15 +113,15 @@
             <hr>
 
             <!-- Preview Image -->
-            <!--      <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
+               <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
 
                   <hr>
 
                   <!-- Post Content -->
             <p><% out.print(story.getContent()); %>
                 <span class="center-block">
-                    <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"></span>
-                    <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"></span>
+                    <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"> <%out.print(story.getPositive_vote());%></span>
+                    <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"><%out.print(story.getNegative_vote());%></span>
                 </span>
 
             <hr>
@@ -151,7 +150,7 @@
             <%for(int i = 0; i < comments.size(); i++) {%>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                    <img class="media-object" height="64" width="64" src="https://cdn3.iconfinder.com/data/icons/line-icons-large-version/64/comment-512.png" alt="">
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading" align="left"> <%out.print(comments.get(i).getOwner_username());%>
@@ -343,9 +342,7 @@
                 window.location.hash = hash;
             });
         });
-        var story_id = <%story.getId();%>;
-        // TODO: get user_id correctly
-        var user_id = <%request.getSession().getAttribute("userid");%>;
+
         // Slide in elements on scroll
         $(window).scroll(function () {
             $(".slideanim").each(function () {
@@ -357,23 +354,36 @@
                 }
             });
         });
-        $(".glyphicon-thumbs-up").click(function(){
-
+        $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
+            var $this = $(this);
+            var story_id = <%out.print(story.getId());%>;
+            var definitelynottheaccesstoken = <%out.print(request.getSession().getAttribute("access-token"));%>;
+            var vote;
+            if(this.id == "like1") vote = 1;
+            else if(this.id == "dislike1") vote = -1;
+            if(definitelynottheaccesstoken == null) vote = 0;
             $.ajax({
                 type: 'POST',
                 url: 'http://52.28.216.93:9000/story/vote',
-                data: {
-                    "story_id": story_id,
-                    "isPositive" : true,
-                    "user_id": user_id
+                beforeSend: function (request)                {
+                    request.setRequestHeader("access-token", definitelynottheaccesstoken);
                 },
-                success: function () {
-                    var $this = $(this),
-                            c = $this.data('count');
-                    if (!c) c = 0;
-                    c++;
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "story_id": story_id,
+                    "vote" : vote
+                }),
+                success: function (myData) {
+                    var c = $this.data('count');
+                    if (!c){
+                        if(this.id == "like1")c = myData.positive_vote;
+                        if(this.id == "dislike1")c = myData.negative_vote;
+                    }
                     $this.data('count',c);
                     $('#'+this.id+'-bs3').html(c);
+                },
+                error:function (errorData) {
+                    alert("error!");
                 }
             });
         });

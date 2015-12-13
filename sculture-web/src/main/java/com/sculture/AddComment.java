@@ -40,7 +40,7 @@ public class AddComment extends HttpServlet {
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/comment/new")
                     .header("Content-Type", "application/json")
-         // TODO: ADD ACCESS TOKEN HERE .header("access-token", "accesstoken")
+                    .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {

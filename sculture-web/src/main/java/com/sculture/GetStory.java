@@ -8,6 +8,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sculture.helpers.BaseStoryResponse;
 import com.sculture.helpers.Comment;
 import com.sculture.helpers.CommentListResponse;
+import com.sculture.helpers.FullStoryResponse;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -35,8 +36,7 @@ public class GetStory extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BaseStoryResponse story = new BaseStoryResponse();
-        Comment comment = new Comment();
+        FullStoryResponse story = new FullStoryResponse();
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -63,7 +63,7 @@ public class GetStory extends HttpServlet {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
 //            ((JSONObject)object).remove("tags");
-            story = gson.fromJson(object.toString(), BaseStoryResponse.class);
+            story = gson.fromJson(object.toString(), FullStoryResponse.class);
         }
         // send req to comment/list
         jsonResponse = null;

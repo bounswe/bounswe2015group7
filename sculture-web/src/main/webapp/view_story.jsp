@@ -1,5 +1,8 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.BaseStoryResponse" %>
+<%@ page language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.FullStoryResponse" %>
+<%@ page import="com.sculture.helpers.FullStoryResponse" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.sql.Timestamp" %>
 <!DOCTYPE html>
 
 
@@ -99,7 +102,7 @@
 
             <!-- Title -->
             <%
-                BaseStoryResponse story = (BaseStoryResponse) request.getAttribute("story");
+                FullStoryResponse story = (FullStoryResponse) request.getAttribute("story");
 
             %>
 
@@ -108,12 +111,18 @@
             <hr>
 
             <!-- Date/Time -->
-            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(story.getCreation_date()); %></p>
+            <%Timestamp stamp = new Timestamp(Long.parseLong(story.getCreation_date()));
+                Date storyCreationDate = new Date(stamp.getTime());%>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(storyCreationDate); %></p>
 
             <hr>
 
             <!-- Preview Image -->
-               <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
+            <%if(story.getMedia() != null && story.getMedia().size() > 0) {%>
+                <img class="img-responsive" src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
+            <%} else {%>
+                <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
+            <%}%>
 
                   <hr>
 
@@ -154,7 +163,9 @@
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading" align="left"> <%out.print(comments.get(i).getOwner_username());%>
-                        <small><%out.print(comments.get(i).getCreate_date());%>
+                        <%stamp = new Timestamp(Long.parseLong(comments.get(i).getCreate_date()));
+                            Date commentCreationDate = new Date(stamp.getTime());%>
+                        <small><%out.print(commentCreationDate);%>
                     </h4>
                     <%out.print(comments.get(i).getContent());%>
                 </div>

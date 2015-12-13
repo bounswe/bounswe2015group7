@@ -108,14 +108,13 @@
 
         <div class="col-md-8">
             <% Story topStory = (Story) request.getAttribute("topStory");%>
-            <%--<% out.print("<img src=\"" + topStory.g + "\" class=\"img-responsive\" alt=\"\">");%>--%>
+            <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
         </div>
 
         <div class="col-md-4">
             <% String title = topStory.getTitle(); %>
             <%String refUrl1 = "/get/story/" + topStory.getStory_id();%>
-            <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></small>
-            <h3><% out.print("<a href=\"" + topStory.getStory_id() + ">" + title + "</a>");%></h3>
+            <h3> <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></h3>
             <p><% out.print(topStory.getContent()); %></p>
         </div>
 

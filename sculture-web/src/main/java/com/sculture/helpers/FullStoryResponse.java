@@ -6,8 +6,10 @@ import java.util.List;
  * Created by Atakan Arıkan on 13.12.2015.
  */
 public class FullStoryResponse extends BaseStoryResponse {
-    private String content;
     private List<String> media;
+
+    public FullStoryResponse() {
+    }
 
     public List<String> getMedia() {
         return media;
@@ -24,20 +26,8 @@ public class FullStoryResponse extends BaseStoryResponse {
     @Override
     public String toString() {
         return "FullStoryResponse{" +
-                "content='" + content + '\'' +
-                ", media=" + media +
+                "media=" + media +
                 '}';
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public FullStoryResponse(String content) {
-        this.content = content;
-    }
 }

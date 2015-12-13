@@ -70,6 +70,7 @@ public class Login extends HttpServlet {
         popular.add(stories.get(0));
         popular.add(stories.get(1));
         popular.add(stories.get(2));
+        popular.add(stories.get(3));
         request.setAttribute("popularStories", popular);
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }

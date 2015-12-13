@@ -7,6 +7,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sculture.helpers.BaseStoryResponse;
 import com.sculture.helpers.Comment;
+import com.sculture.helpers.CommentListResponse;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -80,18 +81,21 @@ public class GetStory extends HttpServlet {
             e.printStackTrace();
         }
         ArrayList<Comment> comments = new ArrayList<Comment>();
-
+        CommentListResponse commentListResponse = new CommentListResponse();
         if (jsonResponse != null) {
-            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
-                Object object = jsonResponse.getBody().getArray().get(i);
-                Gson gson = new Gson();
-                comment = gson.fromJson(object.toString(), Comment.class);
-                comments.add(comment);
-            }
+            Object object = jsonResponse.getBody().getObject();
+            Gson gson = new Gson();
+            commentListResponse = gson.fromJson(object.toString(), CommentListResponse.class);
+//            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
+//                Object object = jsonResponse.getBody().getArray().get(i);
+//                Gson gson = new Gson();
+//                comment = gson.fromJson(object.toString(), Comment.class);
+//                comments.add(comment);
+//            }
         }
         request.setAttribute("story", story);
-        request.setAttribute("comments", comments);
-        for(int i = 0; i < comments.size(); i++){
+        request.setAttribute("comments", commentListResponse.getResult());
+        for (int i = 0; i < comments.size(); i++) {
             System.out.println(comments.get(i).toString());
         }
         System.out.println("SDLJKFHSDKFLJGHSFIUYHGFDIOULGSNDFOLKGI");

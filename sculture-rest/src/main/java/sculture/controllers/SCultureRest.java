@@ -22,7 +22,7 @@ import sculture.exceptions.InvalidAccessTokenException;
 import sculture.exceptions.InvalidEmailException;
 import sculture.exceptions.InvalidPasswordException;
 import sculture.exceptions.InvalidUsernameException;
-import sculture.exceptions.SuccessResponse;
+import sculture.models.response.SuccessResponse;
 import sculture.exceptions.UserAlreadyExistsException;
 import sculture.exceptions.UserNotExistException;
 import sculture.exceptions.WrongPasswordException;
@@ -425,8 +425,7 @@ public class SCultureRest {
     public SuccessResponse storyVote(@RequestBody StoryVoteRequestBody requestBody) {
 
         voteStoryDao.vote(requestBody.getStory_id(), requestBody.getUser_id(), requestBody.getIsPositive());
-
-        return new SuccessResponse();
+       return new SuccessResponse(voteStoryDao.getVoteNumber(requestBody.getStory_id()));
     }
 
     @RequestMapping("/comment/list")

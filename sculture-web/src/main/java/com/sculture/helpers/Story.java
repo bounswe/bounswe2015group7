@@ -112,6 +112,23 @@ public class Story {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return "Story{" +
+                "story_id=" + story_id +
+                ", owner_id=" + owner_id +
+                ", create_date='" + create_date + '\'' +
+                ", last_editor_id=" + last_editor_id +
+                ", last_edit_date='" + last_edit_date + '\'' +
+                ", content='" + content + '\'' +
+                ", positive_vote=" + positive_vote +
+                ", negative_vote=" + negative_vote +
+                ", report_count=" + report_count +
+                ", title='" + title + '\'' +
+                ", media='" + media + '\'' +
+                '}';
+    }
+
     public String getMedia() {
         return media;
     }

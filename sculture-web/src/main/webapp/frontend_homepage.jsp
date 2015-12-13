@@ -73,7 +73,7 @@
     <% String username = (String)request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="/search" method="post">
+    <form class="form-inline" action="Sculture-web/search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>

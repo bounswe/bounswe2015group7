@@ -13,6 +13,10 @@
         <servlet-class>com.sculture.SearchAll</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>getstory</servlet-name>
+        <servlet-class>com.sculture.GetStory</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.sculture.Login</servlet-class>
     </servlet>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>signup</servlet-name>
         <url-pattern>/signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getstory</servlet-name>
+        <url-pattern>/get/story/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>login</servlet-name>

@@ -126,9 +126,8 @@
                                         }
                                     %></p>
                                     <small style="font-family:courier,'new courier';" class="text-muted"><%
-                                        out.print(results.get(i).getCreate_date());%> • <%
-                                        out.print("<a href=\"" + results.get(i).getStory_id() + "\" class=\"text-muted\">");%>
-                                        Read More</a></small>
+                                        out.print(results.get(i).getCreate_date());%> •
+                                        <a href="/get/story/1"> Read More</a></small>
                                     </h4></div>
                                 <div class="col-xs-3"></div>
                             </div>

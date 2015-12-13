@@ -15,7 +15,8 @@ public class FullStoryResponse extends BaseStoryResponse {
     public FullStoryResponse(Story story, TagStoryDao tagStoryDao, UserDao userDao) {
         super(story, tagStoryDao, userDao);
         this.content = story.getContent();
-        this.media =  Arrays.asList(story.getMedia().split("\\s*,\\s*"));
+        if (story.getMedia() != null)
+            this.media = Arrays.asList(story.getMedia().split("\\s*,\\s*"));
     }
 
     public String getContent() {

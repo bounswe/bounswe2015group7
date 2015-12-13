@@ -54,12 +54,7 @@ import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static sculture.Utils.checkEmailSyntax;
 import static sculture.Utils.checkPasswordSyntax;
@@ -322,24 +317,26 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
-        String str = "";
-        for (String media : requestBody.getMedia()) {
-            str += media;
-            str += ",";
+        if (requestBody.getMedia() != null) {
+            String str = "";
+            for (String media : requestBody.getMedia()) {
+                str += media;
+                str += ",";
+            }
+            story.setMedia(str.substring(0, str.length() - 1));
         }
-        story.setMedia(str.substring(0, str.length() - 1));
-
         storyDao.create(story);
 
-        List<String> tags = requestBody.getTags();
+        if (requestBody.getTags() != null) {
+            List<String> tags = requestBody.getTags();
 
-        for (String tag : tags) {
-            TagStory tagStory = new TagStory();
-            tagStory.setTag_title(tag);
-            tagStory.setStory_id(story.getStory_id());
-            tagStoryDao.update(tagStory);
+            for (String tag : tags) {
+                TagStory tagStory = new TagStory();
+                tagStory.setTag_title(tag);
+                tagStory.setStory_id(story.getStory_id());
+                tagStoryDao.update(tagStory);
+            }
         }
-
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
@@ -432,10 +429,14 @@ public class SCultureRest {
 
         List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id(), page, size);
         List<CommentResponse> responses = new LinkedList<>();
-
-        for (Comment comment : comments) {
-            responses.add(new CommentResponse(comment, userDao));
+        Collections.sort(comments);
+        for (int i = comments.size()-1 ; i>=0 ; i--){
+            responses.add(new CommentResponse(comments.get(i), userDao));
         }
+        /*for (Comment comment : comments) {
+            responses.add(new CommentResponse(comment, userDao));
+        }*/
+
 
         CommentListResponse commentListResponse = new CommentListResponse();
         commentListResponse.setResult(responses);

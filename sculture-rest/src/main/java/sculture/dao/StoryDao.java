@@ -1,5 +1,6 @@
 package sculture.dao;
 
+import org.apache.commons.logging.Log;
 import org.springframework.stereotype.Repository;
 import sculture.exceptions.InvalidReportException;
 import sculture.models.tables.Story;
@@ -11,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 @Repository
@@ -42,8 +44,9 @@ public class StoryDao {
         relationVoteStoryUser.setVote_is_positive(isPositive);
         Story story = getById(storyId);
 
-        if (!entityManager.contains(relationVoteStoryUser)) {
-
+        if (entityManager.contains(relationVoteStoryUser)) {
+            return story;
+        }else{
             entityManager.persist(relationVoteStoryUser);
 
             if (isPositive) {

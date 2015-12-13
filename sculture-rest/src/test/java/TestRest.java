@@ -6,7 +6,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import sculture.Application;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static sculture.Utils.checkEmailSyntax;
 
 /**
  * Created by bilal on 29/11/15.
@@ -33,12 +39,32 @@ public class TestRest {
 
 
         JsonNode jsonNode = new JsonNode(jsonObject.toString());
-        jsonResponse = Unirest.post("http://52.28.216.93:9000/user/register")
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/register")
                 .header("Content-Type", "application/json")
                 .body(jsonNode)
                 .asJson();
         assertEquals(jsonResponse.getBody().getObject().getString("username"), "test-user");
-        assertEquals(jsonResponse.getBody().getObject().getString("password"), "test-password");
         assertEquals(jsonResponse.getBody().getObject().getString("email"), "test-password@test.com");
+        
+        String access_token = jsonResponse.getBody().getObject().getString("access_token");
+        Map map = new HashMap<String,String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token",access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("title","title");
+        jsonObject.put("content","content");
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/story/create")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(200, jsonResponse.getStatus());
+    }
+    @Test
+    public void validateEmail(){
+        assertFalse(checkEmailSyntax(null));
+        assertFalse(checkEmailSyntax(""));
+        assertFalse(checkEmailSyntax("bilal"));
+        assertTrue(checkEmailSyntax("bilal@bilal.com"));
     }
 }

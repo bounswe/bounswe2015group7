@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,11 +39,8 @@ import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 public class TagActivity extends AppCompatActivity {
     private TextView tagTitle;
     private TextView tagDescription;
-    private TextView editTagDesc;
-    private TextView save;
-    private TextView writer;
+    private TextView last_editor;
     private TextView update_time;
-    private Button createDescription;
     private RecyclerView story_list_recycler;
 
     LinearLayoutManager mLayoutManager;
@@ -48,9 +48,6 @@ public class TagActivity extends AppCompatActivity {
 
     private boolean is_looding_more = false;
     private boolean is_reach_end = false;
-
-    private boolean is_on_edit = false;
-    private String previous = "";
 
     private Activity mActivity;
 
@@ -60,19 +57,18 @@ public class TagActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tag_description);
+        setContentView(R.layout.activity_tag);
         bundle = getIntent().getExtras();
         if(bundle != null)
             tag_title = bundle.getString(BUNDLE_TAG_TITLE);
 
+        getSupportActionBar().setTitle(tag_title);
+
         Log.i("HERE", "" + tag_title);
         tagTitle = (TextView) findViewById(R.id.tag_title);
         tagDescription = (TextView) findViewById(R.id.tag_description);
-        writer = (TextView) findViewById(R.id.tag_creation);
+        last_editor = (TextView) findViewById(R.id.tag_creation);
         update_time = (TextView) findViewById(R.id.tag_update);
-        editTagDesc = (TextView) findViewById(R.id.edit_cancel_text);
-        save = (TextView) findViewById(R.id.save_Text);
-        createDescription = (Button) findViewById(R.id.create_description);
 
         story_list_recycler = (RecyclerView) findViewById(R.id.profile_story_list);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -87,53 +83,48 @@ public class TagActivity extends AppCompatActivity {
         load_story();
 
 
-        if(tagDescription.getText().toString() != "") {
-            createDescription.setVisibility(View.GONE);
-        } else {
-            createDescription.setOnClickListener(new View.OnClickListener() {
+        if(tagDescription.getText().toString() == "") {
+            last_editor.setVisibility(View.GONE);
+            update_time.setVisibility(View.GONE);
+            tagDescription.setText("Click to write a description");
+            tagDescription.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(getApplicationContext(), TagDescCreateActivity.class);
-                    startActivity(i);
+                    Intent intent = new Intent(getApplicationContext(), TagDescCreateActivity.class);
+                    startActivity(intent);
                 }
             });
         }
 
-        writer.setOnClickListener(new View.OnClickListener() {
+        last_editor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO open profile page
+                Intent intent = new Intent(getApplicationContext(), ProfilePageActivity.class);
+                startActivity(intent);
 
             }
         });
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("CLICK", "Save clicked");
-                //TODO save
-            }
-        });
+    }
 
-        editTagDesc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.tag_edit, menu);
+        return true;
+    }
 
-                if (is_on_edit) {
-                    tagDescription.setEnabled(false);
-                    editTagDesc.setText("Edit");
-                    tagDescription.setText(previous);
-                    save.setVisibility(View.GONE);
-                } else {
-                    previous = tagDescription.getText().toString();
-                    tagDescription.setEnabled(true);
-                    editTagDesc.setText("Cancel");
-                    save.setVisibility(View.VISIBLE);
-                }
-                is_on_edit = !is_on_edit;
-            }
-        });
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                Intent intent = new Intent(getApplicationContext(), TagDescCreateActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     private void setRecyclerListeners() {
@@ -152,8 +143,6 @@ public class TagActivity extends AppCompatActivity {
 
         boolean loadMore = lastVisibleIndex == totalItemCount - 1;
 
-        if (is_reach_end)
-            Log.i("HERE", "HERE");
         if ((loadMore && !is_looding_more && !is_reach_end)) {
             is_looding_more = true;
             JSONObject requestBody = new JSONObject();
@@ -200,6 +189,7 @@ public class TagActivity extends AppCompatActivity {
                         TagResponse tag = new TagResponse(response);
                         tagTitle.setText(tag.tag_title);
                         tagDescription.setText(tag.description);
+                        //TODO add last edit date and last editor id after api completed
                     }
                 }, new Response.ErrorListener() {
                     @Override

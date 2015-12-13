@@ -16,6 +16,8 @@ public class Constants {
     public static final String API_TAG_GET = API_BASE_URL + "/tag/get";
     public static final String API_TAG_CREATE = API_BASE_URL + "/tag/create";
     public static final String API_TAG_EDIT = API_BASE_URL + "/tag/edit";
+    public static final String API_USER_GET = API_BASE_URL + "/user/get";
+    public static final String API_USER_FOLLOW = API_BASE_URL + "/user/follow";
 
     //REQUEST TAGS
     public static final String REQUEST_TAG_LOGIN = "request_login";
@@ -52,6 +54,7 @@ public class Constants {
     public static final String BUNDLE_STORY_ID = "story_id";
     public static final String BUNDLE_IS_EDIT = "is_edit";
     public static final String BUNDLE_TAG_TITLE = "tag_title";
+    public static final String BUNDLE_VISITED_USER_ID = "visited_user_id";
     public static final String BUNDLE_MEDIA_IDS = "media_ids";
     public static final String BUNDLE_INDEX = "index";
 

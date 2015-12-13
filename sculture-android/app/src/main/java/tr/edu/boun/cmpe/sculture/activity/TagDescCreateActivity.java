@@ -52,14 +52,38 @@ public class TagDescCreateActivity extends AppCompatActivity {
             }
         }
 
+        getSupportActionBar().setTitle(tag_title);
+
         titleText = (TextView) findViewById(R.id.tagTitle);
         contentText = (EditText) findViewById(R.id.tagDescription);
+
+        //set tag title
+        JSONObject rb = new JSONObject();
+        try {
+            rb.put(FIELD_TITLE, tag_title);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        addRequest(API_TAG_GET, rb, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                TagResponse tagResponse = new TagResponse(response);
+
+                titleText.setText(tagResponse.tag_title);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, null);
 
         //If it is edit, pre-fill the view
         if (isEdit) {
             final JSONObject requestBody = new JSONObject();
             try {
-                requestBody.put(FIELD_ID, tag_title);
+                requestBody.put(FIELD_TITLE, tag_title);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -89,17 +113,13 @@ public class TagDescCreateActivity extends AppCompatActivity {
             requestBody.put(FIELD_CONTENT, contentText.getText());
 
             if (isEdit)
-                requestBody.put(FIELD_ID, tag_title);
+                requestBody.put(FIELD_TITLE, tag_title);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        String api_url = API_TAG_CREATE;
-        if (isEdit)
-            api_url = API_TAG_EDIT;
-
-        addRequest(api_url, requestBody,
+        addRequest(API_TAG_EDIT, requestBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -122,7 +142,7 @@ public class TagDescCreateActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.story_create, menu);
+        getMenuInflater().inflate(R.menu.tag_create, menu);
         return true;
     }
 
@@ -132,7 +152,7 @@ public class TagDescCreateActivity extends AppCompatActivity {
 
         if (id == R.id.action_save)
             clickSaveButton();
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
 }

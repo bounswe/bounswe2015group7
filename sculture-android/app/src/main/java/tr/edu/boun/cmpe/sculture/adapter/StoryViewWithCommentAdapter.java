@@ -3,6 +3,7 @@ package tr.edu.boun.cmpe.sculture.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.text.Spannable;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
+import tr.edu.boun.cmpe.sculture.activity.TagActivity;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 

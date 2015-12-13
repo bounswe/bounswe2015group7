@@ -14,29 +14,6 @@
         android:hint="description"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
-    <TextView
-        android:id="@+id/edit_cancel_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tag_description"
-        android:text="@string/edit"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/holo_blue_light" />
-    <TextView
-        android:id="@+id/save_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tag_description"
-        android:layout_gravity="center_horizontal"
-        android:layout_toEndOf="@+id/edit_cancel_text"
-        android:layout_toRightOf="@+id/edit_cancel_text"
-        android:paddingLeft="20dp"
-        android:text="@string/save"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/holo_blue_light"
-        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tag_creation"
@@ -59,18 +36,12 @@
         android:text="@string/updated_time"
         android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/create_description"
-        android:text="Create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/profile_story_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/create_description" />
+        android:layout_below="@+id/tag_update" />
 
 </LinearLayout>

@@ -1,8 +1,5 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
-/**
- * Created by SahaOperasyon2 on 06.12.2015.
- */
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,7 +22,10 @@ import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_FOLLOW;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_STORIES;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
@@ -71,22 +71,33 @@ public class ProfilePageActivity extends AppCompatActivity {
 
         setRecyclerListeners();
 
+        currentUserID = baseApplication.getUSER_ID();
+
+        JSONObject requestBody = new JSONObject();
+        try {
+           requestBody.put(FIELD_ID, BUNDLE_VISITED_USER_ID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        addRequest(API_USER_GET, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    visitedUserID = response.getLong(BUNDLE_VISITED_USER_ID);
+                    username.setText(baseApplication.getUSERNAME());
+                    email.setText(baseApplication.getEMAIL());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //TODO error handling
+            }
+        }, null);
+
         load_story();
-
-
-        final JSONObject requestBody = new JSONObject();
-        try {
-            currentUserID = requestBody.getLong(PREF_USER_ID);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            JSONObject requestBody2 = new JSONObject(username.getText().toString());
-            visitedUserID = requestBody2.getLong(username.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         if(currentUserID == visitedUserID)
             follow.setVisibility(View.GONE);
@@ -96,7 +107,7 @@ public class ProfilePageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject rb = new JSONObject();
                 try {
-                    requestBody.put(API_USER_STORIES, visitedUserID);
+                    rb.put(API_USER_FOLLOW, visitedUserID);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -122,16 +133,13 @@ public class ProfilePageActivity extends AppCompatActivity {
 
         boolean loadMore = lastVisibleIndex == totalItemCount - 1;
 
-        if (is_reach_end)
-            Log.i("HERE", "HERE");
         if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
             is_loading_more = true;
             JSONObject requestBody = new JSONObject();
             try {
-                requestBody.put(FIELD_ID, baseApplication.getUSER_ID());
+                requestBody.put(FIELD_ID, visitedUserID);
                 requestBody.put(FIELD_PAGE, PAGE);
                 requestBody.put(FIELD_SIZE, 10);
-                Log.i("HEREd", "" + baseApplication.getUSER_ID());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

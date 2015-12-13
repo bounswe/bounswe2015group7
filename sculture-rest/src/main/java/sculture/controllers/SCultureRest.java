@@ -22,6 +22,7 @@ import sculture.exceptions.InvalidAccessTokenException;
 import sculture.exceptions.InvalidEmailException;
 import sculture.exceptions.InvalidPasswordException;
 import sculture.exceptions.InvalidUsernameException;
+import sculture.models.response.StoryReportResponse;
 import sculture.models.response.SuccessResponse;
 import sculture.exceptions.UserAlreadyExistsException;
 import sculture.exceptions.UserNotExistException;
@@ -416,9 +417,9 @@ public class SCultureRest {
     }
 
     @RequestMapping("/story/report")
-    public boolean storyReport(@RequestBody StoryReportRequestBody requestBody) {
+    public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody) {
         storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
-        return true;
+        return new StoryReportResponse(storyDao.reportCount(requestBody.getStory_id()));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/vote")

@@ -1,10 +1,14 @@
 package sculture.models.tables.relations;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@IdClass(VoteStory.class)
+@Entity
+@Table(name = "VOTE_STORY")
+@IdClass(VoteStoryPK.class)
 public class VoteStory {
     @Id
     @NotNull

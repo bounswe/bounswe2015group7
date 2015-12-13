@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ page import="java.util.ArrayList" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.Story" import="com.sculture.helpers.Comment" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.BaseStoryResponse" import="com.sculture.helpers.CommentListResponse" %>
 
 
 <html lang="en">
@@ -98,7 +98,7 @@
 
             <!-- Title -->
             <%
-                Story story = (Story) request.getAttribute("story");
+                BaseStoryResponse story = (BaseStoryResponse) request.getAttribute("story");
 
             %>
 
@@ -107,7 +107,7 @@
             <hr>
 
             <!-- Date/Time -->
-            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(story.getCreate_date()); %></p>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(story.getCreation_date()); %></p>
 
             <hr>
 
@@ -143,7 +143,7 @@
             <!-- Posted Comments -->
 
             <!-- Comment -->
-            <%ArrayList<Comment> comments = request.getAttribute("comments");%>
+            <%ArrayList<CommentResponse> comments = (ArrayList<CommentResponse>)request.getAttribute("comments");%>
 
             <%for(int i = 0; i < comments.size(); i++) {%>
             <div class="media">
@@ -151,7 +151,7 @@
                     <img class="media-object" src="http://placehold.it/64x64" alt="">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading" align="left"> <%out.print(comments.get(i).getComment_id());%>
+                    <h4 class="media-heading" align="left"> <%out.print(comments.get(i).getOwner_username());%>
                         <small><%out.print(comments.get(i).getCreate_date());%>/small>
                     </h4>
                     <%out.print(comments.get(i).getContent());%>
@@ -190,8 +190,8 @@
                 <div class="row">
                     <div class="col-lg">
                         <ul class="list-unstyled">
-                            <% for (int i = 0; i < story.tags.length; i++) { %>
-                            <li><a href="#"><% out.print(story.tags[i]); %> </a>
+                            <% for (int i = 0; i < story.getTags().size(); i++) { %>
+                            <li><a href="#"><% out.print(story.getTags().get(i)); %> </a>
                             </li>
                             <%}%>
                         </ul>

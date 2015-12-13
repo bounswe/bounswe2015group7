@@ -20,6 +20,7 @@ public class BaseStoryResponse {
     private String title;
     private String creation_date;
     private String update_date;
+    private String content;
     private User last_editor = new User();
     private User owner = new User();
     private List<String> tags;
@@ -33,6 +34,10 @@ public class BaseStoryResponse {
 
     public long getId() {
         return id;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public String getTitle() {

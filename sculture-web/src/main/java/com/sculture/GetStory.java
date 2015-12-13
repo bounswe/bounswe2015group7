@@ -5,8 +5,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sculture.helpers.BaseStoryResponse;
 import com.sculture.helpers.Comment;
-import com.sculture.helpers.Story;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Atakan Arıkan on 13.12.2015.
@@ -35,7 +34,7 @@ public class GetStory extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Story story = new Story();
+        BaseStoryResponse story = new BaseStoryResponse();
         Comment comment = new Comment();
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
@@ -59,9 +58,10 @@ public class GetStory extends HttpServlet {
             e.printStackTrace();
         }
         if (jsonResponse != null) {
-            Object object = jsonResponse.getBody();
+            Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
-            story = gson.fromJson(object.toString(), Story.class);
+//            ((JSONObject)object).remove("tags");
+            story = gson.fromJson(object.toString(), BaseStoryResponse.class);
         }
         // send req to comment/list
         jsonResponse = null;

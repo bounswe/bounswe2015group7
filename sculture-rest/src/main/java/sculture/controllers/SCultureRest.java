@@ -22,6 +22,7 @@ import sculture.exceptions.InvalidAccessTokenException;
 import sculture.exceptions.InvalidEmailException;
 import sculture.exceptions.InvalidPasswordException;
 import sculture.exceptions.InvalidUsernameException;
+import sculture.models.requests.StoryEditRequestBody;
 import sculture.models.response.StoryReportResponse;
 import sculture.models.response.SuccessResponse;
 import sculture.exceptions.UserAlreadyExistsException;
@@ -353,7 +354,7 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
-    public BaseStoryResponse story_edit(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public BaseStoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user;
         try {
             String access_token;
@@ -368,6 +369,7 @@ public class SCultureRest {
         Date date = new Date();
         Story story = new Story();
 
+        story.setStory_id(requestBody.getStory_id());
         story.setTitle(requestBody.getTitle());
         story.setContent(requestBody.getContent());
         story.setOwner_id(current_user.getUser_id());
@@ -382,7 +384,7 @@ public class SCultureRest {
             }
             story.setMedia(str.substring(0, str.length() - 1));
         }
-        storyDao.create(story);
+        storyDao.edit(story);
 
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();

@@ -65,6 +65,7 @@ public class TestRest {
         map.put("Content-Type", "application/json");
         map.put("access-token",access_token);
         jsonObject = new JSONObject();
+        jsonObject.put("story_id",1);
         jsonObject.put("title","title1");
         jsonObject.put("content","content1");
         jsonNode = new JsonNode(jsonObject.toString());

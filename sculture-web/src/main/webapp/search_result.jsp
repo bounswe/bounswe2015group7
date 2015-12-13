@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.Story" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.FullStoryResponse" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.sql.Timestamp" %>
+<%@ page import="java.util.Date" %>
 
 <html lang="en">
 
@@ -92,7 +94,7 @@
 
 <%-- here we assumed that there is a Story class with attributes title, content, tags and date created  --%>
 <%
-    ArrayList<Story> results = (ArrayList<Story>) request.getAttribute("results");
+    ArrayList<FullStoryResponse> results = (ArrayList<FullStoryResponse>) request.getAttribute("results");
 
 %>
 <h1>We found <%out.print(results.size()); %> results for your search</h1>
@@ -111,7 +113,11 @@
 
                         <div class="col-md-2 col-sm-3 text-center">
                             <a class="story-title" href="#">
-                                <%--<%out.println("<img alt=\"\" src=\"" + results[i].mainPhotoURL + "\" style=\"width:100px;height:100px\" class=\"img-circle\"");%>--%>
+                                <%if(results.get(i).getMedia() != null && results.get(i).getMedia().size() > 0) {%>
+                                <img class="img-responsive" src="<%out.print("http://52.28.216.93:9000/image/get/" + results.get(i).getMedia().get(0));%>" alt="">
+                                <%} else {%>
+                                <img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" alt="">
+                                <%}%>
                             </a>
                         </div>
                         <div class="col-md-10 col-sm-9">
@@ -128,9 +134,12 @@
                                             out.print(content.substring(0, 500) + "...");
                                         }
                                     %></p>
-                                    <small style="font-family:courier,'new courier';" class="text-muted"><%
-                                        out.print(results.get(i).getCreate_date());%> •
-                                        <%String refUrl = "/get/story/" + results.get(i).getStory_id();%>
+                                    <small style="font-family:courier,'new courier';" class="text-muted">
+                                        <%
+                                        Timestamp stamp = new Timestamp(Long.parseLong(results.get(i).getCreation_date()));
+                                            Date storyCreationDate = new Date(stamp.getTime());
+                                        out.print(storyCreationDate);%> •
+                                        <%String refUrl = "/get/story/" + results.get(i).getId();%>
                                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                                     </div>
                                 <div class="col-xs-3"></div>

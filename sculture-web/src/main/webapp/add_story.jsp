@@ -99,9 +99,9 @@
                     </div>
                 </div>
                 <fieldset class="form-group">
-                    <label for="exampleInputFile">Upload a photo</label>
+                    <label for="story-photo">Upload a photo</label>
                     <div align="center">
-                        <input type="file" class="form-control-file" id="exampleInputFile" style="center">
+                        <input type="file" class="form-control-file" name="story-photo" id="story-photo" style="center">
                     </div>
                 </fieldset>
                 <div class="form-group">

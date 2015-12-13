@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sculture.helpers.FullStoryResponse;
 import com.sculture.helpers.Story;
 
 import javax.servlet.ServletException;
@@ -30,7 +31,7 @@ public class SearchAll extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Story story = new Story();
+        FullStoryResponse story;
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -48,12 +49,12 @@ public class SearchAll extends HttpServlet {
             e.printStackTrace();
         }
 
-        ArrayList<Story> stories = new ArrayList<Story>();
+        ArrayList<FullStoryResponse> stories = new ArrayList<FullStoryResponse>();
         if (jsonResponse != null) {
             for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
                 Object object = jsonResponse.getBody().getArray().get(i);
                 Gson gson = new Gson();
-                story = gson.fromJson(object.toString(), Story.class);
+                story = gson.fromJson(object.toString(), FullStoryResponse.class);
                 stories.add(story);
             }
         }

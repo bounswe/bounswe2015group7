@@ -108,7 +108,11 @@
 
         <div class="col-md-8">
             <% Story topStory = (Story) request.getAttribute("topStory");%>
-            <img class="img-responsive" src="http://static.independent.co.uk/s3fs-public/styles/story_large/public/thumbnails/image/2014/01/16/18/v236-animal-fights-ala.jpg" alt="">
+            <%if(story.getMedia() != null && story.getMedia().size() > 0) {%>
+            <img class="img-responsive" src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
+            <%} else {%>
+            <img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" alt="">
+            <%}%>
         </div>
 
         <div class="col-md-4">

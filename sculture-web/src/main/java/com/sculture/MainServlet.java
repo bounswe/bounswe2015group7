@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sculture.helpers.FullStoryResponse;
 import com.sculture.helpers.Story;
 
 import javax.servlet.ServletException;
@@ -44,7 +45,7 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Story story;
+        FullStoryResponse story;
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -61,21 +62,22 @@ public class MainServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        ArrayList<Story> stories = new ArrayList<Story>();
+        ArrayList<FullStoryResponse> stories = new ArrayList<FullStoryResponse>();
         if (jsonResponse != null) {
             for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
                 Object object = jsonResponse.getBody().getArray().get(i);
                 Gson gson = new Gson();
-                story = gson.fromJson(object.toString(), Story.class);
+                story = gson.fromJson(object.toString(), FullStoryResponse.class);
                 stories.add(story);
             }
         }
         request.setAttribute("topStory", stories.get(0));
-        ArrayList<Story> popular = new ArrayList<Story>();
+        ArrayList<FullStoryResponse> popular = new ArrayList<FullStoryResponse>();
         popular.add(stories.get(0));
         popular.add(stories.get(1));
         popular.add(stories.get(2));
-        popular.add(stories.get(4));
+        popular.add(stories.get(3));
+        System.out.println("anan");
         request.setAttribute("popularStories", popular);
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }

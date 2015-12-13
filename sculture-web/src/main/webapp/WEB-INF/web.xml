@@ -60,4 +60,8 @@
         <servlet-name>searchall</servlet-name>
         <url-pattern>/search/all</url-pattern>
     </servlet-mapping>
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
 </web-app>

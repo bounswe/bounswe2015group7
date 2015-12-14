@@ -59,6 +59,12 @@
                         <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
                     </div>
                 </li>
+                <li>
+                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+                    </div>
+                </li>
                 <% } else { %>
                 <li>
                     <div class="top-big-link">
@@ -109,18 +115,9 @@
             <h1><% out.print(story.getTitle()); %></h1>
 
             <hr>
+            <p><% out.print(story.getContent()); %></p>
 
-            <!-- Date/Time -->
-            <%
-                try{
-                    Timestamp stamp = new Timestamp(Long.parseLong(story.getCreate_date()));
-                    Date storyCreationDate = new Date(stamp.getTime());%>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(storyCreationDate); %></p>
 
-            <%} catch (Exception e) { %>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on: </p>
-
-            <%} %>
 
             <hr>
 
@@ -134,9 +131,21 @@
             <% }%>
 
                   <hr>
+            <!-- Date/Time -->
 
-                  <!-- Post Content -->
-            <p><% out.print(story.getContent()); %>
+            <%
+                try{
+                    Timestamp stamp = new Timestamp(Long.parseLong(story.getCreate_date()));
+                    Date storyCreationDate = new Date(stamp.getTime());%>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(storyCreationDate); %></p>
+
+            <%} catch (Exception e) { %>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: </p>
+
+            <%} %>
+            <hr>
+
+            <!-- Post Content -->
                 <span class="center-block">
                     <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"> <%out.print(story.getPositive_vote());%></span>
                     <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"><%out.print(story.getNegative_vote());%></span>
@@ -188,21 +197,11 @@
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
 
-            <!-- Blog Search Well -->
             <div class="well">
-                <h4>Search for a story:</h4>
+                <h4>Created by:</h4>
+                <%String refUrl = "/get/user/" + story.getOwnerId();%>
+                <a href="<%out.print(refUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> <%out.print(story.getOwner());%> </a>
 
-                <form role="form" action="/search" method="post">
-                    <div class="form-group has-feedback">
-                        <label class="control-label" for="main-search">
-                        </label>
-                        <input type="text" class="form-control" name="main-search" id="main-search"
-                               placeholder="Tag name"/> <span
-                            class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-                </form>
-
-                <!-- /.input-group -->
             </div>
 
             <!-- Tags -->
@@ -222,6 +221,11 @@
                     </div>
                 </div>
                 <!-- /.row -->
+            </div>
+            <div class="well">
+                <%String asd = "/report/story/" + story.getStory_id();%>
+                <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
+
             </div>
 
 

@@ -461,6 +461,25 @@ public class SCultureRest {
         return commentListResponse;
     }
 
+
+    @RequestMapping("/admin/search/reindex")
+    public void admin_search_reindex() {
+        SearchEngine.removeAll();
+        for (int i = 1; ; i++) {
+            List<Story> stories = storyDao.getAllPaged(i, 20);
+            for (Story story : stories) {
+                List<String> tags = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
+                String tag_index = "";
+                for (String tag : tags)
+                    tag_index += tag + ", ";
+                SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+            }
+            if (stories.size() == 0)
+                break;
+        }
+
+    }
+
     /**
      * Returns current user by using access-token
      *

@@ -127,4 +127,18 @@ public class SearchEngine {
 
         return story_ids;
     }
+
+    public static void removeAll() {
+        IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        IndexWriter w;
+        try {
+            w = new IndexWriter(index, config);
+            w.deleteAll();
+            w.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

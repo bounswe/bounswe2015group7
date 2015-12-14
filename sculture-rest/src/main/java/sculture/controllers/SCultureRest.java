@@ -1,66 +1,16 @@
 package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import sculture.Utils;
 import sculture.dao.*;
 import sculture.exceptions.*;
 import sculture.lucene.SearchEngine;
 import sculture.models.requests.*;
 import sculture.models.response.*;
-import sculture.dao.*;
-import sculture.exceptions.*;
-import sculture.lucene.SearchEngine;
-import sculture.models.requests.*;
-import sculture.models.response.*;
-import sculture.dao.CommentDao;
-import sculture.dao.StoryDao;
-import sculture.dao.TagDao;
-import sculture.dao.TagStoryDao;
-import sculture.dao.UserDao;
-import sculture.dao.VoteStoryDao;
-import sculture.exceptions.InvalidAccessTokenException;
-import sculture.exceptions.InvalidEmailException;
-import sculture.exceptions.InvalidPasswordException;
-import sculture.exceptions.InvalidUsernameException;
-import sculture.models.requests.StoryEditRequestBody;
-import sculture.models.response.StoryReportResponse;
-import sculture.models.response.SuccessResponse;
-import sculture.exceptions.UserAlreadyExistsException;
-import sculture.exceptions.UserNotExistException;
-import sculture.exceptions.WrongPasswordException;
-import sculture.models.requests.CommentGetRequestBody;
-import sculture.models.requests.CommentListRequestBody;
-import sculture.models.requests.CommentNewRequestBody;
-import sculture.models.requests.LoginRequestBody;
-import sculture.models.requests.RegisterRequestBody;
-import sculture.models.requests.SearchRequestBody;
-import sculture.models.requests.StoriesGetRequestBody;
-import sculture.models.requests.StoryCreateRequestBody;
-import sculture.models.requests.StoryGetRequestBody;
-import sculture.models.requests.StoryReportRequestBody;
-import sculture.models.requests.StoryVoteRequestBody;
-import sculture.models.requests.TagGetRequestBody;
-import sculture.models.requests.UserFollowRequestBody;
-import sculture.models.requests.UserGetRequestBody;
-import sculture.models.requests.UserUpdateRequestBody;
-import sculture.models.response.BaseStoryResponse;
-import sculture.models.response.CommentListResponse;
-import sculture.models.response.CommentResponse;
-import sculture.models.response.FullStoryResponse;
-import sculture.models.response.ImageResponse;
-import sculture.models.response.LoginResponse;
-import sculture.models.response.SearchResponse;
-import sculture.models.response.TagResponse;
 import sculture.models.tables.Comment;
 import sculture.models.tables.Story;
 import sculture.models.tables.Tag;
@@ -68,13 +18,7 @@ import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static sculture.Utils.*;
 
@@ -203,7 +147,7 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new TagResponse(tag,userDao.getById(tag.getLast_editor_id()).getUsername());
+        return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
@@ -395,17 +339,22 @@ public class SCultureRest {
             story.setMedia(str.substring(0, str.length() - 1));
         }
         storyDao.edit(story);
-
+        String tag_index = "";
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();
 
             for (String tag : tags) {
+                tag_index += tag + ", ";
                 TagStory tagStory = new TagStory();
                 tagStory.setTag_title(tag);
                 tagStory.setStory_id(story.getStory_id());
                 tagStoryDao.update(tagStory);
             }
         }
+
+        SearchEngine.removeDoc(story.getStory_id());
+        SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 

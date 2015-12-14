@@ -10,19 +10,13 @@ import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.synonym.SynonymFilter;
 import org.apache.lucene.analysis.synonym.SynonymMap;
 import org.apache.lucene.analysis.synonym.WordnetSynonymParser;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.util.PagedBytes;
-import org.apache.lucene.util.Version;
-import org.apache.lucene.util.packed.PackedInts;
+import org.apache.lucene.analysis.util.CharArraySet;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-/**
- * Created by Fatih on 06-Dec-15.
- */
 public class SynonymAnalyzer extends Analyzer {
 
     @Override
@@ -45,7 +39,7 @@ public class SynonymAnalyzer extends Analyzer {
     private SynonymMap buildSynonym() throws IOException {
         InputStream stream = getClass().getClassLoader().getResourceAsStream("wn_s.pl");
         Reader rulesReader = new InputStreamReader(stream);
-        WordnetSynonymParser parser = new WordnetSynonymParser(true, true, new StandardAnalyzer());
+        WordnetSynonymParser parser = new WordnetSynonymParser(true, true, new StandardAnalyzer(CharArraySet.EMPTY_SET));
         try {
             parser.parse(rulesReader);
         } catch (java.text.ParseException e) {
@@ -54,4 +48,5 @@ public class SynonymAnalyzer extends Analyzer {
         SynonymMap synonymMap = parser.build();
         return synonymMap;
     }
+
 }

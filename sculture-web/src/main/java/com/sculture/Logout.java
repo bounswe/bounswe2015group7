@@ -24,18 +24,15 @@ public class Logout extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-            request.clearSession();
-            request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
-            request.getSession().setAttribute("userid", jsonResponse.getBody().getObject().get("id"));
-            request.getSession().setAttribute("access_token", jsonResponse.getBody().getObject().get("access_token"));
-
-        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().invalidate();
+        request.getSession().setAttribute("username", null);
+        request.getSession().setAttribute("userid", null);
+        request.getSession().setAttribute("access_token", null);
         request.setAttribute("isLoggedIn", false);
-        request.setAttribute("username", "");
-        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
+        response.sendRedirect("/index");
     }
 
 }

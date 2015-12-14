@@ -8,7 +8,7 @@ public class Story {
 
     private class User {
         private long id;
-        private String username;
+        public String username;
 
         public long getId() {
             return id;
@@ -19,7 +19,7 @@ public class Story {
         }
     }
 
-    private long story_id;
+    private long id;
     private String title;
     private String creation_date;
     private String update_date;
@@ -36,7 +36,7 @@ public class Story {
     @Override
     public String toString() {
         return "Story{" +
-                "story_id=" + story_id +
+                "story_id=" + id +
                 ", title='" + title + '\'' +
                 ", creation_date='" + creation_date + '\'' +
                 ", update_date='" + update_date + '\'' +
@@ -60,7 +60,7 @@ public class Story {
     }
 
     public long getStory_id() {
-        return story_id;
+        return id;
     }
 
     public String getTitle() {
@@ -83,8 +83,11 @@ public class Story {
         return last_editor;
     }
 
-    public User getOwner() {
-        return owner;
+    public String getOwner() {
+        return owner.getUsername();
+    }
+    public long getOwnerId() {
+        return owner.getId();
     }
 
     public List<String> getTags() {

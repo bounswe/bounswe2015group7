@@ -41,8 +41,16 @@
         <servlet-class>com.sculture.AddStory</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>reportstory</servlet-name>
+        <servlet-class>com.sculture.ReportStory</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>signup</servlet-name>
         <servlet-class>com.sculture.Signup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>followuser</servlet-name>
+        <servlet-class>com.sculture.FollowUser</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>signup</servlet-name>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>addstory</servlet-name>
         <url-pattern>/addstory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>reportstory</servlet-name>
+        <url-pattern>/report/story/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>followuser</servlet-name>
+        <url-pattern>/follow/user/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>searchall</servlet-name>

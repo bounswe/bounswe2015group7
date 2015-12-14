@@ -16,7 +16,7 @@ public class BaseStoryResponse {
         }
     }
 
-    private long id;
+    private long story_id;
     private String title;
     private String creation_date;
     private String update_date;
@@ -32,8 +32,8 @@ public class BaseStoryResponse {
     public BaseStoryResponse() {
     }
 
-    public long getId() {
-        return id;
+    public long getStory_id() {
+        return story_id;
     }
 
     public String getContent() {

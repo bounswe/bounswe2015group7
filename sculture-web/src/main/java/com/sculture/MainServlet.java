@@ -6,7 +6,6 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sculture.helpers.FullStoryResponse;
-import com.sculture.helpers.Story;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

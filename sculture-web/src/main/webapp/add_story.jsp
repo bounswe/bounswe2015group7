@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
     <link rel="stylesheet" href="public/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/font-awesome.css">
-    <!--<link rel="stylesheet" href="public/css/form-elements.css">-->
+    <link rel="stylesheet" href="public/css/form-elements.css">
     <link rel="stylesheet" href="public/css/sweetalert.css">
     <link rel="stylesheet" href="public/css/style.css">
     <link rel="stylesheet" href="public/css/homepage_style.css">

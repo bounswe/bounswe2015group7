@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/css/font-awesome.css">
     <link rel="stylesheet" href="/public/css/sweetalert.css">
+    <link rel="stylesheet" href="/public/css/form-elements.css">
     <link rel="stylesheet" href="/public/css/style.css">
     <link rel="stylesheet" href="/public/css/homepage_style.css">
     <link rel="stylesheet" href="/public/css/storystyle.css">
@@ -211,10 +212,12 @@
                 <div class="row">
                     <div class="col-lg">
                         <ul class="list-unstyled">
+                            <%if(story.getTags() != null)  { %>
                             <% for (int i = 0; i < story.getTags().size(); i++) { %>
                             <li><a href="#"><% out.print(story.getTags().get(i)); %> </a>
                             </li>
-                            <%}%>
+                            <%}
+                                }%>
                         </ul>
                     </div>
                 </div>

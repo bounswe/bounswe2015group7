@@ -42,13 +42,13 @@ public class Signup extends HttpServlet {
         }
         if (jsonResponse != null) {
             request.setAttribute("isLoggedIn", true);
-            request.setAttribute("username", jsonResponse.getBody().getObject().get("username"));
-            request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
+            request.setAttribute("username", request.getParameter("form-username"));
+            request.getSession().setAttribute("username", request.getParameter("form-username"));
         } else {
             request.setAttribute("isLoggedIn", false);
             request.setAttribute("username", "");
         }
-        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
+        response.sendRedirect("/index");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

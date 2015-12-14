@@ -39,20 +39,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
+            <a href="/index"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                        <a class="btn btn-link-2" href="/addstory">Add Story</a>
                     </div>
                 </li>
                 <% boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn"); %>
                 <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="/logout">Log Out</a>
                     </div>
                 </li>
                 <% } else { %>
@@ -173,6 +173,12 @@
 
 
 
+    <div id="contact" class="container-fluid bg-grey">
+        <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
+        <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>
+        <p><span class="glyphicon glyphicon-envelope"></span> info@sculture.com</p>
+    </div>
+
 
     <!-- LOGIN -->
     <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-label" aria-hidden="true">
@@ -265,7 +271,7 @@
             $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
                 // Prevent default anchor click behavior
-                   event.preventDefault();
+//                   event.preventDefault();
 
                 // Store hash
                 var hash = this.hash;
@@ -296,9 +302,3 @@
     </script>
 
 
-
-    <div id="contact" class="container-fluid bg-grey">
-        <p><span class="glyphicon glyphicon-map-marker"></span> Istanbul, TR</p>
-        <p><span class="glyphicon glyphicon-phone"></span> +90 212 359 54 00</p>
-        <p><span class="glyphicon glyphicon-envelope"></span> info@sculture.com</p>
-    </div>

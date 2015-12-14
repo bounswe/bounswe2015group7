@@ -5,8 +5,7 @@ public class UserFollowRequestBody {
 
 
     private long user_id;
-    boolean isFollow;
-    private String accessToken;
+    boolean is_follow;
 
     public long getUser_id() {
         return user_id;
@@ -16,19 +15,11 @@ public class UserFollowRequestBody {
         this.user_id = user_id;
     }
 
-    public boolean isFollow() {
-        return isFollow;
+    public boolean is_follow() {
+        return is_follow;
     }
 
-    public void setIsFollow(boolean isFollow) {
-        this.isFollow = isFollow;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setIs_follow(boolean is_follow) {
+        this.is_follow = is_follow;
     }
 }

@@ -2,40 +2,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tr.edu.boun.cmpe.sculture.activity.main.ProfilePageActivity">
+    tools:context="tr.edu.boun.cmpe.sculture.activity.ProfilePageActivity">
 
     <RelativeLayout
-        android:id="@+id/profile_layout_loggedIn"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/profile_username"
+        <Button
+            android:id="@+id/follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="27dp"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
+            android:text="@string/follow" />
 
         <TextView
-            android:id="@+id/profile_email"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/profile_username"
-            android:layout_alignStart="@+id/profile_username"
-            android:layout_below="@+id/profile_username" />
-
-        <Button
-            android:id="@+id/follow"
-            android:text="Follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_email" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/follow"
+            android:text="@string/stories_of_this_user"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/profile_story_list"
@@ -43,6 +32,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/follow" />
+            android:layout_below="@+id/textView" />
+
     </RelativeLayout>
 </FrameLayout>

@@ -1,9 +1,8 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.text.Spannable;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,11 +28,14 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
+import tr.edu.boun.cmpe.sculture.activity.ProfilePageActivity;
 import tr.edu.boun.cmpe.sculture.activity.TagActivity;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
 
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
@@ -235,7 +236,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 viewHolder.content.setText(story.content);
 
                 SpannableString spannable_username = new SpannableString(story.owner.username);
-                spannable_username.setSpan(new ActivitySpan("" + story.owner.id + "    " + story.owner.username), 0, story.owner.username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable_username.setSpan(new UserSpan(story.owner.id), 0, story.owner.username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 viewHolder.writer.setText(spannable_username);
                 viewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -244,7 +245,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 spannable_username = new SpannableString(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
                 int start_index = 12 + Utils.timestampToPrettyString(story.update_date).length();
                 int finish_index = 12 + Utils.timestampToPrettyString(story.update_date).length() + story.last_editor.username.length();
-                spannable_username.setSpan(new ActivitySpan(story.last_editor.username), start_index, finish_index,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable_username.setSpan(new UserSpan(story.last_editor.id), start_index, finish_index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 viewHolder.update.setText(spannable_username);
                 viewHolder.update.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -256,25 +257,25 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 int[] wordLengths = new int[story.tags.size()];
                 for (int i = 0; i < story.tags.size(); i++) {
-                                        if(i== story.tags.size()-1){
-                                                tags += story.tags.get(i);
-                                            }else{
-                                                tags += story.tags.get(i) + ", ";
-                                            }
+                    if (i == story.tags.size() - 1) {
+                        tags += story.tags.get(i);
+                    } else {
+                        tags += story.tags.get(i) + ", ";
+                    }
 
-                                                wordLengths[i] = story.tags.get(i).length();
-                                    }
-                                SpannableString spannable = new SpannableString(tags);
-                                int first = 0;
-                                for (int i = 0; i < wordLengths.length;i++){
-                                    spannable.setSpan(new ActivitySpan(story.tags.get(i)),first,first+wordLengths[i], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                    first +=  wordLengths[i] +2;
-            }
-                                viewHolder.tags.setText(tags);
+                    wordLengths[i] = story.tags.get(i).length();
+                }
+                SpannableString spannable = new SpannableString(tags);
+                int first = 0;
+                for (int i = 0; i < wordLengths.length; i++) {
+                    spannable.setSpan(new TagSpan(story.tags.get(i)), first, first + wordLengths[i], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    first += wordLengths[i] + 2;
+                }
+                viewHolder.tags.setText(tags);
 
-                                        //spannable.setSpan(new ActivitySpan(tags));
-                                                viewHolder.tags.setText(spannable);
-                                viewHolder.tags.setMovementMethod(LinkMovementMethod.getInstance());
+                //spannable.setSpan(new TagSpan(tags));
+                viewHolder.tags.setText(spannable);
+                viewHolder.tags.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case 1:
                 break;
@@ -286,7 +287,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 commentViewHolder.owner_id = commentResponse.owner_id;
 
                 SpannableString span_comment_owner = new SpannableString(commentResponse.owner_username);
-                span_comment_owner.setSpan(new ActivitySpan(commentResponse.owner_username),0,commentResponse.owner_username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                span_comment_owner.setSpan(new UserSpan(commentResponse.owner_id), 0, commentResponse.owner_username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 commentViewHolder.writer.setText(span_comment_owner);
                 commentViewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -324,18 +325,38 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         comments.add(commentResponse);
         this.notifyItemInserted(comments.size() + 2);
     }
-    public class ActivitySpan extends ClickableSpan {
-                String keyword;
-                public ActivitySpan(String keyword) {
-                        super();
-                        this.keyword = keyword;
-                    }
-                @Override
-                public void onClick(View v) {
-                        Context context = v.getContext();
-                        Toast.makeText(mActivity.getApplicationContext(), keyword, Toast.LENGTH_SHORT).show();
-                    }
-            }
+
+    public class TagSpan extends ClickableSpan {
+        String tag_title;
+
+        public TagSpan(String tag_title) {
+            super();
+            this.tag_title = tag_title;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), TagActivity.class);
+            intent.putExtra(BUNDLE_TAG_TITLE, tag_title);
+            v.getContext().startActivity(intent);
+        }
+    }
+
+    public class UserSpan extends ClickableSpan {
+        long user_id;
+
+        public UserSpan(long user_id) {
+            super();
+            this.user_id = user_id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), ProfilePageActivity.class);
+            intent.putExtra(BUNDLE_VISITED_USER_ID, user_id);
+            v.getContext().startActivity(intent);
+        }
+    }
 
 
 }

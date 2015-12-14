@@ -1,47 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/tag_title"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tag_description"
-        android:hint="description"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
-
-    <TextView
-        android:id="@+id/tag_creation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tag_title"
-        android:text="@string/written_by_username"
-        android:textSize="12sp" />
+        android:layout_height="100dp"
+        android:hint="description"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/tag_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tag_description"
         android:gravity="right"
         android:text="@string/updated_time"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/profile_story_list"
+        android:id="@+id/tag_story_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tag_update" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

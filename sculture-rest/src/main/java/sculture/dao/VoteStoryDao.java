@@ -52,6 +52,13 @@ public class VoteStoryDao {
         VoteStory voteStory = null;
         if (voteStoryList.size() > 0)
             voteStory = voteStoryList.get(0);
+        else
+        {
+            voteStory = new VoteStory();
+            voteStory.setVote(0);
+            voteStory.setStory_id(story_id);
+            voteStory.setUser_id(user_id);
+        }
         return voteStory;
     }
 

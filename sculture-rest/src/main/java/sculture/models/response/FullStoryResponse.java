@@ -7,6 +7,7 @@ import sculture.dao.VoteStoryDao;
 import sculture.models.tables.Story;
 import sculture.models.tables.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class FullStoryResponse extends BaseStoryResponse {
         this.content = story.getContent();
         if (story.getMedia() != null)
             this.media = Arrays.asList(story.getMedia().split("\\s*,\\s*"));
-
+        else {
+            this.media = new ArrayList<>();
+        }
         if (current_user == null)
             vote = 0;
         else {

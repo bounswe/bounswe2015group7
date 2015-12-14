@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by Atakan Arıkan on 13.12.2015.
+ * Created by Atakan Arıkan on 14.12.2015.
  */
-@WebServlet(name = "getstory")
-public class GetStory extends HttpServlet {
+@WebServlet(name = "getuser")
+public class GetUser extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        request.setAttribute("isLoggedIn", false);
@@ -33,7 +33,7 @@ public class GetStory extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Story story = new Story();
+        User user = new User();
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -41,15 +41,13 @@ public class GetStory extends HttpServlet {
             request.setAttribute("isLoggedIn", true);
         }
         String requestURL = request.getRequestURL().toString();
-        String story_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
+        String user_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             JSONObject jsonObject = new JSONObject();
-//            if(isAllDigit){
-                jsonObject.put("id", story_id);
-  //          }
+            jsonObject.put("userId", user_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/story/get")
+            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/get")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();
@@ -59,40 +57,30 @@ public class GetStory extends HttpServlet {
         if (jsonResponse != null) {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
-//            ((JSONObject)object).remove("tags");
-            story = gson.fromJson(object.toString(), Story.class);
+            user = gson.fromJson(object.toString(), User.class);
         }
-        // send req to comment/list
         jsonResponse = null;
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("page", "1");
-            jsonObject.put("size", "10");
-            jsonObject.put("story_id", story_id);
-
+            jsonObject.put("id", user_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/comment/list")
+            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/stories")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {
+            e.printStackTrace();
         }
-        ArrayList<Comment> comments = new ArrayList<Comment>();
-        CommentListResponse commentListResponse = new CommentListResponse();
+        UserStoriesResponse userStoriesResponse = new UserStoriesResponse();
         if (jsonResponse != null) {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
-            commentListResponse = gson.fromJson(object.toString(), CommentListResponse.class);
-//            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
-//                Object object = jsonResponse.getBody().getArray().get(i);
-//                Gson gson = new Gson();
-//                comment = gson.fromJson(object.toString(), Comment.class);
-//                comments.add(comment);
-//            }
+            userStoriesResponse = gson.fromJson(object.toString(), UserStoriesResponse.class);
+            System.out.println(object.toString());
         }
-        request.setAttribute("story", story);
-        request.setAttribute("comments", commentListResponse.getResult());
-        request.getRequestDispatcher("/view_story.jsp").forward(request, response);
+        request.setAttribute("relatedUser", user);
+        request.setAttribute("user_stories", userStoriesResponse.getResult());
+        request.getRequestDispatcher("/user_profile.jsp").forward(request, response);
     }
 
 }

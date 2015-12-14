@@ -21,6 +21,10 @@
         <servlet-class>com.sculture.GetStory</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>getuser</servlet-name>
+        <servlet-class>com.sculture.GetUser</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.sculture.Login</servlet-class>
     </servlet>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>getstory</servlet-name>
         <url-pattern>/get/story/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getuser</servlet-name>
+        <url-pattern>/get/user/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>login</servlet-name>

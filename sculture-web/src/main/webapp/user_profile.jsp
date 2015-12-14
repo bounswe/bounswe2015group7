@@ -5,6 +5,11 @@
   Time: 23:24
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="com.sculture.helpers.User" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.sculture.helpers.UserStory" %>
+<%@ page import="java.sql.Timestamp" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +60,7 @@
             <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
           </div>
         </li>
-        <% boolean isLoggedIn = request.getAttribute(isLoggedIn); %>
+        <% Boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn"); %>
         <% if (isLoggedIn) { %>
         <li>
           <div class="top-big-link">
@@ -86,17 +91,17 @@
   <div class="container target" align="left">
     <div class="row">
       <div class="col-sm-10">
-        <% User user = request.getAttribute("relatedUser");%>
-        <h1 class=""><% out.print(user.username);%></h1>
-        <% out.print("<button href=\"" + user.followURL + "\"type=\"button\" class=\"btn btn-success\" style=\"height:50px;width:300px\"> Follow </button>");%>
+        <% User user = (User)request.getAttribute("relatedUser");%>
+        <h1 class=""><% out.print(user.getUsername());%></h1>
+        <button href="/index" type="button" class="btn btn-success" style="height:50px;width:300px"> Follow </button>
         <br><br>
+        <% //out.print("<button href=\"" + user.followURL + "\"type=\"button\" class=\"btn btn-success\" style=\"height:50px;width:300px\"> Follow </button>");%>
 
 
       </div>
-
-      <div class="col-sm-2" align="right"><a href="#" class="pull-left">
-        <% out.print("<img class=\"img-circle img-responsive\" src=\"" + user.mainPhotoUrl + "\" align=\"left\" alt=\"\">");%>
+      <div class="col-sm-2" align="right"><a href="/users" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="http://www.african-youthmovement.org/wp-content/uploads/2014/10/Blank_woman_placeholder.svg.png" align="left"></a>
       </div>
+
     </div>
     <br>
     <div class="row">
@@ -105,11 +110,9 @@
         <div class="panel panel-default">
           <ul class="list-group">
             <div class="panel-heading">Profile</div>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Joined</strong></span> <%out.print(user.createdAt)%></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> <%out.print(user.name)%></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Username </strong></span> <%out.print(user.username)%>
-
-            </li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> <% if(user.getFullname() != null) {out.print(user.getFullname());}else{out.print("-");}%></li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Username </strong></span> <%if(user.getUsername() != null){out.print(user.getUsername());}else{out.print("-");}%> </li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">E-Mail </strong></span> <%if(user.getEmail() != null){out.print(user.getEmail());}else{out.print("-");}%></li>
           </ul>
         </div>
 
@@ -117,7 +120,7 @@
           <div class="panel-heading">Promoted?
 
           </div>
-          <%if (user.isPromoted) {%>
+          <%if (user.get_promoted()) {%>
           <div class="panel-body"><i style="color:green" class="fa fa-check-square"></i> Yes, I am a promoted user. </div>
           <% } else { %>
           <div class="panel-body"><i style="color:green" class="fa fa-xing"></i> No, I am not a promoted user.</div>
@@ -128,32 +131,47 @@
         <div class="panel panel-default">
           <div class="panel-heading">Activity</div>
           <ul class="list-group">
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Likes</strong></span> 123</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> 44 </li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> <% out.print(user.stories.length);%> </li>
+            <% ArrayList<UserStory> userStories = (ArrayList<UserStory>) request.getAttribute("user_stories");%>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Reported Stories </strong></span> 1 </li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> <% out.print(userStories.size());%> </li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> - </li>
           </ul>
         </div>
       </div>
       <!--/col-3-->
       <div class="col-sm-9" contenteditable="false" style="">
+        <div class="panel panel-default">
+          <div class="panel-heading">User Bio</div>
+          <div class="panel-body"> A long description about me.
 
+          </div>
+        </div>
         <div class="panel panel-default target">
           <div class="panel-heading" contenteditable="false">My Posts</div>
           <div class="panel-body">
             <div class="row">
-              <% for (int i = 0; i < user.stories.size(); i++) { %>
+              <% for (int i = 0; i < userStories.size(); i++) { %>
               <div class="col-md-4">
                 <div class="thumbnail">
-                  <%out.print("<img alt=\"300x200\" src=\"" + user.stories.get(i).mainPhotoUrl+ "\">");%>
+                  <h3>
+                    <% out.print(userStories.get(i).getTitle());%>
+                  </h3>
                   <div class="caption">
-                    <h3>
-                      <% out.print(user.stories.get(i).title);%>
-                    </h3>
                     <p>
-                      <% out.print(user.stories.get(i).content);%>
+                      Liked: <%if(userStories.get(i) != null) out.print(userStories.get(i).getPositive_vote());%> <br>
+                      Disliked: <% if(userStories.get(i) != null)out.print(userStories.get(i).getNegative_vote());%> <br>
+                      Reported: <% if(userStories.get(i) != null)out.print(userStories.get(i).getReport_count());%>
                     </p>
                     <p>
-
+                      Created at: <%if(userStories.get(i) != null) {
+                      Timestamp stamp = new Timestamp(userStories.get(i).getCreation_date());
+                      Date storyCreationDate = new Date(stamp.getTime());
+                      out.print(storyCreationDate);
+                    }%>
+                    </p>
+                    <p>
+                      <%String refUrl = "/get/story/" + userStories.get(i).getId();%>
+                      <a href="<%out.print(refUrl);%>"> Read More</a>
                     </p>
                   </div>
                 </div>
@@ -196,120 +214,6 @@
 
         $('.tw-btn').fadeIn(3000);
         $('.alert').delay(5000).fadeOut(1500);
-
-        $('#btnLogin').click(function(){
-          $(this).text("...");
-          $.ajax({
-            url: "/loginajax",
-            type: "post",
-            data: $('#formLogin').serialize(),
-            success: function (data) {
-              //console.log('data:'+data);
-              if (data.status==1&&data.user) { //logged in
-                $('#menuLogin').hide();
-                $('#lblUsername').text(data.user.username);
-                $('#menuUser').show();
-                /*
-                 $('#completeLoginModal').modal('show');
-                 $('#btnYes').click(function() {
-                 window.location.href="/";
-                 });
-                 */
-              }
-              else {
-                $('#btnLogin').text("Login");
-                prependAlert("#spacer",data.error);
-                $('#btnLogin').shake(4,6,700,'#CC2222');
-                $('#username').focus();
-              }
-            },
-            error: function (e) {
-              $('#btnLogin').text("Login");
-              console.log('error:'+JSON.stringify(e));
-            }
-          });
-        });
-        $('#btnRegister').click(function(){
-          $(this).text("Wait..");
-          $.ajax({
-            url: "/signup?format=json",
-            type: "post",
-            data: $('#formRegister').serialize(),
-            success: function (data) {
-              console.log('data:'+JSON.stringify(data));
-              if (data.status==1) {
-                $('#btnRegister').attr("disabled","disabled");
-                $('#formRegister').text('Thanks. You can now login using the Login form.');
-              }
-              else {
-                prependAlert("#spacer",data.error);
-                $('#btnRegister').shake(4,6,700,'#CC2222');
-                $('#btnRegister').text("Sign Up");
-                $('#inputEmail').focus();
-              }
-            },
-            error: function (e) {
-              $('#btnRegister').text("Sign Up");
-              console.log('error:'+e);
-            }
-          });
-        });
-
-        $('.loginFirst').click(function(){
-          $('#navLogin').trigger('click');
-          return false;
-        });
-
-        $('#btnForgotPassword').on('click',function(){
-          $.ajax({
-            url: "/resetPassword",
-            type: "post",
-            data: $('#formForgotPassword').serializeObject(),
-            success: function (data) {
-              if (data.status==1){
-                prependAlert("#spacer",data.msg);
-                return true;
-              }
-              else {
-                prependAlert("#spacer","Your password could not be reset.");
-                return false;
-              }
-            },
-            error: function (e) {
-              console.log('error:'+e);
-            }
-          });
-        });
-
-        $('#btnContact').click(function(){
-
-          $.ajax({
-            url: "/contact",
-            type: "post",
-            data: $('#formContact').serializeObject(),
-            success: function (data) {
-              if (data.status==1){
-                prependAlert("#spacer","Thanks. We got your message and will get back to you shortly.");
-                $('#contactModal').modal('hide');
-                return true;
-              }
-              else {
-                prependAlert("#spacer",data.error);
-                return false;
-              }
-            },
-            error: function (e) {
-              console.log('error:'+e);
-            }
-          });
-          return false;
-        });
-
-        /*
-         $('.nav .dropdown-menu input').on('click touchstart',function(e) {
-         e.stopPropagation();
-         });
-         */
 
 
 

@@ -43,6 +43,10 @@ public class SCultureRest {
     @Autowired
     private TagStoryDao tagStoryDao;
 
+    @Autowired
+    private FollowUserDao followUserDao;
+
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/register")
     public LoginResponse user_register(@RequestBody RegisterRequestBody requestBody) {
         String email = requestBody.getEmail();
@@ -122,7 +126,9 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/get")
-    public LoginResponse user_get(@RequestBody UserGetRequestBody requestBody) {
+    public UserGetResponse user_get(@RequestBody UserGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
+
         long id = requestBody.getUserId();
         User u;
         try {
@@ -130,7 +136,13 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new LoginResponse(u);
+
+        UserGetResponse response = new UserGetResponse();
+        response.setEmail(u.getEmail());
+        response.setUser_id(u.getUser_id());
+        response.setUsername(u.getUsername());
+        response.setIs_following(followUserDao.get(current_user.getUser_id(), u.getUser_id()).is_follow());
+        return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search/all")
@@ -260,17 +272,10 @@ public class SCultureRest {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/follow")
-    public LoginResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        long id = requestBody.getUser_id();
-        String accessToken = headers.get("access-token").get(0);
-        User u;
-        try {
-            u = userDao.getByAccessToken(accessToken);
-            userDao.follow(u, id, requestBody.isFollow());
-        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new UserNotExistException();
-        }
-        return new LoginResponse(u);
+    public UserFollowResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        followUserDao.follow_user(current_user.getUser_id(), requestBody.getUser_id(), requestBody.is_follow());
+        return new UserFollowResponse(requestBody.is_follow());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
@@ -444,6 +449,8 @@ public class SCultureRest {
         Story story = voteStoryDao.vote(current_user.getUser_id(), requestBody.getStory_id(), requestBody.getVote());
         return new VoteResponse(requestBody.getVote(), story);
     }
+
+
 
     @RequestMapping("/comment/list")
     public CommentListResponse commentList(@RequestBody CommentListRequestBody requestBody) {

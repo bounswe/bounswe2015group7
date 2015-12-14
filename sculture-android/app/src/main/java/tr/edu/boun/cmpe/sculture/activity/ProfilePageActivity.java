@@ -1,18 +1,12 @@
-package tr.edu.boun.cmpe.sculture.fragment.main;
+package tr.edu.boun.cmpe.sculture.activity;
 
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,29 +15,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.activity.LoginRegistrationActivity;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.LoginResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_STORIES;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ProfileFragment extends Fragment {
-    private static ProfileFragment profileFragment;
-    private TextView username;
-    private TextView email;
-    private RecyclerView story_list_recycler;
-    private RelativeLayout loggedInLayout;
-    private RelativeLayout loggedOutLayout;
+public class ProfilePageActivity extends AppCompatActivity {
 
+    RecyclerView story_list_recycler;
+    Button follow;
+    ActionBar actionBar;
     LinearLayoutManager mLayoutManager;
     StoryListViewAdapter mStoryListViewAdapter;
 
@@ -51,67 +41,70 @@ public class ProfileFragment extends Fragment {
     private boolean is_loading_more = false;
     private boolean is_reach_end = false;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    long currentUserID;
+    long visitedUserID;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        profileFragment = this;
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_page);
 
-        loggedInLayout = (RelativeLayout) view.findViewById(R.id.profile_layout_loggedIn);
-        loggedOutLayout = (RelativeLayout) view.findViewById(R.id.profile_layout_loggedOut);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+            visitedUserID = bundle.getLong(BUNDLE_VISITED_USER_ID);
+        actionBar = getSupportActionBar();
 
-        username = (TextView) view.findViewById(R.id.profile_username);
-        email = (TextView) view.findViewById(R.id.profile_email);
+        currentUserID = baseApplication.getUSER_ID();
 
-        story_list_recycler = (RecyclerView) view.findViewById(R.id.profile_story_list);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
+        follow = (Button) findViewById(R.id.follow);
+
+        story_list_recycler = (RecyclerView) findViewById(R.id.profile_story_list);
+        mLayoutManager = new LinearLayoutManager(this);
+        mStoryListViewAdapter = new StoryListViewAdapter(this);
         story_list_recycler.setLayoutManager(mLayoutManager);
         story_list_recycler.setAdapter(mStoryListViewAdapter);
 
         setRecyclerListeners();
-
+        loadUser();
         load_story();
-        Button login_register_button = (Button) view.findViewById(R.id.login_register);
-        login_register_button.setOnClickListener(new View.OnClickListener() {
+
+        if (currentUserID == visitedUserID)
+            follow.setVisibility(View.GONE);
+
+        //TODO Follow unfollow
+        follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginRegistrationActivity.class);
-                startActivity(intent);
+                followUser();
             }
         });
 
-        return view;
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!baseApplication.checkLogin()) {
-            loggedOutLayout.setVisibility(View.VISIBLE);
-            loggedInLayout.setVisibility(View.GONE);
-        } else {
-            loggedOutLayout.setVisibility(View.GONE);
-            loggedInLayout.setVisibility(View.VISIBLE);
-
-
-            username.setText(baseApplication.getUSERNAME());
-            email.setText(baseApplication.getEMAIL());
+    private void loadUser() {
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put(FIELD_ID, BUNDLE_VISITED_USER_ID);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
+        addRequest(API_USER_GET, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                LoginResponse loginResponse = new LoginResponse(response);
+                visitedUserID = loginResponse.id;
+                setActionBarTitle(loginResponse.username);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //TODO error handling
+            }
+        }, null);
     }
 
-    public static void reset() {
-        //TODO Find a better way to refresh this fragment
-        profileFragment.PAGE = 1;
-        profileFragment.is_loading_more = false;
-        profileFragment.is_reach_end = false;
-        profileFragment.mStoryListViewAdapter.clearElements();
+    private void followUser() {
+
     }
 
     private void setRecyclerListeners() {
@@ -131,16 +124,13 @@ public class ProfileFragment extends Fragment {
 
         boolean loadMore = lastVisibleIndex == totalItemCount - 1;
 
-        if (is_reach_end)
-            Log.i("HERE", "HERE");
         if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
             is_loading_more = true;
             JSONObject requestBody = new JSONObject();
             try {
-                requestBody.put(FIELD_ID, baseApplication.getUSER_ID());
+                requestBody.put(FIELD_ID, visitedUserID);
                 requestBody.put(FIELD_PAGE, PAGE);
                 requestBody.put(FIELD_SIZE, 10);
-                Log.i("HEREd", "" + baseApplication.getUSER_ID());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -166,5 +156,10 @@ public class ProfileFragment extends Fragment {
             }, null);
         }
 
+    }
+
+    private void setActionBarTitle(String s) {
+        if (actionBar != null)
+            actionBar.setTitle(s);
     }
 }

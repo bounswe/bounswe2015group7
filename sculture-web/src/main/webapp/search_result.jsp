@@ -111,13 +111,15 @@
                     <div class="row">
                         <br>
 
-                        <div class="col-md-2 col-sm-3 text-center">
+                        <div class="col-md-2 col-sm-4 text-center">
                             <a class="story-title" href="#">
-                                <%if(results.get(i).getMedia() != null && results.get(i).getMedia().size() > 0) {%>
-                                <img class="img-responsive" src="<%out.print("http://52.28.216.93:9000/image/get/" + results.get(i).getMedia().get(0));%>" alt="">
-                                <%} else {%>
-                                <img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" alt="">
-                                <%}%>
+                                <% try { %>
+                                <%if (results.get(i).getMedia() != null) { %>
+                                <img style="width: 300px; height: 250px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + results.get(i).getMedia().get(0));%>" alt="">
+                                <% } %>
+                                <%} catch (Exception e) {%>
+                                <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
+                                <% }%>
                             </a>
                         </div>
                         <div class="col-md-10 col-sm-9">
@@ -136,10 +138,10 @@
                                     %></p>
                                     <small style="font-family:courier,'new courier';" class="text-muted">
                                         <%
-                                        Timestamp stamp = new Timestamp(Long.parseLong(results.get(i).getCreation_date()));
+                                        Timestamp stamp = new Timestamp(Long.parseLong(results.get(i).getCreate_date()));
                                             Date storyCreationDate = new Date(stamp.getTime());
                                         out.print(storyCreationDate);%> •
-                                        <%String refUrl = "/get/story/" + results.get(i).getId();%>
+                                        <%String refUrl = "/get/story/" + results.get(i).getStory_id();%>
                                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                                     </div>
                                 <div class="col-xs-3"></div>

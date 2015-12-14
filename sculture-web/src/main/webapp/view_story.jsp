@@ -1,6 +1,5 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.FullStoryResponse" %>
-<%@ page import="com.sculture.helpers.FullStoryResponse" %>
+<%@ page language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.Story" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.sql.Timestamp" %>
 <!DOCTYPE html>
@@ -102,7 +101,7 @@
 
             <!-- Title -->
             <%
-                FullStoryResponse story = (FullStoryResponse) request.getAttribute("story");
+                Story story = (Story) request.getAttribute("story");
 
             %>
 
@@ -111,18 +110,27 @@
             <hr>
 
             <!-- Date/Time -->
-            <%Timestamp stamp = new Timestamp(Long.parseLong(story.getCreation_date()));
-                Date storyCreationDate = new Date(stamp.getTime());%>
+            <%
+                try{
+                    Timestamp stamp = new Timestamp(Long.parseLong(story.getCreate_date()));
+                    Date storyCreationDate = new Date(stamp.getTime());%>
             <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(storyCreationDate); %></p>
+
+            <%} catch (Exception e) { %>
+            <p><span class="glyphicon glyphicon-time"></span> Posted on: </p>
+
+            <%} %>
 
             <hr>
 
             <!-- Preview Image -->
-            <%if(story.getMedia() != null && story.getMedia().size() > 0) {%>
-                <img class="img-responsive" src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
-            <%} else {%>
-                <img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" alt="">
-            <%}%>
+            <% try { %>
+            <%if (story.getMedia() != null) { %>
+            <img  src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
+            <% } %>
+            <%} catch (Exception e) {%>
+            <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
+            <% }%>
 
                   <hr>
 
@@ -144,7 +152,7 @@
                     <div class="form-group">
                         <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
-                        <input type="hidden" name="story_id" id="story_id" value="<%out.print(story.getId());%>" class="form-control"></textarea>
+                        <input type="hidden" name="story_id" id="story_id" value="<%out.print(story.getStory_id());%>" class="form-control"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -163,7 +171,7 @@
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading" align="left"> <%out.print(comments.get(i).getOwner_username());%>
-                        <%stamp = new Timestamp(Long.parseLong(comments.get(i).getCreate_date()));
+                        <%Timestamp stamp = new Timestamp(Long.parseLong(comments.get(i).getCreate_date()));
                             Date commentCreationDate = new Date(stamp.getTime());%>
                         <small><%out.print(commentCreationDate);%>
                     </h4>
@@ -367,7 +375,7 @@
         });
         $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
             var $this = $(this);
-            var story_id = <%out.print(story.getId());%>;
+            var story_id = <%out.print(story.getStory_id());%>;
             var definitelynottheaccesstoken = <%out.print(request.getSession().getAttribute("access-token"));%>;
             var vote;
             if(this.id == "like1") vote = 1;

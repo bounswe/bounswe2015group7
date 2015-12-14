@@ -1,27 +1,26 @@
 package com.sculture.helpers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Atakan Arıkan on 13.12.2015.
  */
 public class FullStoryResponse extends BaseStoryResponse {
-    private List<String> media;
+    private String media;
 
     public FullStoryResponse() {
     }
 
-    public List<String> getMedia() {
-        return media;
+    public ArrayList<String> getMedia() {
+        return new ArrayList<String>(Arrays.asList(media.split(",")));
     }
 
-    public void setMedia(List<String> media) {
+    public void setMedia(String media) {
         this.media = media;
     }
 
-    public FullStoryResponse(List<String> media) {
-        this.media = media;
-    }
 
     @Override
     public String toString() {

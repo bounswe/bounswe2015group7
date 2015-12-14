@@ -18,7 +18,7 @@ public class BaseStoryResponse {
 
     private long story_id;
     private String title;
-    private String creation_date;
+    private String create_date;
     private String update_date;
     private String content;
     private User last_editor = new User();
@@ -36,16 +36,16 @@ public class BaseStoryResponse {
         return story_id;
     }
 
-    public String getContent() {
-        return content;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public String getCreation_date() {
-        return creation_date;
+    public String getContent() {
+        return content;
+    }
+
+    public String getCreate_date() {
+        return create_date;
     }
 
     public String getUpdate_date() {

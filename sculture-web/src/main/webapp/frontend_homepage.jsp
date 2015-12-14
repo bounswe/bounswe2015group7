@@ -1,4 +1,4 @@
-<%@ page import="com.sculture.helpers.Story" %>
+<%@ page import="com.sculture.helpers.FullStoryResponse" %>
 <%@ page import="java.util.ArrayList" %>
 !DOCTYPE html>
 <html lang="en">
@@ -107,12 +107,14 @@
     <div class="row">
 
         <div class="col-md-8">
-            <% Story topStory = (Story) request.getAttribute("topStory");%>
-            <%if(story.getMedia() != null && story.getMedia().size() > 0) {%>
-            <img class="img-responsive" src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
-            <%} else {%>
-            <img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" alt="">
-            <%}%>
+            <% FullStoryResponse topStory = (FullStoryResponse) request.getAttribute("topStory");%>
+            <% try { %>
+            <%if (topStory.getMedia() != null) { %>
+            <img style="width: 300px; height: 250px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + topStory.getMedia().get(0));%>" alt="">
+            <% } %>
+            <%} catch (Exception e) {%>
+            <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
+            <% }%>
         </div>
 
         <div class="col-md-4">
@@ -135,15 +137,20 @@
     </div>
     <!-- /.row -->
 
-        <% ArrayList<Story> popular = (ArrayList<Story>) request.getAttribute("popularStories"); %>
+        <% ArrayList<FullStoryResponse> popular = (ArrayList<FullStoryResponse>) request.getAttribute("popularStories"); %>
 
     <!-- Page Features -->
     <div class="row text-center">
         <% for (int i = 0; i < popular.size(); i++) { %>
         <div class="col-md-3 col-sm-6 hero-feature">
             <div class="thumbnail">
-                <%--<% out.print("<img src=\"" + popular.get(i).mainPhotoUrl + "\" alt=\"\">");%>--%>
-
+                <% try { %>
+                    <%if (popular.get(i).getMedia() != null) { %>
+                     <img style="width: 200px; height: 200px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + popular.get(i).getMedia().get(0));%>" alt="">
+                    <% } %>
+                <%} catch (Exception e) {%>
+                     <img  style="width: 200px; height: 200px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
+                <% }%>
                 <div class="caption">
                     <% String popularTitle = popular.get(i).getTitle(); %>
                     <h3><% out.print(popularTitle); %></h3>

@@ -5,10 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.BaseStoryResponse;
-import com.sculture.helpers.Comment;
-import com.sculture.helpers.CommentListResponse;
-import com.sculture.helpers.FullStoryResponse;
+import com.sculture.helpers.*;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -36,7 +33,7 @@ public class GetStory extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FullStoryResponse story = new FullStoryResponse();
+        Story story = new Story();
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -63,7 +60,7 @@ public class GetStory extends HttpServlet {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
 //            ((JSONObject)object).remove("tags");
-            story = gson.fromJson(object.toString(), FullStoryResponse.class);
+            story = gson.fromJson(object.toString(), Story.class);
         }
         // send req to comment/list
         jsonResponse = null;
@@ -95,7 +92,6 @@ public class GetStory extends HttpServlet {
         }
         request.setAttribute("story", story);
         request.setAttribute("comments", commentListResponse.getResult());
-        System.out.println("DSFGKJAHFIAYDHGFIUASDYGBF: "+story.getId());
         request.getRequestDispatcher("/view_story.jsp").forward(request, response);
     }
 

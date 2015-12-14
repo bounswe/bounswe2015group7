@@ -1,9 +1,14 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -225,21 +231,48 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 viewHolder.title.setText(story.title);
                 viewHolder.content.setText(story.content);
-                viewHolder.writer.setText(story.owner.username);
+
+                SpannableString spannable_username = new SpannableString(story.owner.username);
+                spannable_username.setSpan(new ActivitySpan("" + story.owner.id + "    " + story.owner.username), 0, story.owner.username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.writer.setText(spannable_username);
+                viewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
+
                 viewHolder.owner_id = story.owner.id;
-                viewHolder.update.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
+
+                spannable_username = new SpannableString(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
+                int start_index = 12 + Utils.timestampToPrettyString(story.update_date).length();
+                int finish_index = 12 + Utils.timestampToPrettyString(story.update_date).length() + story.last_editor.username.length();
+                spannable_username.setSpan(new ActivitySpan(story.last_editor.username), start_index, finish_index,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.update.setText(spannable_username);
+                viewHolder.update.setMovementMethod(LinkMovementMethod.getInstance());
+
                 viewHolder.editor_id = story.last_editor.id;
                 viewHolder.media_ids.clear();
                 viewHolder.media_ids.addAll(story.media);
 
                 String tags = "";
 
-                //TODO Clickable tags
+                int[] wordLengths = new int[story.tags.size()];
                 for (int i = 0; i < story.tags.size(); i++) {
-                    tags += story.tags.get(i) + ", ";
-                }
-                viewHolder.tags.setText(tags);
-                viewHolder.adapter.notifyDataSetChanged();
+                                        if(i== story.tags.size()-1){
+                                                tags += story.tags.get(i);
+                                            }else{
+                                                tags += story.tags.get(i) + ", ";
+                                            }
+
+                                                wordLengths[i] = story.tags.get(i).length();
+                                    }
+                                SpannableString spannable = new SpannableString(tags);
+                                int first = 0;
+                                for (int i = 0; i < wordLengths.length;i++){
+                                    spannable.setSpan(new ActivitySpan(story.tags.get(i)),first,first+wordLengths[i], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    first +=  wordLengths[i] +2;
+            }
+                                viewHolder.tags.setText(tags);
+
+                                        //spannable.setSpan(new ActivitySpan(tags));
+                                                viewHolder.tags.setText(spannable);
+                                viewHolder.tags.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case 1:
                 break;
@@ -249,7 +282,12 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 commentViewHolder.comment_id = commentResponse.comment_id;
                 commentViewHolder.owner_id = commentResponse.owner_id;
-                commentViewHolder.writer.setText(commentResponse.owner_username);
+
+                SpannableString span_comment_owner = new SpannableString(commentResponse.owner_username);
+                span_comment_owner.setSpan(new ActivitySpan(commentResponse.owner_username),0,commentResponse.owner_username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                commentViewHolder.writer.setText(span_comment_owner);
+                commentViewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
+
                 commentViewHolder.comment.setText(commentResponse.content);
                 commentViewHolder.time.setText(Utils.timestampToPrettyString(commentResponse.last_edit_date));
 
@@ -284,4 +322,18 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         comments.add(commentResponse);
         this.notifyItemInserted(comments.size() + 2);
     }
+    public class ActivitySpan extends ClickableSpan {
+                String keyword;
+                public ActivitySpan(String keyword) {
+                        super();
+                        this.keyword = keyword;
+                    }
+                @Override
+                public void onClick(View v) {
+                        Context context = v.getContext();
+                        Toast.makeText(mActivity.getApplicationContext(), keyword, Toast.LENGTH_SHORT).show();
+                    }
+            }
+
+
 }

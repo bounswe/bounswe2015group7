@@ -31,7 +31,7 @@ public class Story {
     private long negative_vote;
     private long report_count;
 
-    private String media;
+    private List<String> media;
 
     @Override
     public String toString() {
@@ -51,11 +51,11 @@ public class Story {
                 '}';
     }
 
-    public ArrayList<String> getMedia() {
-        return new ArrayList<String>(Arrays.asList(media.split(",")));
+    public List<String> getMedia() {
+        return media;
     }
 
-    public void setMedia(String media) {
+    public void setMedia(ArrayList<String> media) {
         this.media = media;
     }
 

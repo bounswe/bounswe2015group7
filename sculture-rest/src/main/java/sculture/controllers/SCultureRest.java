@@ -134,7 +134,10 @@ public class SCultureRest {
         response.setEmail(u.getEmail());
         response.setUser_id(u.getUser_id());
         response.setUsername(u.getUsername());
-        response.setIs_following(followUserDao.get(current_user.getUser_id(), u.getUser_id()).is_follow());
+        if (current_user != null)
+            response.setIs_following(followUserDao.get(current_user.getUser_id(), u.getUser_id()).is_follow());
+        else
+            response.setIs_following(false);
         return response;
     }
 
@@ -431,7 +434,6 @@ public class SCultureRest {
         Story story = voteStoryDao.vote(current_user.getUser_id(), requestBody.getStory_id(), requestBody.getVote());
         return new VoteResponse(requestBody.getVote(), story);
     }
-
 
 
     @RequestMapping("/comment/list")

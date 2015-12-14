@@ -10,10 +10,6 @@ import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.synonym.SynonymFilter;
 import org.apache.lucene.analysis.synonym.SynonymMap;
 import org.apache.lucene.analysis.synonym.WordnetSynonymParser;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.util.PagedBytes;
-import org.apache.lucene.util.Version;
-import org.apache.lucene.util.packed.PackedInts;
 import org.apache.lucene.analysis.util.CharArraySet;
 
 import java.io.IOException;

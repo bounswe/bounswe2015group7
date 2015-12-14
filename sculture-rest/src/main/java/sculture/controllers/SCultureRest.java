@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
 import sculture.dao.*;
 import sculture.exceptions.*;
+import sculture.lucene.SearchEngine;
 import sculture.models.requests.*;
 import sculture.models.response.*;
 import sculture.models.tables.Comment;
@@ -146,7 +147,20 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new TagResponse(tag,userDao.getById(tag.getLast_editor_id()).getUsername());
+        return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/tag/edit")
+    public TagResponse tag_edit(@RequestBody TagEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Tag tag = new Tag();
+        tag.setTag_title(requestBody.getTag_title());
+        tag.setIs_location(false);
+        tag.setTag_description(requestBody.getTag_description());
+        tag.setLast_editor_id(current_user.getUser_id());
+        tag.setLast_edit_date(new Date());
+        tagDao.update(tag);
+        return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
@@ -176,7 +190,7 @@ public class SCultureRest {
 
     final java.util.Random rand = new java.util.Random();
 
-    // consider using a Map<String,Boolean> to say whether the identifier is being used or not 
+    // consider using a Map<String,Boolean> to say whether the identifier is being used or not
     final Set<String> identifiers = new HashSet<String>();
 
     public String randomIdentifier() {
@@ -291,16 +305,18 @@ public class SCultureRest {
         }
         storyDao.create(story);
 
-        if (requestBody.getTags() != null) {
-            List<String> tags = requestBody.getTags();
-
-            for (String tag : tags) {
-                TagStory tagStory = new TagStory();
-                tagStory.setTag_title(tag);
-                tagStory.setStory_id(story.getStory_id());
-                tagStoryDao.update(tagStory);
-            }
+        List<String> tags = requestBody.getTags();
+        String tag_index = "";
+        for (String tag : tags) {
+            TagStory tagStory = new TagStory();
+            tagStory.setTag_title(tag);
+            tagStory.setStory_id(story.getStory_id());
+            tag_index += tag + ", ";
+            tagStoryDao.update(tagStory);
         }
+
+        SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
@@ -336,17 +352,22 @@ public class SCultureRest {
             story.setMedia(str.substring(0, str.length() - 1));
         }
         storyDao.edit(story);
-
+        String tag_index = "";
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();
 
             for (String tag : tags) {
+                tag_index += tag + ", ";
                 TagStory tagStory = new TagStory();
                 tagStory.setTag_title(tag);
                 tagStory.setStory_id(story.getStory_id());
                 tagStoryDao.update(tagStory);
             }
         }
+
+        SearchEngine.removeDoc(story.getStory_id());
+        SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
@@ -369,7 +390,8 @@ public class SCultureRest {
         if (page < 1)
             page = 1;
 
-        List<Long> story_ids = tagStoryDao.getStoryIdsByTag(requestBody.getQuery(), page, size);
+
+        List<Long> story_ids = SearchEngine.search(requestBody.getQuery(), page, size);
 
         List<BaseStoryResponse> responses = new LinkedList<>();
         for (long id : story_ids) {

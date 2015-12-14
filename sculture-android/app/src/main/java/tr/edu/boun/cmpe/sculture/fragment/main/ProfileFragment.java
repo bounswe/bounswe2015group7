@@ -67,7 +67,6 @@ public class ProfileFragment extends Fragment {
         username = (TextView) view.findViewById(R.id.profile_username);
         email = (TextView) view.findViewById(R.id.profile_email);
 
-
         story_list_recycler = (RecyclerView) view.findViewById(R.id.profile_story_list);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
@@ -85,7 +84,6 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
 
         return view;
 

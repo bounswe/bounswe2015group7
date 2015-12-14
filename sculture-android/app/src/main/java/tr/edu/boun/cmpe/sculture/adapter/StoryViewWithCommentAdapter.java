@@ -1,15 +1,21 @@
 package tr.edu.boun.cmpe.sculture.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -23,10 +29,17 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
+import tr.edu.boun.cmpe.sculture.activity.ProfilePageActivity;
+import tr.edu.boun.cmpe.sculture.activity.TagActivity;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.VoteResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_VOTE;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
@@ -49,6 +62,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         private long owner_id;
         private long editor_id;
         private ArrayList<String> media_ids = new ArrayList<>();
+        private ImageButton likeButton;
+        private ImageButton dislikeButton;
+        private int likeStatus = 0;
 
         public StoryViewHolder(View itemView) {
             super(itemView);
@@ -58,27 +74,80 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             tags = (TextView) itemView.findViewById(R.id.storyTags);
             update = (TextView) itemView.findViewById(R.id.story_update);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.story_media_recycler);
+            likeButton = (ImageButton) itemView.findViewById(R.id.likeButton);
+            dislikeButton = (ImageButton) itemView.findViewById(R.id.dislikeButton);
+
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (likeStatus != 1) {
+                        sendVote(1);
+                    } else {
+                        sendVote(0);
+                    }
+                }
+            });
+
+            dislikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (likeStatus != -1) {
+                        sendVote(-1);
+                    } else {
+                        sendVote(0);
+                    }
+                }
+            });
+
 
             LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
             llm.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(llm);
             adapter = new StoryImageViewAdapter(null, media_ids, false);
             recyclerView.setAdapter(adapter);
-            writer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("CLICK", "Writer clicked");
-                    //TODO OPEN USER PAGE
-                }
-            });
-            update.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("CLICK", "Update clicked");
-                    //TODO OPEN USER PAGE
-                }
-            });
         }
+
+
+        private void sendVote(final int l) {
+            final int previous_status = likeStatus;
+            setVote(l);
+            final JSONObject requestObject = new JSONObject();
+            try {
+                requestObject.put("story_id", story.id);
+                requestObject.put("vote", l);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            addRequest(API_STORY_VOTE, requestObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    VoteResponse voteResponse = new VoteResponse(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //TODO Error handling
+                    setVote(previous_status);
+                }
+            }, null);
+
+        }
+
+        private void setVote(int l) {
+            likeButton.setImageResource(R.drawable.thumb_up_inactive);
+            dislikeButton.setImageResource(R.drawable.thumb_down_inactive);
+
+            if (l == -1)
+                dislikeButton.setImageResource(R.drawable.thumb_down_active);
+            else if (l == 1)
+                likeButton.setImageResource(R.drawable.thumb_up_active);
+
+            likeStatus = l;
+        }
+
+
     }
 
     class CommentEditViewHolder extends RecyclerView.ViewHolder {
@@ -103,7 +172,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                         e.printStackTrace();
                     }
                     comment.setText("");
-                    Utils.addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
+                    addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             CommentResponse commentResponse = new CommentResponse(response);
@@ -119,9 +188,6 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                             //TODO ERROR HANDLING
                         }
                     }, null);
-
-                    Log.i("CLICK", "Comment submit clicked");
-                    //TODO CONNECT API
                 }
             });
         }
@@ -225,21 +291,51 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 viewHolder.title.setText(story.title);
                 viewHolder.content.setText(story.content);
-                viewHolder.writer.setText(story.owner.username);
+
+                SpannableString spannable_username = new SpannableString(story.owner.username);
+                spannable_username.setSpan(new UserSpan(story.owner.id), 0, story.owner.username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.writer.setText(spannable_username);
+                viewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
+
                 viewHolder.owner_id = story.owner.id;
-                viewHolder.update.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
+
+                spannable_username = new SpannableString(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username));
+                int start_index = 12 + Utils.timestampToPrettyString(story.update_date).length();
+                int finish_index = 12 + Utils.timestampToPrettyString(story.update_date).length() + story.last_editor.username.length();
+                spannable_username.setSpan(new UserSpan(story.last_editor.id), start_index, finish_index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.update.setText(spannable_username);
+                viewHolder.update.setMovementMethod(LinkMovementMethod.getInstance());
+
                 viewHolder.editor_id = story.last_editor.id;
                 viewHolder.media_ids.clear();
                 viewHolder.media_ids.addAll(story.media);
 
+                viewHolder.setVote(story.vote);
+
                 String tags = "";
 
-                //TODO Clickable tags
+
+                int[] wordLengths = new int[story.tags.size()];
                 for (int i = 0; i < story.tags.size(); i++) {
-                    tags += story.tags.get(i) + ", ";
+                    if (i == story.tags.size() - 1) {
+                        tags += story.tags.get(i);
+                    } else {
+                        tags += story.tags.get(i) + ", ";
+                    }
+
+                    wordLengths[i] = story.tags.get(i).length();
+                }
+                SpannableString spannable = new SpannableString(tags);
+                int first = 0;
+                for (int i = 0; i < wordLengths.length; i++) {
+                    spannable.setSpan(new TagSpan(story.tags.get(i)), first, first + wordLengths[i], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    first += wordLengths[i] + 2;
                 }
                 viewHolder.tags.setText(tags);
-                viewHolder.adapter.notifyDataSetChanged();
+
+                //spannable.setSpan(new TagSpan(tags));
+                viewHolder.tags.setText(spannable);
+                viewHolder.tags.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case 1:
                 break;
@@ -249,7 +345,12 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
                 commentViewHolder.comment_id = commentResponse.comment_id;
                 commentViewHolder.owner_id = commentResponse.owner_id;
-                commentViewHolder.writer.setText(commentResponse.owner_username);
+
+                SpannableString span_comment_owner = new SpannableString(commentResponse.owner_username);
+                span_comment_owner.setSpan(new UserSpan(commentResponse.owner_id), 0, commentResponse.owner_username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                commentViewHolder.writer.setText(span_comment_owner);
+                commentViewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());
+
                 commentViewHolder.comment.setText(commentResponse.content);
                 commentViewHolder.time.setText(Utils.timestampToPrettyString(commentResponse.last_edit_date));
 
@@ -284,4 +385,38 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         comments.add(commentResponse);
         this.notifyItemInserted(comments.size() + 2);
     }
+
+    public class TagSpan extends ClickableSpan {
+        String tag_title;
+
+        public TagSpan(String tag_title) {
+            super();
+            this.tag_title = tag_title;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), TagActivity.class);
+            intent.putExtra(BUNDLE_TAG_TITLE, tag_title);
+            v.getContext().startActivity(intent);
+        }
+    }
+
+    public class UserSpan extends ClickableSpan {
+        long user_id;
+
+        public UserSpan(long user_id) {
+            super();
+            this.user_id = user_id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), ProfilePageActivity.class);
+            intent.putExtra(BUNDLE_VISITED_USER_ID, user_id);
+            v.getContext().startActivity(intent);
+        }
+    }
+
+
 }

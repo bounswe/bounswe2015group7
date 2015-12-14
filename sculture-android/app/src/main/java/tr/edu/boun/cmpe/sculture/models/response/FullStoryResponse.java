@@ -13,12 +13,14 @@ public class FullStoryResponse extends BaseStoryResponse {
 
     public List<String> media = new ArrayList<>();
 
+    public int vote;
+
     public FullStoryResponse(JSONObject object) {
         super(object);
 
         try {
             this.content = object.getString("content");
-
+            this.vote = object.getInt("vote");
 
             JSONArray mediaArray = object.getJSONArray("media");
             for (int i = 0; i < mediaArray.length(); i++) {

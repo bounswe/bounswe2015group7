@@ -1,6 +1,8 @@
 package sculture.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
@@ -146,7 +148,7 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new TagResponse(tag,userDao.getById(tag.getLast_editor_id()).getUsername());
+        return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
@@ -338,17 +340,22 @@ public class SCultureRest {
             story.setMedia(str.substring(0, str.length() - 1));
         }
         storyDao.edit(story);
-
+        String tag_index = "";
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();
 
             for (String tag : tags) {
+                tag_index += tag + ", ";
                 TagStory tagStory = new TagStory();
                 tagStory.setTag_title(tag);
                 tagStory.setStory_id(story.getStory_id());
                 tagStoryDao.update(tagStory);
             }
         }
+
+        SearchEngine.removeDoc(story.getStory_id());
+        SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 

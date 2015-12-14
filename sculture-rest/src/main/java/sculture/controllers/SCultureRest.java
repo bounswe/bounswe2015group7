@@ -150,6 +150,19 @@ public class SCultureRest {
         return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/tag/edit")
+    public TagResponse tag_edit(@RequestBody TagEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Tag tag = new Tag();
+        tag.setTag_title(requestBody.getTag_title());
+        tag.setIs_location(false);
+        tag.setTag_description(requestBody.getTag_description());
+        tag.setLast_editor_id(current_user.getUser_id());
+        tag.setLast_edit_date(new Date());
+        tagDao.update(tag);
+        return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
     public SearchResponse user_get(@RequestBody StoriesGetRequestBody requestBody) {
         //TODO Exception handling

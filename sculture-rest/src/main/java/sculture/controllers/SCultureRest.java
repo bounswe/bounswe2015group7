@@ -150,6 +150,19 @@ public class SCultureRest {
         return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/tag/edit")
+    public TagResponse tag_edit(@RequestBody TagEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Tag tag = new Tag();
+        tag.setTag_title(requestBody.getTag_title());
+        tag.setIs_location(false);
+        tag.setTag_description(requestBody.getTag_description());
+        tag.setLast_editor_id(current_user.getUser_id());
+        tag.setLast_edit_date(new Date());
+        tagDao.update(tag);
+        return new TagResponse(tag, userDao.getById(tag.getLast_editor_id()).getUsername());
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
     public SearchResponse user_get(@RequestBody StoriesGetRequestBody requestBody) {
         //TODO Exception handling
@@ -358,6 +371,8 @@ public class SCultureRest {
         return new BaseStoryResponse(story, tagStoryDao, userDao);
     }
 
+
+    // TODO
     @RequestMapping("/story/get")
     public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, false);
@@ -476,4 +491,24 @@ public class SCultureRest {
         }
         return current_user;
     }
+    /**
+     * Returns current user by using access-token
+     *
+     * @param headers The headers which contains access-token
+     * @param notnull Whether the current_user can be null or not, if true it will not return null instead throw an exception
+     * @return Current user
+     */
+    private User getCurrentUser(HttpHeaders headers, boolean notnull) {
+        User current_user = null;
+        try {
+            String access_token;
+            access_token = headers.get("access-token").get(0);
+            current_user = userDao.getByAccessToken(access_token);
+        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException ignored) {
+            if (notnull)
+                throw new InvalidAccessTokenException();
+        }
+        return current_user;
+    }
+
 }

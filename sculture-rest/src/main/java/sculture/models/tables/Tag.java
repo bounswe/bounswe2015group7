@@ -5,10 +5,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "TAGS")
+@Table(name = "TAG")
 public class Tag {
     @Id
-    @Column(name = "tag_title", unique = true, nullable = false)
     private String tag_title;
 
     @Lob

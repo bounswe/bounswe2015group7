@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -32,10 +33,13 @@ import tr.edu.boun.cmpe.sculture.activity.ProfilePageActivity;
 import tr.edu.boun.cmpe.sculture.activity.TagActivity;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.VoteResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_VOTE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
@@ -58,6 +62,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         private long owner_id;
         private long editor_id;
         private ArrayList<String> media_ids = new ArrayList<>();
+        private ImageButton likeButton;
+        private ImageButton dislikeButton;
+        private int likeStatus = 0;
 
         public StoryViewHolder(View itemView) {
             super(itemView);
@@ -67,27 +74,80 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             tags = (TextView) itemView.findViewById(R.id.storyTags);
             update = (TextView) itemView.findViewById(R.id.story_update);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.story_media_recycler);
+            likeButton = (ImageButton) itemView.findViewById(R.id.likeButton);
+            dislikeButton = (ImageButton) itemView.findViewById(R.id.dislikeButton);
+
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (likeStatus != 1) {
+                        sendVote(1);
+                    } else {
+                        sendVote(0);
+                    }
+                }
+            });
+
+            dislikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (likeStatus != -1) {
+                        sendVote(-1);
+                    } else {
+                        sendVote(0);
+                    }
+                }
+            });
+
 
             LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
             llm.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(llm);
             adapter = new StoryImageViewAdapter(null, media_ids, false);
             recyclerView.setAdapter(adapter);
-            writer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("CLICK", "Writer clicked");
-                    //TODO OPEN USER PAGE
-                }
-            });
-            update.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("CLICK", "Update clicked");
-                    //TODO OPEN USER PAGE
-                }
-            });
         }
+
+
+        private void sendVote(final int l) {
+            final int previous_status = likeStatus;
+            setVote(l);
+            final JSONObject requestObject = new JSONObject();
+            try {
+                requestObject.put("story_id", story.id);
+                requestObject.put("vote", l);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            addRequest(API_STORY_VOTE, requestObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    VoteResponse voteResponse = new VoteResponse(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //TODO Error handling
+                    setVote(previous_status);
+                }
+            }, null);
+
+        }
+
+        private void setVote(int l) {
+            likeButton.setImageResource(R.drawable.thumb_up_inactive);
+            dislikeButton.setImageResource(R.drawable.thumb_down_inactive);
+
+            if (l == -1)
+                dislikeButton.setImageResource(R.drawable.thumb_down_active);
+            else if (l == 1)
+                likeButton.setImageResource(R.drawable.thumb_up_active);
+
+            likeStatus = l;
+        }
+
+
     }
 
     class CommentEditViewHolder extends RecyclerView.ViewHolder {
@@ -112,7 +172,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                         e.printStackTrace();
                     }
                     comment.setText("");
-                    Utils.addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
+                    addRequest(Constants.API_COMMENT_NEW, request, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             CommentResponse commentResponse = new CommentResponse(response);
@@ -128,9 +188,6 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                             //TODO ERROR HANDLING
                         }
                     }, null);
-
-                    Log.i("CLICK", "Comment submit clicked");
-                    //TODO CONNECT API
                 }
             });
         }
@@ -253,7 +310,10 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 viewHolder.media_ids.clear();
                 viewHolder.media_ids.addAll(story.media);
 
+                viewHolder.setVote(story.vote);
+
                 String tags = "";
+
 
                 int[] wordLengths = new int[story.tags.size()];
                 for (int i = 0; i < story.tags.size(); i++) {

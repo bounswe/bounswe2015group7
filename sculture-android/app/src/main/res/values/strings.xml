@@ -37,4 +37,7 @@
     <string name="click_to_write">Click to write a description</string>
     <string name="follow">Follow</string>
     <string name="stories_of_this_user">Stories of this user:</string>
+    <string name="action_report">Report</string>
+    <string name="report_success">Thank you for your report. We will investigate this story.</string>
+    <string name="vote_success">Thank you for your feedback.</string>
 </resources>

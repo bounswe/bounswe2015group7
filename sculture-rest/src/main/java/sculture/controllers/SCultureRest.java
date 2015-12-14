@@ -447,13 +447,10 @@ public class SCultureRest {
 
         List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id(), page, size);
         List<CommentResponse> responses = new LinkedList<>();
-        Collections.sort(comments);
-        for (int i = comments.size() - 1; i >= 0; i--) {
-            responses.add(new CommentResponse(comments.get(i), userDao));
-        }
-        /*for (Comment comment : comments) {
+
+        for (Comment comment : comments) {
             responses.add(new CommentResponse(comment, userDao));
-        }*/
+        }
 
 
         CommentListResponse commentListResponse = new CommentListResponse();

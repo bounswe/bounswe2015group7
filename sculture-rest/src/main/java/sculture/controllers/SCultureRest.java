@@ -121,8 +121,9 @@ public class SCultureRest {
 
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/user/get")
-    public LoginResponse user_get(@RequestBody UserGetRequestBody requestBody) {
+    @RequestMapping(method = RequestMethod.POST, value = "/user/get" )
+    public UserGetResponse user_get(@RequestBody UserGetRequestBody requestBody , @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
         long id = requestBody.getUserId();
         User u;
         try {
@@ -130,7 +131,17 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new LoginResponse(u);
+        UserGetResponse response = new UserGetResponse();
+        response.setEmail(u.getEmail());
+        response.setUser_id(u.getUser_id());
+        response.setUsername(u.getUsername());
+        if(userDao.getFollowers(id).contains(current_user.getUser_id())){
+            response.setIs_following(true);
+        }else{
+            response.setIs_following(false);
+        }
+
+        return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search/all")
@@ -444,6 +455,8 @@ public class SCultureRest {
         Story story = voteStoryDao.vote(current_user.getUser_id(), requestBody.getStory_id(), requestBody.getVote());
         return new VoteResponse(requestBody.getVote(), story);
     }
+
+
 
     @RequestMapping("/comment/list")
     public CommentListResponse commentList(@RequestBody CommentListRequestBody requestBody) {

@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.util.LinkedList;
 
 
 @Entity
@@ -26,6 +27,16 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    public LinkedList<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(LinkedList<User> followers) {
+        this.followers = followers;
+    }
+
+    private LinkedList<User> followers;
 
     private String password_hash;
 

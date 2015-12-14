@@ -67,6 +67,13 @@ public class UserDao {
                 .getSingleResult();
     }
 
+    public List<User> getFollowers(long id){
+        return entityManager.createQuery("from RelationFollowUser where FOLLOWED_USER_ID = :id ")
+                .setParameter("FOLLOWED_USER_ID" , id)
+                .getResultList();
+    }
+
+  
     /**
      * Return the user having the access_token email.
      */

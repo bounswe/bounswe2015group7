@@ -338,7 +338,7 @@
                 </form>
 
             </div>
-
+            <input type="hidden" id="definitelynottheaccesstoken" value="<%out.print(request.getSession().getAttribute("access-token"));%>">
         </div>
     </div>
 </div>
@@ -382,31 +382,27 @@
         });
         $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
             var $this = $(this);
-            var story_id = <%out.print(story.getStory_id());%>;
-            var definitelynottheaccesstoken = <%out.print(request.getSession().getAttribute("access-token"));%>;
+            var story_id = "<%=story.getStory_id()%>";
+            var definitelynottheaccesstoken = "<%=request.getSession().getAttribute("access_token")%>";
+            console.log(definitelynottheaccesstoken);
+            console.log("story: " + story_id);
             var vote;
             if(this.id == "like1") vote = 1;
             else if(this.id == "dislike1") vote = -1;
             if(definitelynottheaccesstoken == null) vote = 0;
             $.ajax({
                 type: 'POST',
-                url: 'http://52.28.216.93:9000/story/vote',
                 beforeSend: function (request)                {
                     request.setRequestHeader("access-token", definitelynottheaccesstoken);
                 },
+                url: 'http://52.28.216.93:9000/story/vote',
                 contentType: "application/json",
                 data: JSON.stringify({
                     "story_id": story_id,
                     "vote" : vote
                 }),
                 success: function (myData) {
-                    var c = $this.data('count');
-                    if (!c){
-                        if(this.id == "like1")c = myData.positive_vote;
-                        if(this.id == "dislike1")c = myData.negative_vote;
-                    }
-                    $this.data('count',c);
-                    $('#'+this.id+'-bs3').html(c);
+                    location.reload();
                 },
                 error:function (errorData) {
                     alert("error!");

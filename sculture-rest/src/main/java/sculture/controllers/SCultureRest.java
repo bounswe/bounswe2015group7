@@ -81,14 +81,7 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/update")
     public LoginResponse user_update(@RequestBody UserUpdateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        User u;
-        try {
-            String access_token;
-            access_token = headers.get("access-token").get(0);
-            u = userDao.getByAccessToken(access_token);
-        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new InvalidAccessTokenException();
-        }
+        User u = getCurrentUser(headers, true);
 
         String email = requestBody.getEmail();
         String username = requestBody.getUsername();
@@ -275,14 +268,7 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
     public BaseStoryResponse story_create(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        User current_user;
-        try {
-            String access_token;
-            access_token = headers.get("access-token").get(0);
-            current_user = userDao.getByAccessToken(access_token);
-        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new InvalidAccessTokenException();
-        }
+        User current_user = getCurrentUser(headers, true);
 
         //TODO Exception handling
 
@@ -322,19 +308,15 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
     public BaseStoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        User current_user;
-        try {
-            String access_token;
-            access_token = headers.get("access-token").get(0);
-            current_user = userDao.getByAccessToken(access_token);
-        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new InvalidAccessTokenException();
+        User current_user = getCurrentUser(headers, true);
+        Story story = storyDao.getById(requestBody.getStory_id());
+        if (current_user.getUser_id() != story.getOwner_id()) {
+            throw new NotOwnerException();
         }
 
         //TODO Exception handling
 
         Date date = new Date();
-        Story story = new Story();
 
         story.setStory_id(requestBody.getStory_id());
         story.setTitle(requestBody.getTitle());

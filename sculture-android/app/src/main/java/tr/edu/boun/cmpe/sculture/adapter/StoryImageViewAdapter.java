@@ -98,8 +98,6 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
                         intent.putExtra(BUNDLE_MEDIA_IDS, urls);
                         intent.putExtra(BUNDLE_INDEX, index);
                         v.getContext().startActivity(intent);
-
-                        //TODO Add image view activity here
                     }
                 });
             }

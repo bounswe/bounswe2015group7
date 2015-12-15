@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,12 +27,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.Constants;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.activity.ProfilePageActivity;
 import tr.edu.boun.cmpe.sculture.activity.TagActivity;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.VoteResponse;
 
@@ -40,6 +43,7 @@ import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_VOTE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
+import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_ACCESS_TOKEN;
 
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
@@ -181,11 +185,16 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse != null && error.networkResponse.data != null) {
-                                VolleyError e = new VolleyError(new String(error.networkResponse.data));
-                                Log.i("ERROR", e.toString());
-                            } else Log.i("ERROR", error.toString());
-                            //TODO ERROR HANDLING
+                            ErrorResponse errorResponse = new ErrorResponse(error);
+                            switch (errorResponse.message) {
+                                case ERROR_INVALID_ACCESS_TOKEN:
+                                    Toast.makeText(BaseApplication.baseApplication, R.string.access_toke_error, Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(BaseApplication.baseApplication, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                                    Log.e("COMMENT", errorResponse.toString());
+                                    break;
+                            }
                         }
                     }, null);
                 }

@@ -1,12 +1,11 @@
-package com.sculture;
+package com.sculture.controller;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.FullStoryResponse;
-import com.sculture.helpers.Story;
+import com.sculture.model.response.StoriesResponse;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 public class Login extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FullStoryResponse story;
         HttpResponse<JsonNode> jsonResponse = null;
         try {
 
@@ -48,31 +46,32 @@ public class Login extends HttpServlet {
             request.setAttribute("isLoggedIn", false);
             request.setAttribute("username", "");
         }
-        jsonResponse = null;
+
+        //Get popular stories using /search/all
+
+        JSONObject params = new JSONObject();
+        params.put("page", 1);
+        params.put("size", 4);
+
+        HttpResponse<JsonNode> popularStoriesResponse = null;
         try {
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/search/all")
+            popularStoriesResponse = Unirest.post("http://52.28.216.93:9000/search/all")
                     .header("Content-Type", "application/json")
+                    .body(new JsonNode(params.toString()))
                     .asJson();
         } catch (UnirestException e) {
             e.printStackTrace();
         }
 
-        ArrayList<FullStoryResponse> stories = new ArrayList<FullStoryResponse>();
-        if (jsonResponse != null) {
-            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
-                Object object = jsonResponse.getBody().getArray().get(i);
-                Gson gson = new Gson();
-                story = gson.fromJson(object.toString(), FullStoryResponse.class);
-                stories.add(story);
-            }
-        }
-        request.setAttribute("topStory", stories.get(0));
-        ArrayList<FullStoryResponse> popular = new ArrayList<FullStoryResponse>();
-        popular.add(stories.get(0));
-        popular.add(stories.get(1));
-        popular.add(stories.get(2));
-        popular.add(stories.get(3));
-        request.setAttribute("popularStories", popular);
+
+        Gson gson = new Gson();
+        StoriesResponse storiesResponse = gson.fromJson(popularStoriesResponse.toString(), StoriesResponse.class);
+
+        //Set the topStory attribute
+        request.setAttribute("topStory", storiesResponse.getResult().get(3));
+
+        //Set the popularStories
+        request.setAttribute("popularStories", storiesResponse);
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
     }
 

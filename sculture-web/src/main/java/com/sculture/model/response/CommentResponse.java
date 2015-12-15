@@ -1,4 +1,4 @@
-package com.sculture.helpers;
+package com.sculture.model.response;
 
 public class CommentResponse {
     private long comment_id;

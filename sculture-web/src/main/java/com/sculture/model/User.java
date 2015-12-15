@@ -1,4 +1,4 @@
-package com.sculture.helpers;
+package com.sculture.model;
 
 /**
  * Created by Atakan Arıkan on 14.12.2015.

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.helpers.FullStoryResponse" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.sql.Timestamp" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sculture.model.response.StoriesResponse" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="com.sculture.model.response.StoryResponse" %>
+<%@ page import="java.util.List" %>
 
 <html lang="en">
 
@@ -94,7 +94,7 @@
 
 <%-- here we assumed that there is a Story class with attributes title, content, tags and date created  --%>
 <%
-    ArrayList<FullStoryResponse> results = (ArrayList<FullStoryResponse>) request.getAttribute("results");
+    List<StoryResponse> results = ((StoriesResponse) request.getAttribute("results")).getResult();
 
 %>
 <h1>We found <%out.print(results.size()); %> results for your search</h1>
@@ -115,10 +115,13 @@
                             <a class="story-title" href="#">
                                 <% try { %>
                                 <%if (results.get(i).getMedia() != null) { %>
-                                <img style="width: 300px; height: 250px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + results.get(i).getMedia().get(0));%>" alt="">
+                                <img style="width: 300px; height: 250px"
+                                     src="<%out.print("http://52.28.216.93:9000/image/get/" + results.get(i).getMedia().get(0));%>"
+                                     alt="">
                                 <% } %>
                                 <%} catch (Exception e) {%>
-                                <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
+                                <img style="width: 250px; height: 300px"
+                                     src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
                                 <% }%>
                             </a>
                         </div>
@@ -138,12 +141,11 @@
                                     %></p>
                                     <small style="font-family:courier,'new courier';" class="text-muted">
                                         <%
-                                        Timestamp stamp = new Timestamp(Long.parseLong(results.get(i).getCreate_date()));
-                                            Date storyCreationDate = new Date(stamp.getTime());
-                                        out.print(storyCreationDate);%> •
-                                        <%String refUrl = "/get/story/" + results.get(i).getStory_id();%>
+                                            Date storyCreationDate = results.get(i).getCreation_date();
+                                            out.print(storyCreationDate);%> •
+                                        <% String refUrl = "/get/story/" + results.get(i).getId();%>
                                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
-                                    </div>
+                                </div>
                                 <div class="col-xs-3"></div>
                             </div>
                             <br><br>

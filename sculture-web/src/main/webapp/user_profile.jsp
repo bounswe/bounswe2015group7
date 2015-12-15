@@ -5,11 +5,14 @@
   Time: 23:24
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="com.sculture.helpers.User" %>
+<%@ page import="com.sculture.model.User" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.sculture.helpers.UserStory" %>
+<%@ page import="com.sculture.model.UserStory" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="com.sculture.model.response.StoryResponse" %>
+<%@ page import="com.sculture.model.response.StoriesResponse" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +134,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">Activity</div>
           <ul class="list-group">
-            <% ArrayList<UserStory> userStories = (ArrayList<UserStory>) request.getAttribute("user_stories");%>
+            <% List<StoryResponse> userStories = ((StoriesResponse) request.getAttribute("user_stories")).getResult();%>
             <li class="list-group-item text-right"><span class="pull-left"><strong class="">Reported Stories </strong></span> 1 </li>
             <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> <% out.print(userStories.size());%> </li>
             <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> - </li>
@@ -164,8 +167,7 @@
                     </p>
                     <p>
                       Created at: <%if(userStories.get(i) != null) {
-                      Timestamp stamp = new Timestamp(userStories.get(i).getCreation_date());
-                      Date storyCreationDate = new Date(stamp.getTime());
+                      Date storyCreationDate = userStories.get(i).getCreation_date();
                       out.print(storyCreationDate);
                     }%>
                     </p>

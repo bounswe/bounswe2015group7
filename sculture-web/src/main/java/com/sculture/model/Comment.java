@@ -1,4 +1,5 @@
-package com.sculture.helpers;
+package com.sculture.model;
+
 import java.util.Date;
 
 /**

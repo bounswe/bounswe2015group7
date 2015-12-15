@@ -1,4 +1,4 @@
-package com.sculture;
+package com.sculture.controller;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;

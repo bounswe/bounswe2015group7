@@ -1,7 +1,8 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page language="java" import="com.sculture.helpers.CommentResponse" import="com.sculture.helpers.Story" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.sql.Timestamp" %>
+<%@ page import="com.sculture.model.response.StoryResponse" %>
+<%@ page import="com.sculture.model.response.CommentResponse" %>
 <!DOCTYPE html>
 
 
@@ -102,7 +103,7 @@
 
             <!-- Title -->
             <%
-                Story story = (Story) request.getAttribute("story");
+                StoryResponse story = (StoryResponse) request.getAttribute("story");
 
             %>
 
@@ -113,8 +114,7 @@
             <!-- Date/Time -->
             <%
                 try{
-                    Timestamp stamp = new Timestamp(Long.parseLong(story.getCreate_date()));
-                    Date storyCreationDate = new Date(stamp.getTime());%>
+                    Date storyCreationDate = story.getCreation_date();%>
             <p><span class="glyphicon glyphicon-time"></span> Posted on: <% out.print(storyCreationDate); %></p>
 
             <%} catch (Exception e) { %>
@@ -153,7 +153,7 @@
                     <div class="form-group">
                         <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
-                        <input type="hidden" name="story_id" id="story_id" value="<%out.print(story.getStory_id());%>" class="form-control"></textarea>
+                        <input type="hidden" name="story_id" id="story_id" value="<%out.print(story.getId());%>" class="form-control"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -378,7 +378,7 @@
         });
         $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
             var $this = $(this);
-            var story_id = <%out.print(story.getStory_id());%>;
+            var story_id = <%out.print(story.getId());%>;
             var definitelynottheaccesstoken = <%out.print(request.getSession().getAttribute("access-token"));%>;
             var vote;
             if(this.id == "like1") vote = 1;

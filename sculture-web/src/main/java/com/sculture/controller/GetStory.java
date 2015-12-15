@@ -1,11 +1,14 @@
-package com.sculture;
+package com.sculture.controller;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.*;
+import com.sculture.model.Comment;
+import com.sculture.model.response.CommentListResponse;
+import com.sculture.model.response.StoryResponse;
+import com.sculture.util.MyGson;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -33,7 +36,7 @@ public class GetStory extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Story story = new Story();
+        StoryResponse story = new StoryResponse();
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -58,9 +61,9 @@ public class GetStory extends HttpServlet {
         }
         if (jsonResponse != null) {
             Object object = jsonResponse.getBody().getObject();
-            Gson gson = new Gson();
+            Gson gson = new MyGson().create();
 //            ((JSONObject)object).remove("tags");
-            story = gson.fromJson(object.toString(), Story.class);
+            story = gson.fromJson(object.toString(), StoryResponse.class);
         }
         // send req to comment/list
         jsonResponse = null;
@@ -81,7 +84,7 @@ public class GetStory extends HttpServlet {
         CommentListResponse commentListResponse = new CommentListResponse();
         if (jsonResponse != null) {
             Object object = jsonResponse.getBody().getObject();
-            Gson gson = new Gson();
+            Gson gson = MyGson.create();
             commentListResponse = gson.fromJson(object.toString(), CommentListResponse.class);
 //            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
 //                Object object = jsonResponse.getBody().getArray().get(i);

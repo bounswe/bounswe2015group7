@@ -1,4 +1,4 @@
-package com.sculture.helpers;
+package com.sculture.model.response;
 
 import java.util.List;
 

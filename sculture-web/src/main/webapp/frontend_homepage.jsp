@@ -1,6 +1,9 @@
-<%@ page import="com.sculture.helpers.FullStoryResponse" %>
+<%@ page import="com.sculture.model.response.StoriesResponse" %>
 <%@ page import="java.util.ArrayList" %>
-!DOCTYPE html>
+<%@ page import="com.sculture.model.response.StoryResponse" %>
+
+<!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -107,7 +110,7 @@
     <div class="row">
 
         <div class="col-md-8">
-            <% FullStoryResponse topStory = (FullStoryResponse) request.getAttribute("topStory");%>
+            <% StoryResponse topStory = (StoryResponse) request.getAttribute("topStory");%>
             <% try { %>
             <%if (topStory.getMedia() != null) { %>
             <img style="width: 300px; height: 250px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + topStory.getMedia().get(0));%>" alt="">
@@ -119,7 +122,7 @@
 
         <div class="col-md-4">
             <% String title = topStory.getTitle(); %>
-            <%String refUrl1 = "/get/story/" + topStory.getStory_id();%>
+            <% String refUrl1 = "/get/story/" + topStory.getId();%>
             <h3> <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></h3>
             <p><% out.print(topStory.getContent()); %></p>
         </div>
@@ -137,27 +140,27 @@
     </div>
     <!-- /.row -->
 
-        <% ArrayList<FullStoryResponse> popular = (ArrayList<FullStoryResponse>) request.getAttribute("popularStories"); %>
+        <% StoriesResponse popularStories = (StoriesResponse) request.getAttribute("popularStories"); %>
 
     <!-- Page Features -->
     <div class="row text-center">
-        <% for (int i = 0; i < popular.size(); i++) { %>
+        <% for (int i = 0; i < popularStories.getResult().size(); i++) { %>
         <div class="col-md-3 col-sm-6 hero-feature">
             <div class="thumbnail">
                 <% try { %>
-                    <%if (popular.get(i).getMedia() != null) { %>
-                     <img style="width: 200px; height: 200px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + popular.get(i).getMedia().get(0));%>" alt="">
+                    <%if (popularStories.getResult().get(i).getMedia() != null) { %>
+                     <img style="width: 200px; height: 200px"  src="<%out.print("http://52.28.216.93:9000/image/get/" + popularStories.getResult().get(i).getMedia().get(0));%>" alt="">
                     <% } %>
                 <%} catch (Exception e) {%>
                      <img  style="width: 200px; height: 200px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
                 <% }%>
                 <div class="caption">
-                    <% String popularTitle = popular.get(i).getTitle(); %>
+                    <% String popularTitle = popularStories.getResult().get(i).getTitle(); %>
                     <h3><% out.print(popularTitle); %></h3>
-                    <% String popularContent = popular.get(i).getContent(); %>
+                    <% String popularContent = popularStories.getResult().get(i).getContent(); %>
                     <p><% out.print(popularContent); %></p>
                     <p>
-                        <%String refUrl = "/get/story/" + popular.get(i).getStory_id();%>
+                        <%String refUrl = "/get/story/" + popularStories.getResult().get(i).getId();%>
                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                     </p>
                 </div>

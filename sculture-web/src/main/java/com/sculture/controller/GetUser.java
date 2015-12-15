@@ -1,11 +1,12 @@
-package com.sculture;
+package com.sculture.controller;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.*;
+import com.sculture.model.User;
+import com.sculture.model.response.StoriesResponse;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Atakan Arıkan on 14.12.2015.
@@ -71,11 +71,12 @@ public class GetUser extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        UserStoriesResponse userStoriesResponse = new UserStoriesResponse();
+
+        StoriesResponse userStoriesResponse = new StoriesResponse();
         if (jsonResponse != null) {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
-            userStoriesResponse = gson.fromJson(object.toString(), UserStoriesResponse.class);
+            userStoriesResponse = gson.fromJson(object.toString(), StoriesResponse.class);
             System.out.println(object.toString());
         }
         request.setAttribute("relatedUser", user);

@@ -1,15 +1,13 @@
-package com.sculture;
+package com.sculture.controller;
 
 /**
  * Created by Atakan Arıkan on 13.12.2015.
  */
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.Story;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @WebServlet(name = "addcomment")
 public class AddComment extends HttpServlet {

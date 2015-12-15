@@ -67,8 +67,8 @@
         <tbody>
         <% for (int i = 0; i < username.size(); i++) { %>
         <tr>
-            <td><% out.println(username.get(i)); %></td>
-            <td><% out.println(password.get(i));; %></td>
+            <td><% out.print(username.get(i)); %></td>
+            <td><% out.print(password.get(i)); %></td>
             <%
 
                 } %>

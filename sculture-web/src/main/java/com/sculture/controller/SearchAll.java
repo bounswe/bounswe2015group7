@@ -1,12 +1,13 @@
-package com.sculture;
+package com.sculture.controller;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.FullStoryResponse;
-import com.sculture.helpers.Story;
+import com.sculture.model.response.StoriesResponse;
+import com.sculture.util.MyGson;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,17 +22,11 @@ import java.util.ArrayList;
 public class SearchAll extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.setAttribute("isLoggedIn", false);
-//        request.setAttribute("username", "");
-//        if (request.getSession().getAttribute("username") != null) {
-//            request.setAttribute("username", request.getSession().getAttribute("username"));
-//            request.setAttribute("isLoggedIn", true);
-//        }
-//        request.getRequestDispatcher("/add_story.jsp").forward(request, response);
+        request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FullStoryResponse story;
+        //User login state
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -39,26 +34,26 @@ public class SearchAll extends HttpServlet {
             request.setAttribute("isLoggedIn", true);
         }
 
+        //Get all stories using /search/all
 
-        HttpResponse<JsonNode> jsonResponse = null;
+        JSONObject params = new JSONObject();
+        params.put("page", 1);
+        params.put("size", 10);
+
+        HttpResponse<JsonNode> jsonStoriesResponse = null;
         try {
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/search/all")
+            jsonStoriesResponse = Unirest.post("http://52.28.216.93:9000/search/all")
                     .header("Content-Type", "application/json")
+                    .body(new JsonNode(params.toString()))
                     .asJson();
         } catch (UnirestException e) {
             e.printStackTrace();
         }
 
-        ArrayList<FullStoryResponse> stories = new ArrayList<FullStoryResponse>();
-        if (jsonResponse != null) {
-            for (int i = 0; i < jsonResponse.getBody().getArray().length(); i++) {
-                Object object = jsonResponse.getBody().getArray().get(i);
-                Gson gson = new Gson();
-                story = gson.fromJson(object.toString(), FullStoryResponse.class);
-                stories.add(story);
-            }
-        }
-        request.setAttribute("results", stories);
+        Gson gson = MyGson.create();
+        StoriesResponse storiesResponse = gson.fromJson(jsonStoriesResponse.toString(), StoriesResponse.class);
+
+        request.setAttribute("results", storiesResponse);
         request.getRequestDispatcher("/search_result.jsp").forward(request, response);
     }
 

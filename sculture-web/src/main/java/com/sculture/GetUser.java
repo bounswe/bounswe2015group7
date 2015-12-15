@@ -7,6 +7,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sculture.model.User;
 import com.sculture.model.response.StoriesResponse;
+import com.sculture.util.MyGson;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -37,13 +38,17 @@ public class GetUser extends HttpServlet {
         String requestURL = request.getRequestURL().toString();
         String user_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
         HttpResponse<JsonNode> jsonResponse = null;
+        String access_token = "";
+        if(request.getSession().getAttribute("access_token") != null){
+            access_token = request.getSession().getAttribute("access_token").toString();
+        }
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userId", user_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/user/get")
                     .header("Content-Type", "application/json")
-                    .header("access-token", request.getSession().getAttribute("access_token").toString())
+                    .header("access-token", access_token)
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {
@@ -62,7 +67,7 @@ public class GetUser extends HttpServlet {
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/user/stories")
                     .header("Content-Type", "application/json")
-                    .header("access-token", request.getSession().getAttribute("access_token").toString())
+                    .header("access-token", access_token)
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {
@@ -72,12 +77,12 @@ public class GetUser extends HttpServlet {
         StoriesResponse userStoriesResponse = new StoriesResponse();
         if (jsonResponse != null) {
             Object object = jsonResponse.getBody().getObject();
-            Gson gson = new Gson();
+            Gson gson = MyGson.create();
             userStoriesResponse = gson.fromJson(object.toString(), StoriesResponse.class);
             System.out.println(object.toString());
         }
         request.setAttribute("relatedUser", user);
-        request.setAttribute("user_stories", userStoriesResponse.getResult());
+        request.setAttribute("user_stories", userStoriesResponse);
         request.getRequestDispatcher("/user_profile.jsp").forward(request, response);
     }
 

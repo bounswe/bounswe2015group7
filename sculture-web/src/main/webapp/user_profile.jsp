@@ -7,7 +7,6 @@
 --%>
 <%@ page import="com.sculture.model.User" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.sculture.model.UserStory" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="com.sculture.model.response.StoryResponse" %>

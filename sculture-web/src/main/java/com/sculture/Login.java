@@ -6,6 +6,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sculture.model.response.StoriesResponse;
+import com.sculture.util.MyGson;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -64,8 +65,8 @@ public class Login extends HttpServlet {
         }
 
 
-        Gson gson = new Gson();
-        StoriesResponse storiesResponse = gson.fromJson(popularStoriesResponse.toString(), StoriesResponse.class);
+        Gson gson = MyGson.create();
+        StoriesResponse storiesResponse = gson.fromJson(popularStoriesResponse.getBody().getObject().toString(), StoriesResponse.class);
 
         //Set the topStory attribute
         request.setAttribute("topStory", storiesResponse.getResult().get(3));

@@ -46,7 +46,7 @@ public class StoryDao {
     @SuppressWarnings("unchecked")
     public List<Story> getAll(int page, int size) {
         Query query = entityManager.createQuery(
-                "from Story");
+                "from Story ORDER BY create_date DESC");
         query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);
 
@@ -60,7 +60,7 @@ public class StoryDao {
     public List<Story> getByOwner(long owner_id, int page, int size) {
 
         Query query = entityManager.createQuery(
-                "from Story where owner_id = :owner_id ");
+                "from Story where owner_id = :owner_id ORDER BY create_date DESC");
         query.setParameter("owner_id", owner_id);
         query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);
@@ -85,7 +85,7 @@ public class StoryDao {
 
     public List<Story> getAllPaged(int page, int size) {
         Query query = entityManager.createQuery(
-                "from Story");
+                "from Story  ORDER BY create_date DESC");
         query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);
 

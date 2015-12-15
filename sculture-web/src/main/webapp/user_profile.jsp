@@ -99,7 +99,11 @@
       <div class="col-sm-10">
         <% User user = (User)request.getAttribute("relatedUser");%>
         <h1 class=""><% out.print(user.getUsername());%></h1>
+        <%if(user.is_following()) {%>
+          You are following this user.
+        <%}else {%>
         <a href="/follow/user/<%out.print(user.getId());%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Follow User </a>
+        <%}%>
         <br><br>
 
 

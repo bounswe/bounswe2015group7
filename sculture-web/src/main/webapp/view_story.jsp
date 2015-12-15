@@ -115,12 +115,6 @@
             <h1><% out.print(story.getTitle()); %></h1>
 
             <hr>
-            <p><% out.print(story.getContent()); %></p>
-
-
-
-            <hr>
-
             <!-- Preview Image -->
             <% try { %>
             <%if (story.getMedia() != null) { %>
@@ -129,8 +123,13 @@
             <%} catch (Exception e) {%>
             <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
             <% }%>
+            <hr>
+            <p><% out.print(story.getContent().replace("\n","<br>")); %></p>
 
-                  <hr>
+
+
+            <hr>
+
             <!-- Date/Time -->
 
             <%

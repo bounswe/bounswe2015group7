@@ -127,7 +127,11 @@
             <% String title = topStory.getTitle(); %>
             <%String refUrl1 = "/get/story/" + topStory.getStory_id();%>
             <h3> <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></h3>
-            <p><% out.print(topStory.getContent()); %></p>
+            <p><% if(topStory.getContent().length() < 300){
+                out.print(topStory.getContent().replace("\n", "<br>"));
+            }else {
+                out.print(topStory.getContent().replace("\n", "<br>").substring(0, 400) + "...");
+            } %></p>
         </div>
 
     </div>

@@ -29,9 +29,8 @@ public class FollowUser extends HttpServlet {
         String user_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
         try {
             JSONObject jsonObject = new JSONObject();
-
             jsonObject.put("user_id", user_id);
-            jsonObject.put("isFollow", true);
+            jsonObject.put("is_follow", true);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/user/follow")
                     .header("Content-Type", "application/json")

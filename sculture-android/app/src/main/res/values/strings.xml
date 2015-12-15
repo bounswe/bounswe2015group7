@@ -40,4 +40,11 @@
     <string name="action_report">Report</string>
     <string name="report_success">Thank you for your report. We will investigate this story.</string>
     <string name="vote_success">Thank you for your feedback.</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="no_connection">There is no Internet connection.</string>
+    <string name="user_exist">This user already exists.</string>
+    <string name="user_not_exist">This user does not exist.</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="access_toke_error">Your session is ended. Please log in again.</string>
 </resources>

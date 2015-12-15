@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.CommentListResponse;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
@@ -104,7 +106,9 @@ public class StoryShowActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+                    Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("COMMENT", errorResponse.toString());
                 }
             }, REQUEST_TAG_SEARCH);
         }
@@ -132,6 +136,9 @@ public class StoryShowActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        ErrorResponse errorResponse = new ErrorResponse(error);
+                        Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                        Log.e("STORY", errorResponse.toString());
                     }
                 },
                 REQUEST_TAG_STORY_GET);

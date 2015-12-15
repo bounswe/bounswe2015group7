@@ -62,4 +62,14 @@ public class Constants {
 
     //HEADER FIELDS
     public static final String HEADER_ACCESS_TOKEN = "access-token";
+
+    //API ERRORS
+    public static final String ERROR_INVALID_ACCESS_TOKEN = "Invalid access token";
+    public static final String ERROR_INVALID_EMAIL = "Invalid email address";
+    public static final String ERROR_INVALID_PASSWORD = "Invalid password";
+    public static final String ERROR_INVALID_REPORT = "This User is already reported this story";
+    public static final String ERROR_INVALID_USERNAME = "Invalid username";
+    public static final String ERROR_USER_ALREADY_EXISTS = "This user already exists";
+    public static final String ERROR_USER_NOT_EXIST = "This user does not exist";
+    public static final String ERROR_WRONG_PASSWORD = "Wrong password";
 }

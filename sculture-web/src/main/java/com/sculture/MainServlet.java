@@ -70,7 +70,7 @@ public class MainServlet extends HttpServlet {
                 stories.add(story);
             }
         }
-        request.setAttribute("topStory", stories.get(3));
+        request.setAttribute("topStory", stories.get(stories.size()-1));
         ArrayList<FullStoryResponse> popular = new ArrayList<FullStoryResponse>();
         popular.add(stories.get(0));
         popular.add(stories.get(1));

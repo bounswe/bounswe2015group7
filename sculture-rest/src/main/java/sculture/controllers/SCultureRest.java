@@ -517,8 +517,8 @@ public class SCultureRest {
             }
 
 
-            for (int i = 1; ; i++) {
-                List<Story> stories = storyDao.getByOwner(user.getUser_id(), i, 10);
+            for (; ; ) {
+                List<Story> stories = storyDao.getByOwner(user.getUser_id(), 1, 10);
                 if (stories.size() == 0)
                     break;
                 for (Story story : stories) {
@@ -542,6 +542,19 @@ public class SCultureRest {
         admin_search_reindex();
     }
 
+
+    @RequestMapping("/admin/clear/orphan")
+    public void admin_clear_orphan(@RequestBody AdminClearRequest requestBody) {
+        List<Story> stories = storyDao.getAll(1, 1000);
+
+        for (Story story : stories) {
+            User u = userDao.getById(story.getOwner_id());
+            if (u == null)
+                storyDao.delete(story);
+        }
+        admin_search_reindex();
+    }
+
     /**
      * Returns current user by using access-token
      *
@@ -549,6 +562,7 @@ public class SCultureRest {
      * @param notnull Whether the current_user can be null or not, if true it will not return null instead throw an exception
      * @return Current user
      */
+
     private User getCurrentUser(HttpHeaders headers, boolean notnull) {
         User current_user = null;
         try {

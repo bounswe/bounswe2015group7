@@ -13,6 +13,10 @@
         <servlet-class>com.sculture.SearchAll</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>search</servlet-name>
+        <servlet-class>com.sculture.Search</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>addcomment</servlet-name>
         <servlet-class>com.sculture.AddComment</servlet-class>
     </servlet>
@@ -44,10 +48,12 @@
         <servlet-name>signup</servlet-name>
         <servlet-class>com.sculture.Signup</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>signup</servlet-name>
         <url-pattern>/signup</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>addcomment</servlet-name>
         <url-pattern>/addcomment</url-pattern>
@@ -83,6 +89,10 @@
     <servlet-mapping>
         <servlet-name>searchall</servlet-name>
         <url-pattern>/search/all</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>search</servlet-name>
+        <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>js</extension>

@@ -33,6 +33,7 @@ public class MainServlet extends HttpServlet {
 //    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("mainservlet dopost");
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
         if (request.getSession().getAttribute("username") != null) {
@@ -44,6 +45,7 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("mainservlet dopost");
         FullStoryResponse story;
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");

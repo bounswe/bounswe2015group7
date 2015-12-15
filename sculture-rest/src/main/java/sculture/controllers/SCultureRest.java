@@ -527,7 +527,7 @@ public class SCultureRest {
                     reportStoryDao.deleteByStoryId(story.getStory_id());
                     voteStoryDao.deleteByStoryId(story.getStory_id());
 
-                    storyDao.deleteByStoryId(story.getStory_id());
+                    storyDao.delete(story);
                 }
             }
             commentDao.deleteByUserId(user.getUser_id());
@@ -535,7 +535,7 @@ public class SCultureRest {
             reportStoryDao.deleteByUserId(user.getUser_id());
             voteStoryDao.deleteByUserId(user.getUser_id());
             followUserDao.deleteByUserId(user.getUser_id());
-            userDao.deleteByEmail(email);
+            userDao.delete(user);
         }
 
         admin_search_reindex();

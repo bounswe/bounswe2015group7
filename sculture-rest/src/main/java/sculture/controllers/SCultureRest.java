@@ -543,8 +543,8 @@ public class SCultureRest {
     }
 
 
-    @RequestMapping("/admin/clear/orphan")
-    public void admin_clear_orphan(@RequestBody AdminClearRequest requestBody) {
+    @RequestMapping("/admin/orphan")
+    public void admin_clear_orphan() {
         List<Story> stories = storyDao.getAll(1, 1000);
 
         for (Story story : stories) {

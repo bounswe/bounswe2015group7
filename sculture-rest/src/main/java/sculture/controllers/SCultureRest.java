@@ -529,6 +529,8 @@ public class SCultureRest {
             followUserDao.deleteByUserId(user.getUser_id());
             userDao.deleteByEmail(email);
         }
+
+        admin_search_reindex();
     }
 
     /**

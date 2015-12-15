@@ -119,7 +119,7 @@
             <% StoryResponse topStory = (StoryResponse) request.getAttribute("topStory");%>
             <% try { %>
             <%if (topStory.getMedia() != null) { %>
-            <img style="width: 300px; height: 250px"  src="<%out.print("http://52.59.252.52:9000/image/get/" + topStory.getMedia().get(0));%>" alt="">
+            <img style="width: 300px; height: 250px"  src="<%out.print("http://52.59.252.52:9000:9000/image/get/" + topStory.getMedia().get(0));%>" alt="">
             <% } %>
             <%} catch (Exception e) {%>
             <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
@@ -159,7 +159,7 @@
             <div class="thumbnail">
                 <% try { %>
                     <%if (popularStories.getResult().get(i).getMedia() != null) { %>
-                     <img style="width: 200px; height: 200px"  src="<%out.print("http://52.59.252.52:9000/image/get/" + popularStories.getResult().get(i).getMedia().get(0));%>" alt="">
+                     <img style="width: 200px; height: 200px"  src="<%out.print("http://52.59.252.52:9000:9000/image/get/" + popularStories.getResult().get(i).getMedia().get(0));%>" alt="">
                     <% } %>
                 <%} catch (Exception e) {%>
                      <img  style="width: 200px; height: 200px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">

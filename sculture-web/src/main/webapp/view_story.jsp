@@ -119,7 +119,7 @@
             <!-- Preview Image -->
             <% try { %>
             <%if (story.getMedia() != null) { %>
-            <img  src="<%out.print("http://52.59.252.52:9000/image/get/" + story.getMedia().get(0));%>" alt="">
+            <img  src="<%out.print("http://52.59.252.52:9000:9000/image/get/" + story.getMedia().get(0));%>" alt="">
             <% } %>
             <%} catch (Exception e) {%>
             <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
@@ -392,7 +392,7 @@
                 beforeSend: function (request)                {
                     request.setRequestHeader("access-token", definitelynottheaccesstoken);
                 },
-                url: 'http://52.59.252.52:9000/story/vote',
+                url: 'http://52.59.252.52:9000:9000/story/vote',
                 contentType: "application/json",
                 data: JSON.stringify({
                     "story_id": story_id,

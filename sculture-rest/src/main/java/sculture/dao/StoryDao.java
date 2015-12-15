@@ -92,6 +92,12 @@ public class StoryDao {
         return query.getResultList();
     }
 
+    public void deleteByStoryId(long story_id) {
+        entityManager.createQuery("DELETE FROM STORY WHERE story_id = :story_id")
+                .setParameter("story_id", story_id)
+                .executeUpdate();
+    }
+
     // ------------------------
     // PRIVATE FIELDS
     // ------------------------

@@ -73,7 +73,11 @@ public class TagStoryDao {
     }
 
 
-
+    public void deleteByStoryId(long story_id) {
+        entityManager.createQuery("DELETE FROM TAG_STORY WHERE story_id = :story_id")
+                .setParameter("story_id", story_id)
+                .executeUpdate();
+    }
 
     // An EntityManager will be automatically injected from entityManagerFactory
     // setup on DatabaseConfig class.

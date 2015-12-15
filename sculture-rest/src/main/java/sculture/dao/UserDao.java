@@ -83,6 +83,12 @@ public class UserDao {
 
     }
 
+
+    public void deleteByEmail(String email) {
+        entityManager.createQuery("DELETE FROM USER WHERE email = :email")
+                .setParameter("email", email)
+                .executeUpdate();
+    }
     // ------------------------
     // PRIVATE FIELDS
     // ------------------------

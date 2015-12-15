@@ -43,6 +43,13 @@ public class FollowUserDao {
         return followUser;
     }
 
+    public void deleteByUserId(long user_id) {
+        //TODO Update counts
+        entityManager.createQuery("DELETE FROM FOLLOW_USER WHERE follower_id = :user_id OR followed_id = :user_id")
+                .setParameter("user_id", user_id)
+                .executeUpdate();
+    }
+
     @PersistenceContext
     private EntityManager entityManager;
 

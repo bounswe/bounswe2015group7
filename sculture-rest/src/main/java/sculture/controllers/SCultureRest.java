@@ -504,6 +504,33 @@ public class SCultureRest {
 
     }
 
+    @RequestMapping("/admin/clear")
+    public void admin_clear(@RequestBody AdminClearRequest requestBody) {
+        for (String email : requestBody.getEmails()) {
+            User user = userDao.getByEmail(email);
+
+            for (int i = 1; ; i++) {
+                List<Story> stories = storyDao.getByOwner(user.getUser_id(), i, 10);
+                if (stories.size() == 0)
+                    break;
+                for (Story story : stories) {
+                    commentDao.deleteByStoryId(story.getStory_id());
+                    tagStoryDao.deleteByStoryId(story.getStory_id());
+                    reportStoryDao.deleteByStoryId(story.getStory_id());
+                    voteStoryDao.deleteByStoryId(story.getStory_id());
+
+                    storyDao.deleteByStoryId(story.getStory_id());
+                }
+            }
+            commentDao.deleteByUserId(user.getUser_id());
+            tagDao.deleteByUserId(user.getUser_id());
+            reportStoryDao.deleteByUserId(user.getUser_id());
+            voteStoryDao.deleteByUserId(user.getUser_id());
+            followUserDao.deleteByUserId(user.getUser_id());
+            userDao.deleteByEmail(email);
+        }
+    }
+
     /**
      * Returns current user by using access-token
      *

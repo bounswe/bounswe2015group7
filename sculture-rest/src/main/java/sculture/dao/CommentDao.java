@@ -74,6 +74,17 @@ public class CommentDao {
         return;
     }
 
+    public void deleteByUserId(long owner_id) {
+        entityManager.createQuery("DELETE FROM COMMENT WHERE owner_id = :owner_id")
+                .setParameter("owner_id", owner_id)
+                .executeUpdate();
+    }
+
+    public void deleteByStoryId(long story_id) {
+        entityManager.createQuery("DELETE FROM COMMENT WHERE story_id = :story_id")
+                .setParameter("story_id", story_id)
+                .executeUpdate();
+    }
 
     // An EntityManager will be automatically injected from entityManagerFactory
     // setup on DatabaseConfig class.

@@ -3,13 +3,13 @@ package tr.edu.boun.cmpe.sculture.models.response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StoryReportResponse {
+public class UserFollowResponse {
 
-    public long report_count;
+    public boolean is_follow;
 
-    public StoryReportResponse(JSONObject object) {
+    public UserFollowResponse(JSONObject object) {
         try {
-            this.report_count = object.getLong("report_count");
+            this.is_follow = object.getBoolean("_follow");
         } catch (JSONException e) {
             e.printStackTrace();
         }

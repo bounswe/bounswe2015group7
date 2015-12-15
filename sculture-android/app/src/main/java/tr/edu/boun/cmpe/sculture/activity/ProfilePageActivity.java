@@ -17,10 +17,12 @@ import org.json.JSONObject;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
-import tr.edu.boun.cmpe.sculture.models.response.LoginResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
+import tr.edu.boun.cmpe.sculture.models.response.UserFollowResponse;
+import tr.edu.boun.cmpe.sculture.models.response.UserGetResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_USER_FOLLOW;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.API_USER_STORIES;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
@@ -43,6 +45,8 @@ public class ProfilePageActivity extends AppCompatActivity {
 
     long currentUserID;
     long visitedUserID;
+
+    boolean is_followed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,18 +86,20 @@ public class ProfilePageActivity extends AppCompatActivity {
     }
 
     private void loadUser() {
-        JSONObject requestBody = new JSONObject();
+        final JSONObject requestBody = new JSONObject();
         try {
-            requestBody.put(FIELD_ID, BUNDLE_VISITED_USER_ID);
+            requestBody.put("userId", visitedUserID);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         addRequest(API_USER_GET, requestBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                LoginResponse loginResponse = new LoginResponse(response);
-                visitedUserID = loginResponse.id;
-                setActionBarTitle(loginResponse.username);
+                UserGetResponse userGetResponse = new UserGetResponse(response);
+                visitedUserID = userGetResponse.user_id;
+                is_followed = userGetResponse.is_following;
+                refreshFollowButton();
+                setActionBarTitle(userGetResponse.username);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -104,7 +110,35 @@ public class ProfilePageActivity extends AppCompatActivity {
     }
 
     private void followUser() {
+        final JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("user_id", visitedUserID);
+            requestBody.put("is_follow", !is_followed);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        addRequest(API_USER_FOLLOW, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                UserFollowResponse userFollowResponse = new UserFollowResponse(response);
+                is_followed = userFollowResponse.is_follow;
+                refreshFollowButton();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, null);
+    }
+
+
+    private void refreshFollowButton() {
+        if (is_followed)
+            follow.setText(R.string.unfollow);
+        else
+            follow.setText(R.string.follow);
     }
 
     private void setRecyclerListeners() {

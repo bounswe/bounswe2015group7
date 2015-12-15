@@ -40,4 +40,5 @@
     <string name="action_report">Report</string>
     <string name="report_success">Thank you for your report. We will investigate this story.</string>
     <string name="vote_success">Thank you for your feedback.</string>
+    <string name="unfollow">Unfollow</string>
 </resources>

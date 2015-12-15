@@ -42,12 +42,12 @@ public class Login extends HttpServlet {
             request.setAttribute("username", jsonResponse.getBody().getObject().get("username"));
             request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
             request.getSession().setAttribute("userid", jsonResponse.getBody().getObject().get("id"));
-            request.getSession().setAttribute("access_token", jsonResponse.getBody().getObject().get("access_token"));
+            request.getSession().setAttribute("access_token", jsonResponse.getBody().getObject().get("access_token").toString());
+            System.out.println(jsonResponse.getBody().getObject().get("access_token").toString());
         } else {
             request.setAttribute("isLoggedIn", false);
             request.setAttribute("username", "");
         }
-
         //Get popular stories using /search/all
 
         JSONObject params = new JSONObject();

@@ -168,7 +168,11 @@
                     <% String popularTitle = popularStories.getResult().get(i).getTitle(); %>
                     <h3><% out.print(popularTitle); %></h3>
                     <% String popularContent = popularStories.getResult().get(i).getContent(); %>
-                    <p><% out.print(popularContent); %></p>
+                    <p><% if(popularContent.length() < 300){
+                        out.print(popularContent.replace("\n", "<br>"));
+                    }else {
+                        out.print(popularContent.replace("\n", "<br>").substring(0, 400) + "...");
+                    } %></p>
                     <p>
                         <%String refUrl = "/get/story/" + popularStories.getResult().get(i).getId();%>
                         <a href="<%out.print(refUrl);%>"> Read More</a></small>

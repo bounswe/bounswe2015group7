@@ -2,12 +2,16 @@ package sculture.models.response;
 
 import sculture.dao.TagStoryDao;
 import sculture.dao.UserDao;
+import sculture.dao.VoteStoryDao;
 import sculture.models.tables.Story;
+import sculture.models.tables.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class BaseStoryResponse {
+public class StoryResponse {
     private class User {
         private long id;
         private String username;
@@ -31,9 +35,12 @@ public class BaseStoryResponse {
     private long positive_vote;
     private long negative_vote;
     private long report_count;
+    private String content;
+    private List<String> media;
+    private int vote;
 
 
-    public BaseStoryResponse(Story story, TagStoryDao tagStoryDao, UserDao userDao) {
+    public StoryResponse(Story story, sculture.models.tables.User current_user, TagStoryDao tagStoryDao, UserDao userDao, VoteStoryDao voteStoryDao) {
         this.id = story.getStory_id();
         this.title = story.getTitle();
         this.creation_date = story.getCreate_date();
@@ -48,6 +55,18 @@ public class BaseStoryResponse {
 
         this.owner.username = userDao.getById(story.getOwner_id()).getUsername();
         this.last_editor.username = userDao.getById(story.getLast_editor_id()).getUsername();
+
+        this.content = story.getContent();
+        if (story.getMedia() != null)
+            this.media = Arrays.asList(story.getMedia().split("\\s*,\\s*"));
+        else {
+            this.media = new ArrayList<>();
+        }
+        if (current_user == null)
+            vote = 0;
+        else {
+            vote = voteStoryDao.get(current_user.getUser_id(), story.getStory_id()).getVote();
+        }
     }
 
     public long getId() {

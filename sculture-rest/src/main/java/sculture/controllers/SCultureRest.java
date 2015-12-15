@@ -144,8 +144,26 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search/all")
-    public List<Story> user_get() {
-        return storyDao.getAll();
+    public SearchResponse user_get(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
+
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+        SearchResponse response = new SearchResponse();
+        List<StoryResponse> storyResponses = new ArrayList<>();
+        response.setResult(storyResponses);
+        List<Story> stories = storyDao.getAll(page, size);
+
+        for (Story story : stories) {
+            storyResponses.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        }
+
+        response.setResult(storyResponses);
+        return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/tag/get")
@@ -174,7 +192,8 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/stories")
-    public SearchResponse user_get(@RequestBody StoriesGetRequestBody requestBody) {
+    public SearchResponse user_get(@RequestBody StoriesGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
         //TODO Exception handling
         int page = requestBody.getPage();
         int size = requestBody.getSize();
@@ -188,9 +207,9 @@ public class SCultureRest {
         List<Story> storyList = storyDao.getByOwner(id, page, size);
 
         SearchResponse searchResponse = new SearchResponse();
-        List<BaseStoryResponse> responses = new ArrayList<>();
+        List<StoryResponse> responses = new ArrayList<>();
         for (Story story : storyList) {
-            responses.add(new BaseStoryResponse(story, tagStoryDao, userDao));
+            responses.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
         }
         searchResponse.setResult(responses);
         return searchResponse;
@@ -277,7 +296,7 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
-    public BaseStoryResponse story_create(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public StoryResponse story_create(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);
 
         //TODO Exception handling
@@ -313,11 +332,11 @@ public class SCultureRest {
 
         SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
 
-        return new BaseStoryResponse(story, tagStoryDao, userDao);
+        return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
-    public BaseStoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public StoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);
         Story story = storyDao.getById(requestBody.getStory_id());
         if (current_user.getUser_id() != story.getOwner_id()) {
@@ -360,20 +379,21 @@ public class SCultureRest {
         SearchEngine.removeDoc(story.getStory_id());
         SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
 
-        return new BaseStoryResponse(story, tagStoryDao, userDao);
+        return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
     @RequestMapping("/story/get")
-    public FullStoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public StoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, false);
 
         Story story = storyDao.getById(requestBody.getId());
 
-        return new FullStoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
+        return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
     @RequestMapping("/search")
-    public SearchResponse search(@RequestBody SearchRequestBody requestBody) {
+    public SearchResponse search(@RequestBody SearchRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
         //TODO Exception handling
         int page = requestBody.getPage();
         int size = requestBody.getSize();
@@ -385,11 +405,11 @@ public class SCultureRest {
 
         List<Long> story_ids = SearchEngine.search(requestBody.getQuery(), page, size);
 
-        List<BaseStoryResponse> responses = new LinkedList<>();
+        List<StoryResponse> responses = new LinkedList<>();
         for (long id : story_ids) {
             Story story = storyDao.getById(id);
             System.out.println(id);
-            responses.add(new BaseStoryResponse(story, tagStoryDao, userDao));
+            responses.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
         }
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResult(responses);

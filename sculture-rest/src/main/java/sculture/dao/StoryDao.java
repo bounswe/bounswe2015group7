@@ -44,8 +44,13 @@ public class StoryDao {
      * Return all the stories stored in the database.
      */
     @SuppressWarnings("unchecked")
-    public List<Story> getAll() {
-        return entityManager.createQuery("from Story").getResultList();
+    public List<Story> getAll(int page, int size) {
+        Query query = entityManager.createQuery(
+                "from Story");
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+
+        return query.getResultList();
     }
 
     /**

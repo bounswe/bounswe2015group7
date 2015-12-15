@@ -39,7 +39,7 @@ public class CommentDao {
      */
     public List<Comment> retrieveByStory(long story_id, int page, int size) {
         Query query = entityManager.createQuery(
-                "from Comment where story_id = :story_id ORDER BY create_date ASC");
+                "from Comment where story_id = :story_id ORDER BY create_date DESC");
         query.setParameter("story_id", story_id).getResultList();
         query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);

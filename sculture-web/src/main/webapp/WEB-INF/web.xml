@@ -6,44 +6,44 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>sculture</servlet-name>
-        <servlet-class>com.sculture.controller.MainServlet</servlet-class>
+        <servlet-class>com.sculture.MainServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>searchall</servlet-name>
-        <servlet-class>com.sculture.controller.SearchAll</servlet-class>
+        <servlet-class>com.sculture.SearchAll</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>search</servlet-name>
-        <servlet-class>com.sculture.controller.Search</servlet-class>
+        <servlet-class>com.sculture.Search</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addcomment</servlet-name>
-        <servlet-class>com.sculture.controller.AddComment</servlet-class>
+        <servlet-class>com.sculture.AddComment</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>getstory</servlet-name>
-        <servlet-class>com.sculture.controller.GetStory</servlet-class>
+        <servlet-class>com.sculture.GetStory</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>getuser</servlet-name>
-        <servlet-class>com.sculture.controller.GetUser</servlet-class>
+        <servlet-class>com.sculture.GetUser</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>login</servlet-name>
-        <servlet-class>com.sculture.controller.Login</servlet-class>
+        <servlet-class>com.sculture.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>logout</servlet-name>
-        <servlet-class>com.sculture.controller.Logout</servlet-class>
+        <servlet-class>com.sculture.Logout</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>savestory</servlet-name>
-        <servlet-class>com.sculture.controller.SaveStory</servlet-class>
+        <servlet-class>com.sculture.SaveStory</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addstory</servlet-name>
-        <servlet-class>com.sculture.controller.AddStory</servlet-class>
+        <servlet-class>com.sculture.AddStory</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>reportstory</servlet-name>
@@ -51,7 +51,7 @@
     </servlet>
     <servlet>
         <servlet-name>signup</servlet-name>
-        <servlet-class>com.sculture.controller.Signup</servlet-class>
+        <servlet-class>com.sculture.Signup</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>followuser</servlet-name>

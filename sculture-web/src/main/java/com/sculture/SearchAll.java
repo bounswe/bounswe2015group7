@@ -1,4 +1,4 @@
-package com.sculture.controller;
+package com.sculture;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 @WebServlet(name = "searchall")

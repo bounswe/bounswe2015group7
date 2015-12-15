@@ -1,4 +1,4 @@
-package com.sculture.controller;
+package com.sculture;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;

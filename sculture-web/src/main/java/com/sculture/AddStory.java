@@ -1,4 +1,4 @@
-package com.sculture.controller;
+package com.sculture;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

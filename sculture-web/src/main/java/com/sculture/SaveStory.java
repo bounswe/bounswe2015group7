@@ -1,13 +1,10 @@
-package com.sculture.controller;
-
-/**
- * Created by Atakan Arıkan on 13.12.2015.
- */
+package com.sculture;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sculture.model.response.StoryResponse;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -16,26 +13,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-@WebServlet(name = "addcomment")
-public class AddComment extends HttpServlet {
 
+@WebServlet(name = "savestory")
+public class SaveStory extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("isLoggedIn", false);
-        request.setAttribute("username", "");
-        if (request.getSession().getAttribute("username") != null) {
-            request.setAttribute("username", request.getSession().getAttribute("username"));
-            request.setAttribute("isLoggedIn", true);
-        }
         HttpResponse<JsonNode> jsonResponse = null;
+        StoryResponse story = null;
+
+        ArrayList<String> tags = new ArrayList<String>(Arrays.asList(request.getParameter("story-tags").split(" ")));
+
+
         try {
             JSONObject jsonObject = new JSONObject();
-            System.out.println("id: " + request.getParameter("story_id"));
-            System.out.println("content: " + request.getParameter("form-commentbody"));
-            jsonObject.put("storyId", request.getParameter("story_id"));
-            jsonObject.put("content", request.getParameter("form-commentbody"));
+
+            jsonObject.put("title", request.getParameter("story-title"));
+            jsonObject.put("content", request.getParameter("story-content"));
+            jsonObject.put("tags", tags);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/comment/new")
+            jsonResponse = Unirest.post("http://52.28.216.93:9000/story/create")
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
@@ -43,8 +41,8 @@ public class AddComment extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        String url = "/get/story/" + request.getParameter("story_id");
-        response.sendRedirect(url);
+
+        response.sendRedirect("/index");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

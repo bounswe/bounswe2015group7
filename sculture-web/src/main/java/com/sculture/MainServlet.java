@@ -1,7 +1,6 @@
-package com.sculture.controller;
+package com.sculture;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -16,12 +15,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by bilal on 14/10/15.
  */
-@WebServlet(name = "MainServlet")
+@WebServlet(name = "sculture")
 public class MainServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,4 +1,8 @@
-package com.sculture.controller;
+package com.sculture;
+
+/**
+ * Created by Atakan Arıkan on 13.12.2015.
+ */
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -12,41 +16,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 
-/**
- * Created by bilal on 14/10/15.
- */
-@WebServlet(name = "signup")
-public class Signup extends HttpServlet {
+@WebServlet(name = "addcomment")
+public class AddComment extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Enumeration<String> enumeration = request.getParameterNames();
-//        while (enumeration.hasMoreElements()) System.out.println(enumeration.nextElement());
+        request.setAttribute("isLoggedIn", false);
+        request.setAttribute("username", "");
+        if (request.getSession().getAttribute("username") != null) {
+            request.setAttribute("username", request.getSession().getAttribute("username"));
+            request.setAttribute("isLoggedIn", true);
+        }
         HttpResponse<JsonNode> jsonResponse = null;
         try {
-
-
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("email", request.getParameter("form-email"));
-            jsonObject.put("username", request.getParameter("form-username"));
-            jsonObject.put("password", request.getParameter("form-password"));
-
+            System.out.println("id: " + request.getParameter("story_id"));
+            System.out.println("content: " + request.getParameter("form-commentbody"));
+            jsonObject.put("storyId", request.getParameter("story_id"));
+            jsonObject.put("content", request.getParameter("form-commentbody"));
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/register")
+            jsonResponse = Unirest.post("http://52.28.216.93:9000/comment/new")
                     .header("Content-Type", "application/json")
+                    .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/index");
+        String url = "/get/story/" + request.getParameter("story_id");
+        response.sendRedirect(url);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("isLoggedIn", false);
-        request.setAttribute("username", "");
-        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
+
     }
 
 }

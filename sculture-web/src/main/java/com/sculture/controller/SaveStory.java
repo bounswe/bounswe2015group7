@@ -1,13 +1,10 @@
 package com.sculture.controller;
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.helpers.BaseStoryResponse;
-import com.sculture.helpers.Story;
-import org.apache.commons.io.IOUtils;
+import com.sculture.model.response.StoryResponse;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -15,10 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,7 +21,7 @@ import java.util.Arrays;
 public class SaveStory extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpResponse<JsonNode> jsonResponse = null;
-        BaseStoryResponse story = null;
+        StoryResponse story = null;
 
         ArrayList<String> tags = new ArrayList<String>(Arrays.asList(request.getParameter("story-tags").split(" ")));
 

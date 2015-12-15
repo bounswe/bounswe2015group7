@@ -51,7 +51,7 @@ public class SearchAll extends HttpServlet {
         }
 
         Gson gson = MyGson.create();
-        StoriesResponse storiesResponse = gson.fromJson(jsonStoriesResponse.toString(), StoriesResponse.class);
+        StoriesResponse storiesResponse = gson.fromJson(jsonStoriesResponse.getBody().getObject().toString(), StoriesResponse.class);
 
         request.setAttribute("results", storiesResponse);
         request.getRequestDispatcher("/search_result.jsp").forward(request, response);

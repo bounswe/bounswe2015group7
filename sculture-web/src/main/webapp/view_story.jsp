@@ -198,8 +198,8 @@
 
             <div class="well">
                 <h4>Created by:</h4>
-                <%String refUrl = "/get/user/" + story.getOwnerId();%>
-                <a href="<%out.print(refUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> <%out.print(story.getOwner());%> </a>
+                <%String refUrl = "/get/user/" + story.getOwner().getId();%>
+                <a href="<%out.print(refUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> <%out.print(story.getOwner().getUsername());%> </a>
 
             </div>
 
@@ -222,7 +222,7 @@
                 <!-- /.row -->
             </div>
             <div class="well">
-                <%String asd = "/report/story/" + story.getStory_id();%>
+                <%String asd = "/report/story/" + story.getId();%>
                 <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
 
             </div>

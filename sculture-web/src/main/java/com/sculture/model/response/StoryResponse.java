@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class StoryResponse {
-    private static class User {
+    public class User {
         private long id;
         private String username;
 

@@ -44,6 +44,7 @@ public class UserDao {
      * Return the user having the passed email.
      */
     public User getByEmail(String email) {
+
         return (User) entityManager.createQuery(
                 "from User where email = :email ")
                 .setParameter("email", email)
@@ -85,7 +86,7 @@ public class UserDao {
 
 
     public void deleteByEmail(String email) {
-        entityManager.createQuery("DELETE FROM USER WHERE email = :email")
+        entityManager.createQuery("DELETE FROM User WHERE email = :email")
                 .setParameter("email", email)
                 .executeUpdate();
     }

@@ -55,7 +55,7 @@ public class TagDao {
     }
 
     public void deleteByUserId(long last_editor_id) {
-        entityManager.createQuery("DELETE FROM TAG WHERE last_editor_id = :last_editor_id")
+        entityManager.createQuery("DELETE FROM Tag WHERE last_editor_id = :last_editor_id")
                 .setParameter("last_editor_id", last_editor_id)
                 .executeUpdate();
     }

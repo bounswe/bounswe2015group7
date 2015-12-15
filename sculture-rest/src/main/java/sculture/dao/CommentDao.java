@@ -75,13 +75,13 @@ public class CommentDao {
     }
 
     public void deleteByUserId(long owner_id) {
-        entityManager.createQuery("DELETE FROM COMMENT WHERE owner_id = :owner_id")
+        entityManager.createQuery("DELETE FROM Comment WHERE owner_id = :owner_id")
                 .setParameter("owner_id", owner_id)
                 .executeUpdate();
     }
 
     public void deleteByStoryId(long story_id) {
-        entityManager.createQuery("DELETE FROM COMMENT WHERE story_id = :story_id")
+        entityManager.createQuery("DELETE FROM Comment WHERE story_id = :story_id")
                 .setParameter("story_id", story_id)
                 .executeUpdate();
     }

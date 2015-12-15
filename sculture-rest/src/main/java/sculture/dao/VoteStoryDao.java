@@ -66,14 +66,14 @@ public class VoteStoryDao {
 
     public void deleteByUserId(long user_id) {
         //TODO Update counts
-        entityManager.createQuery("DELETE FROM VOTE_STORY WHERE user_id = :user_id")
+        entityManager.createQuery("DELETE FROM VoteStory WHERE user_id = :user_id")
                 .setParameter("user_id", user_id)
                 .executeUpdate();
     }
 
     public void deleteByStoryId(long story_id) {
         //TODO Update counts
-        entityManager.createQuery("DELETE FROM VOTE_STORY WHERE story_id = :story_id")
+        entityManager.createQuery("DELETE FROM VoteStory WHERE story_id = :story_id")
                 .setParameter("story_id", story_id)
                 .executeUpdate();
     }

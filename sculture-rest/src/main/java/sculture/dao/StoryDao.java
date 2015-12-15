@@ -93,7 +93,7 @@ public class StoryDao {
     }
 
     public void deleteByStoryId(long story_id) {
-        entityManager.createQuery("DELETE FROM STORY WHERE story_id = :story_id")
+        entityManager.createQuery("DELETE FROM Story WHERE story_id = :story_id")
                 .setParameter("story_id", story_id)
                 .executeUpdate();
     }

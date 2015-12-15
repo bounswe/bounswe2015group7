@@ -74,7 +74,7 @@ public class TagStoryDao {
 
 
     public void deleteByStoryId(long story_id) {
-        entityManager.createQuery("DELETE FROM TAG_STORY WHERE story_id = :story_id")
+        entityManager.createQuery("DELETE FROM TagStory WHERE story_id = :story_id")
                 .setParameter("story_id", story_id)
                 .executeUpdate();
     }

@@ -3,6 +3,7 @@ package sculture.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import sculture.Utils;
@@ -17,6 +18,7 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
+import javax.persistence.NoResultException;
 import java.io.FileOutputStream;
 import java.util.*;
 
@@ -507,7 +509,13 @@ public class SCultureRest {
     @RequestMapping("/admin/clear")
     public void admin_clear(@RequestBody AdminClearRequest requestBody) {
         for (String email : requestBody.getEmails()) {
-            User user = userDao.getByEmail(email);
+            User user;
+            try {
+                user = userDao.getByEmail(email);
+            } catch (EmptyResultDataAccessException e) {
+                continue;
+            }
+
 
             for (int i = 1; ; i++) {
                 List<Story> stories = storyDao.getByOwner(user.getUser_id(), i, 10);

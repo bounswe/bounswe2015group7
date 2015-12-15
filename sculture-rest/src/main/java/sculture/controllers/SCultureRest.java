@@ -536,6 +536,7 @@ public class SCultureRest {
             voteStoryDao.deleteByUserId(user.getUser_id());
             followUserDao.deleteByUserId(user.getUser_id());
             userDao.delete(user);
+            System.out.println("User " + user.getUsername() + " is deleted");
         }
 
         admin_search_reindex();

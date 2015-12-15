@@ -83,6 +83,11 @@ public class Utils {
             }
         };
         request.setTag(tag);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         baseApplication.mRequestQueue.add(request);
     }
 

@@ -61,7 +61,6 @@ public class StoryCreateActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             isEdit = bundle.getBoolean(BUNDLE_IS_EDIT, false);
-
             if (isEdit) {
                 storyId = bundle.getLong(BUNDLE_STORY_ID);
             }
@@ -135,6 +134,7 @@ public class StoryCreateActivity extends AppCompatActivity {
         }
 
         new StoryUploader(titleText.getText().toString(), contentText.getText().toString(), completionView.getObjects(), mediaUris);
+        //TODO Edit
         startActivity(new Intent(this, MainActivity.class));
     }
 

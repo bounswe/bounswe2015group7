@@ -180,7 +180,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                         @Override
                         public void onResponse(JSONObject response) {
                             CommentResponse commentResponse = new CommentResponse(response);
-                            addComment(commentResponse);
+                            insertCommentAtStart(commentResponse);
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -393,6 +393,11 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
     public void addComment(CommentResponse commentResponse) {
         comments.add(commentResponse);
         this.notifyItemInserted(comments.size() + 2);
+    }
+
+    public void insertCommentAtStart(CommentResponse commentResponse) {
+        comments.add(0, commentResponse);
+        this.notifyItemInserted(2);
     }
 
     public class TagSpan extends ClickableSpan {

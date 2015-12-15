@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
@@ -57,6 +58,7 @@ public class TagActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag);
+        mActivity = this;
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
             tag_title = bundle.getString(BUNDLE_TAG_TITLE);
@@ -94,6 +96,7 @@ public class TagActivity extends AppCompatActivity {
                 TagResponse tagResponse = new TagResponse(response);
                 tagDescription.setText(tagResponse.description);
                 setActionBarTitle(tagResponse.tag_title);
+                update_time.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(tagResponse.last_edit_date), tagResponse.last_editor_id));
                 set_visibilities();
             }
         }, new Response.ErrorListener() {

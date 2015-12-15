@@ -108,4 +108,68 @@ public class StoryResponse {
     public long getReport_count() {
         return report_count;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCreation_date(Date creation_date) {
+        this.creation_date = creation_date;
+    }
+
+    public void setUpdate_date(Date update_date) {
+        this.update_date = update_date;
+    }
+
+    public void setLast_editor(User last_editor) {
+        this.last_editor = last_editor;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public void setPositive_vote(long positive_vote) {
+        this.positive_vote = positive_vote;
+    }
+
+    public void setNegative_vote(long negative_vote) {
+        this.negative_vote = negative_vote;
+    }
+
+    public void setReport_count(long report_count) {
+        this.report_count = report_count;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public List<String> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<String> media) {
+        this.media = media;
+    }
+
+    public int getVote() {
+        return vote;
+    }
+
+    public void setVote(int vote) {
+        this.vote = vote;
+    }
 }

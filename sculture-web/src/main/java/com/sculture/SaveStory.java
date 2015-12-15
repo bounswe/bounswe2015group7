@@ -33,7 +33,7 @@ public class SaveStory extends HttpServlet {
             jsonObject.put("content", request.getParameter("story-content"));
             jsonObject.put("tags", tags);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/story/create")
+            jsonResponse = Unirest.post("http://52.59.252.52:9000/story/create")
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)

@@ -30,7 +30,7 @@ public class Login extends HttpServlet {
             jsonObject.put("username", request.getParameter("form-username"));
             jsonObject.put("password", request.getParameter("form-password"));
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/user/login")
+            jsonResponse = Unirest.post("http://http://52.59.252.52/user/login")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();
@@ -56,7 +56,7 @@ public class Login extends HttpServlet {
 
         HttpResponse<JsonNode> popularStoriesResponse = null;
         try {
-            popularStoriesResponse = Unirest.post("http://52.28.216.93:9000/search/all")
+            popularStoriesResponse = Unirest.post("http://52.59.252.52:9000/search/all")
                     .header("Content-Type", "application/json")
                     .body(new JsonNode(params.toString()))
                     .asJson();

@@ -122,7 +122,7 @@
                                 <% try { %>
                                 <%if (results.get(i).getMedia() != null) { %>
                                 <img style="width: 300px; height: 250px"
-                                     src="<%out.print("http://52.28.216.93:9000/image/get/" + results.get(i).getMedia().get(0));%>"
+                                     src="<%out.print("http://52.59.252.52:9000/image/get/" + results.get(i).getMedia().get(0));%>"
                                      alt="">
                                 <% } %>
                                 <%} catch (Exception e) {%>

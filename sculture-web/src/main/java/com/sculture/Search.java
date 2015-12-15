@@ -41,7 +41,7 @@ public class Search extends HttpServlet {
 
         HttpResponse<JsonNode> searchJsonResponse = null;
         try {
-            searchJsonResponse = Unirest.post("http://52.28.216.93:9000/search")
+            searchJsonResponse = Unirest.post("http://52.59.252.52:9000/search")
                     .header("Content-Type", "application/json")
                     .body(new JsonNode(jsonObject.toString()))
                     .asJson();

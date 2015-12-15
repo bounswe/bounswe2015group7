@@ -34,7 +34,7 @@ public class ReportStory extends HttpServlet {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("story_id", story_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.28.216.93:9000/story/report")
+            jsonResponse = Unirest.post("http://52.59.252.52:9000/story/report")
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)

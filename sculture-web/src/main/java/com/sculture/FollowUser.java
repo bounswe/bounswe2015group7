@@ -32,7 +32,7 @@ public class FollowUser extends HttpServlet {
             jsonObject.put("user_id", user_id);
             jsonObject.put("is_follow", true);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000:9000/user/follow")
+            jsonResponse = Unirest.post("http://52.59.252.52:9000/user/follow")
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)

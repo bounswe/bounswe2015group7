@@ -44,7 +44,7 @@ public class GetStory extends HttpServlet {
             JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", story_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000:9000/story/get")
+            jsonResponse = Unirest.post("http://52.59.252.52:9000/story/get")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();
@@ -66,7 +66,7 @@ public class GetStory extends HttpServlet {
             jsonObject.put("story_id", story_id);
 
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000:9000/comment/list")
+            jsonResponse = Unirest.post("http://52.59.252.52:9000/comment/list")
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();

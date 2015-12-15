@@ -28,7 +28,7 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.StoryUploader;
 import tr.edu.boun.cmpe.sculture.adapter.StoryImageViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
-import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.view.TagView;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
@@ -61,7 +61,6 @@ public class StoryCreateActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             isEdit = bundle.getBoolean(BUNDLE_IS_EDIT, false);
-
             if (isEdit) {
                 storyId = bundle.getLong(BUNDLE_STORY_ID);
             }
@@ -92,7 +91,7 @@ public class StoryCreateActivity extends AppCompatActivity {
             addRequest(API_STORY_GET, requestBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FullStoryResponse storyResponse = new FullStoryResponse(response);
+                    StoryResponse storyResponse = new StoryResponse(response);
 
                     titleText.setText(storyResponse.title);
                     contentText.setText(storyResponse.content);
@@ -135,6 +134,7 @@ public class StoryCreateActivity extends AppCompatActivity {
         }
 
         new StoryUploader(titleText.getText().toString(), contentText.getText().toString(), completionView.getObjects(), mediaUris);
+        //TODO Edit
         startActivity(new Intent(this, MainActivity.class));
     }
 

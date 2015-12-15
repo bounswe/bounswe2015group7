@@ -1,5 +1,6 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +9,6 @@ import android.util.Log;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,11 +22,12 @@ import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.CommentListResponse;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
-import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_REPORT;
+import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_IS_EDIT;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
@@ -48,6 +49,8 @@ public class StoryShowActivity extends AppCompatActivity {
     private int PAGE = 1;
     private boolean is_loading_more = false;
     private boolean is_reach_end = false;
+    MenuItem report_menu;
+    MenuItem edit_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +131,12 @@ public class StoryShowActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        FullStoryResponse story = new FullStoryResponse(response);
+                        StoryResponse story = new StoryResponse(response);
                         mAdapter.addStory(story);
+
+                        edit_menu.setVisible(story.owner.id == BaseApplication.baseApplication.getUSER_ID());
+                        report_menu.setVisible(story.owner.id != BaseApplication.baseApplication.getUSER_ID());
+
                         load_comment();
                     }
                 },
@@ -147,6 +154,10 @@ public class StoryShowActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_story_show, menu);
+
+        report_menu = menu.findItem(R.id.action_report);
+        edit_menu = menu.findItem(R.id.action_edit);
+
         return true;
     }
 
@@ -178,6 +189,12 @@ public class StoryShowActivity extends AppCompatActivity {
                     }
                 }, null);
 
+                break;
+            case R.id.action_edit:
+                Intent intent = new Intent(this, StoryCreateActivity.class);
+                intent.putExtra(BUNDLE_STORY_ID, story_id);
+                intent.putExtra(BUNDLE_IS_EDIT, true);
+                startActivity(intent);
                 break;
             default:
                 break;

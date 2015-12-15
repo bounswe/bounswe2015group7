@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.activity.StoryShowActivity;
-import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 
 public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdapter.ViewHolder> {
     private final Activity mActivity;
-    private final ArrayList<BaseStoryResponse> stories = new ArrayList<>();
+    private final ArrayList<StoryResponse> stories = new ArrayList<>();
 
 
     public StoryListViewAdapter(Activity activity) {
@@ -36,7 +36,7 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        BaseStoryResponse story = stories.get(position);
+        StoryResponse story = stories.get(position);
         holder.story_title.setText(story.title);
         holder.story_id = story.id;
         String s = mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(story.update_date), story.last_editor.username);
@@ -51,12 +51,12 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
         return stories.size();
     }
 
-    public void addElement(BaseStoryResponse story) {
+    public void addElement(StoryResponse story) {
         stories.add(story);
         this.notifyDataSetChanged();
     }
 
-    private void removeElement(BaseStoryResponse story) {
+    private void removeElement(StoryResponse story) {
         stories.remove(story);
         removeElement(stories.indexOf(story));
     }

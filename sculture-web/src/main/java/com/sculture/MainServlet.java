@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by bilal on 14/10/15.
@@ -33,6 +35,7 @@ public class MainServlet extends HttpServlet {
 //    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Logger.getLogger(MainServlet.class.getName()).log(Level.SEVERE, "Heyyo123");
         System.out.println("mainservlet dopost");
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
@@ -45,6 +48,8 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        Logger.getLogger(MainServlet.class.getName()).log(Level.SEVERE, "Heyyo123");
         System.out.println("mainservlet dopost");
         FullStoryResponse story;
         request.setAttribute("isLoggedIn", false);

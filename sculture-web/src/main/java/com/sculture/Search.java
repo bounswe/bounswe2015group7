@@ -1,6 +1,7 @@
 package com.sculture;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -9,6 +10,7 @@ import com.sculture.helpers.BaseStoryResponse;
 import com.sculture.helpers.FullStoryResponse;
 import com.sculture.helpers.SearchResponse;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,11 +46,14 @@ public class Search extends HttpServlet {
         }
 
 
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("query", request.getParameter("main-search"));
+
         HttpResponse<JsonNode> searchJsonResponse = null;
         try {
             searchJsonResponse = Unirest.post("http://52.28.216.93:9000/search")
                     .header("Content-Type", "application/json")
-                    .field("query", request.getParameter("main-search"))
+                    .body(new JsonNode(jsonObject.toString()))
                     .asJson();
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -57,7 +62,7 @@ public class Search extends HttpServlet {
 
         SearchResponse searchResponse = new SearchResponse();
         ArrayList<BaseStoryResponse> stories = new ArrayList<BaseStoryResponse>();
-        if (searchJsonResponse != null) {
+        if (searchJsonResponse != null && !searchJsonResponse.getBody().isArray()) {
             JSONArray jsonStories = searchJsonResponse.getBody().getObject().getJSONArray("result");
             for(int i=0; i< jsonStories.length(); i++) {
                 Gson gson = new Gson();

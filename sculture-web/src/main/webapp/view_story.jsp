@@ -60,6 +60,12 @@
                         <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
                     </div>
                 </li>
+                <li>
+                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+                    </div>
+                </li>
                 <% } else { %>
                 <li>
                     <div class="top-big-link">
@@ -110,8 +116,23 @@
             <h1><% out.print(story.getTitle()); %></h1>
 
             <hr>
+            <!-- Preview Image -->
+            <% try { %>
+            <%if (story.getMedia() != null) { %>
+            <img  src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
+            <% } %>
+            <%} catch (Exception e) {%>
+            <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
+            <% }%>
+            <hr>
+            <p><% out.print(story.getContent().replace("\n","<br>")); %></p>
+
+
+
+            <hr>
 
             <!-- Date/Time -->
+
             <%
                 try{
                     Date storyCreationDate = story.getCreation_date();%>
@@ -121,22 +142,9 @@
             <p><span class="glyphicon glyphicon-time"></span> Posted on: </p>
 
             <%} %>
-
             <hr>
 
-            <!-- Preview Image -->
-            <% try { %>
-            <%if (story.getMedia() != null) { %>
-            <img  src="<%out.print("http://52.28.216.93:9000/image/get/" + story.getMedia().get(0));%>" alt="">
-            <% } %>
-            <%} catch (Exception e) {%>
-            <img  style="width: 250px; height: 300px" src="http://en.mladinsko.com/images/emptyMME.gif" alt="">
-            <% }%>
-
-                  <hr>
-
-                  <!-- Post Content -->
-            <p><% out.print(story.getContent()); %>
+            <!-- Post Content -->
                 <span class="center-block">
                     <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"> <%out.print(story.getPositive_vote());%></span>
                     <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"><%out.print(story.getNegative_vote());%></span>
@@ -188,21 +196,11 @@
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
 
-            <!-- Blog Search Well -->
             <div class="well">
-                <h4>Search for a story:</h4>
+                <h4>Created by:</h4>
+                <%String refUrl = "/get/user/" + story.getOwnerId();%>
+                <a href="<%out.print(refUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> <%out.print(story.getOwner());%> </a>
 
-                <form role="form" action="/search" method="post">
-                    <div class="form-group has-feedback">
-                        <label class="control-label" for="main-search">
-                        </label>
-                        <input type="text" class="form-control" name="main-search" id="main-search"
-                               placeholder="Tag name"/> <span
-                            class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-                </form>
-
-                <!-- /.input-group -->
             </div>
 
             <!-- Tags -->
@@ -222,6 +220,11 @@
                     </div>
                 </div>
                 <!-- /.row -->
+            </div>
+            <div class="well">
+                <%String asd = "/report/story/" + story.getStory_id();%>
+                <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
+
             </div>
 
 
@@ -334,7 +337,7 @@
                 </form>
 
             </div>
-
+            <input type="hidden" id="definitelynottheaccesstoken" value="<%out.print(request.getSession().getAttribute("access-token"));%>">
         </div>
     </div>
 </div>
@@ -379,30 +382,24 @@
         $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
             var $this = $(this);
             var story_id = <%out.print(story.getId());%>;
-            var definitelynottheaccesstoken = <%out.print(request.getSession().getAttribute("access-token"));%>;
+            var definitelynottheaccesstoken = <%out.print(request.getSession().getAttribute("access_token"));%>;
             var vote;
             if(this.id == "like1") vote = 1;
             else if(this.id == "dislike1") vote = -1;
             if(definitelynottheaccesstoken == null) vote = 0;
             $.ajax({
                 type: 'POST',
-                url: 'http://52.28.216.93:9000/story/vote',
                 beforeSend: function (request)                {
                     request.setRequestHeader("access-token", definitelynottheaccesstoken);
                 },
+                url: 'http://52.28.216.93:9000/story/vote',
                 contentType: "application/json",
                 data: JSON.stringify({
                     "story_id": story_id,
                     "vote" : vote
                 }),
                 success: function (myData) {
-                    var c = $this.data('count');
-                    if (!c){
-                        if(this.id == "like1")c = myData.positive_vote;
-                        if(this.id == "dislike1")c = myData.negative_vote;
-                    }
-                    $this.data('count',c);
-                    $('#'+this.id+'-bs3').html(c);
+                    location.reload();
                 },
                 error:function (errorData) {
                     alert("error!");

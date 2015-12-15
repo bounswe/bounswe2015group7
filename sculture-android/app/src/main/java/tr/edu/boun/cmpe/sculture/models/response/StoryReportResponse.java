@@ -5,11 +5,11 @@ import org.json.JSONObject;
 
 public class StoryReportResponse {
 
-    public int report_count;
+    public long report_count;
 
     public StoryReportResponse(JSONObject object) {
         try {
-            this.report_count = object.getInt("report_count");
+            this.report_count = object.getLong("report_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }

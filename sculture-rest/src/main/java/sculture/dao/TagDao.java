@@ -54,7 +54,11 @@ public class TagDao {
         return;
     }
 
-
+    public void deleteByUserId(long last_editor_id) {
+        entityManager.createQuery("DELETE FROM Tag WHERE last_editor_id = :last_editor_id")
+                .setParameter("last_editor_id", last_editor_id)
+                .executeUpdate();
+    }
 
     // An EntityManager will be automatically injected from entityManagerFactory
     // setup on DatabaseConfig class.

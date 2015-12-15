@@ -23,13 +23,7 @@ import java.io.IOException;
 public class GetUser extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.setAttribute("isLoggedIn", false);
-//        request.setAttribute("username", "");
-//        if (request.getSession().getAttribute("username") != null) {
-//            request.setAttribute("username", request.getSession().getAttribute("username"));
-//            request.setAttribute("isLoggedIn", true);
-//        }
-//        request.getRequestDispatcher("/add_story.jsp").forward(request, response);
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,6 +43,7 @@ public class GetUser extends HttpServlet {
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/user/get")
                     .header("Content-Type", "application/json")
+                    .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {
@@ -58,6 +53,7 @@ public class GetUser extends HttpServlet {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
             user = gson.fromJson(object.toString(), User.class);
+            System.out.println(user.toString());
         }
         jsonResponse = null;
         try {
@@ -66,6 +62,7 @@ public class GetUser extends HttpServlet {
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/user/stories")
                     .header("Content-Type", "application/json")
+                    .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {

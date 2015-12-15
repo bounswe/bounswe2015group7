@@ -3,13 +3,13 @@ package sculture.models.response;
 import java.util.List;
 
 public class SearchResponse {
-    private List<BaseStoryResponse> result;
+    private List<StoryResponse> result;
 
-    public List<BaseStoryResponse> getResult() {
+    public List<StoryResponse> getResult() {
         return result;
     }
 
-    public void setResult(List<BaseStoryResponse> result) {
+    public void setResult(List<StoryResponse> result) {
         this.result = result;
     }
 }

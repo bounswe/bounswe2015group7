@@ -28,6 +28,7 @@
         <servlet-name>getuser</servlet-name>
         <servlet-class>com.sculture.controller.GetUser</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.sculture.controller.Login</servlet-class>
@@ -45,10 +46,17 @@
         <servlet-class>com.sculture.controller.AddStory</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>reportstory</servlet-name>
+        <servlet-class>com.sculture.ReportStory</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>signup</servlet-name>
         <servlet-class>com.sculture.controller.Signup</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>followuser</servlet-name>
+        <servlet-class>com.sculture.FollowUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>signup</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -85,6 +93,14 @@
     <servlet-mapping>
         <servlet-name>addstory</servlet-name>
         <url-pattern>/addstory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>reportstory</servlet-name>
+        <url-pattern>/report/story/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>followuser</servlet-name>
+        <url-pattern>/follow/user/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>searchall</servlet-name>

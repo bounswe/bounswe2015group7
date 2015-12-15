@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html lang="en">
 
 <head>
@@ -51,6 +52,12 @@
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                    </div>
+                </li>
+                <li>
+                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
                     </div>
                 </li>
                 <% } else { %>

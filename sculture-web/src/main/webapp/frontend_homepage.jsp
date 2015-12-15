@@ -58,6 +58,12 @@
                         <a class="btn btn-link-2" href="/logout">Log Out</a>
                     </div>
                 </li>
+                <li>
+                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+                    </div>
+                </li>
                 <% } else { %>
                 <li>
                     <div class="top-big-link">
@@ -124,7 +130,11 @@
             <% String title = topStory.getTitle(); %>
             <% String refUrl1 = "/get/story/" + topStory.getId();%>
             <h3> <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></h3>
-            <p><% out.print(topStory.getContent()); %></p>
+            <p><% if(topStory.getContent().length() < 300){
+                out.print(topStory.getContent().replace("\n", "<br>"));
+            }else {
+                out.print(topStory.getContent().replace("\n", "<br>").substring(0, 400) + "...");
+            } %></p>
         </div>
 
     </div>

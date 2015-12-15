@@ -39,7 +39,7 @@ public class CommentDao {
      */
     public List<Comment> retrieveByStory(long story_id, int page, int size) {
         Query query = entityManager.createQuery(
-                "from Comment where story_id = :story_id");
+                "from Comment where story_id = :story_id ORDER BY create_date DESC");
         query.setParameter("story_id", story_id).getResultList();
         query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);
@@ -74,6 +74,17 @@ public class CommentDao {
         return;
     }
 
+    public void deleteByUserId(long owner_id) {
+        entityManager.createQuery("DELETE FROM Comment WHERE owner_id = :owner_id")
+                .setParameter("owner_id", owner_id)
+                .executeUpdate();
+    }
+
+    public void deleteByStoryId(long story_id) {
+        entityManager.createQuery("DELETE FROM Comment WHERE story_id = :story_id")
+                .setParameter("story_id", story_id)
+                .executeUpdate();
+    }
 
     // An EntityManager will be automatically injected from entityManagerFactory
     // setup on DatabaseConfig class.

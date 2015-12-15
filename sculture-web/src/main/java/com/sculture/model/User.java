@@ -4,14 +4,23 @@ package com.sculture.model;
  * Created by Atakan Arıkan on 14.12.2015.
  */
 public class User {
-    private long id;
+    private long user_id;
     private String username;
     private String email;
     private String fullname;
     private String facebook_id;
     private String access_token;
     private String notification_rate;
-    private boolean _promoted;
+    private boolean _promoted = false;
+    private boolean _following;
+
+    public boolean is_following() {
+        return _following;
+    }
+
+    public void set_following(boolean _following) {
+        this._following = _following;
+    }
 
     public boolean get_promoted() {
         return _promoted;
@@ -22,11 +31,11 @@ public class User {
     }
 
     public long getId() {
-        return id;
+        return user_id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.user_id = id;
     }
 
     public String getUsername() {

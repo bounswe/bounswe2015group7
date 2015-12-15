@@ -70,6 +70,12 @@
             <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
           </div>
         </li>
+        <li>
+          <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+          <div class="top-big-link">
+            <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+          </div>
+        </li>
         <% } else { %>
         <li>
           <div class="top-big-link">
@@ -96,9 +102,12 @@
       <div class="col-sm-10">
         <% User user = (User)request.getAttribute("relatedUser");%>
         <h1 class=""><% out.print(user.getUsername());%></h1>
-        <button href="/index" type="button" class="btn btn-success" style="height:50px;width:300px"> Follow </button>
+        <%if(user.is_following()) {%>
+          You are following this user.
+        <%}else {%>
+        <a href="/follow/user/<%out.print(user.getId());%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Follow User </a>
+        <%}%>
         <br><br>
-        <% //out.print("<button href=\"" + user.followURL + "\"type=\"button\" class=\"btn btn-success\" style=\"height:50px;width:300px\"> Follow </button>");%>
 
 
       </div>

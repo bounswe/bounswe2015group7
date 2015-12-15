@@ -1,7 +1,5 @@
 package tr.edu.boun.cmpe.sculture.models.response;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BaseStoryResponse {
+public class StoryResponse {
     public class User {
         public long id;
         public String username;
@@ -26,11 +24,12 @@ public class BaseStoryResponse {
     public long positive_vote;
     public long negative_vote;
     public long report_count;
+    public String content;
+    public List<String> media = new ArrayList<>();
+    public int vote;
 
-
-    public BaseStoryResponse(JSONObject object) {
+    public StoryResponse(JSONObject object) {
         try {
-            Log.i("HERE", object.toString());
             this.id = object.getLong("id");
             this.title = object.getString("title");
             this.creation_date = new Date(object.getLong("creation_date"));
@@ -49,6 +48,13 @@ public class BaseStoryResponse {
 
             this.owner.username = object.getJSONObject("owner").getString("username");
             this.last_editor.username = object.getJSONObject("last_editor").getString("username");
+            this.content = object.getString("content");
+            this.vote = object.getInt("vote");
+
+            JSONArray mediaArray = object.getJSONArray("media");
+            for (int i = 0; i < mediaArray.length(); i++) {
+                media.add(mediaArray.getString(i));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,7 +21,7 @@ import tr.edu.boun.cmpe.sculture.adapter.StoryViewWithCommentAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.CommentListResponse;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
-import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
@@ -128,7 +127,7 @@ public class StoryShowActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        FullStoryResponse story = new FullStoryResponse(response);
+                        StoryResponse story = new StoryResponse(response);
                         mAdapter.addStory(story);
                         load_comment();
                     }

@@ -36,7 +36,7 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.fragment.main.HomeFragment;
 import tr.edu.boun.cmpe.sculture.fragment.main.ProfileFragment;
-import tr.edu.boun.cmpe.sculture.models.response.BaseStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     SearchResponse searchResponse = new SearchResponse(response);
-                    for (BaseStoryResponse story : searchResponse.result)
+                    for (StoryResponse story : searchResponse.result)
                         mStoryListViewAdapter.addElement(story);
 
                     if (searchResponse.result.size() == 0)

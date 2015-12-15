@@ -35,7 +35,7 @@ import tr.edu.boun.cmpe.sculture.activity.ProfilePageActivity;
 import tr.edu.boun.cmpe.sculture.activity.TagActivity;
 import tr.edu.boun.cmpe.sculture.models.response.CommentResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
-import tr.edu.boun.cmpe.sculture.models.response.FullStoryResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.VoteResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
@@ -50,7 +50,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
     private static final int VIEW_TYPE_COMMENT_EDIT = 2;
     private static final int VIEW_TYPE_COMMENT = 3;
     private boolean is_story_added = false;
-    private FullStoryResponse story;
+    private StoryResponse story;
     private final ArrayList<CommentResponse> comments = new ArrayList<>();
 
     private Activity mActivity;
@@ -382,7 +382,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         return size;
     }
 
-    public void addStory(FullStoryResponse story) {
+    public void addStory(StoryResponse story) {
         this.story = story;
         is_story_added = true;
         this.notifyItemChanged(0);

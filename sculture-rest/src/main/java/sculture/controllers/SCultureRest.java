@@ -46,6 +46,8 @@ public class SCultureRest {
     @Autowired
     private FollowUserDao followUserDao;
 
+    @Autowired
+    private ReportStoryDao reportStoryDao;
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/register")
     public LoginResponse user_register(@RequestBody RegisterRequestBody requestBody) {
@@ -423,9 +425,13 @@ public class SCultureRest {
     }
 
     @RequestMapping("/story/report")
-    public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody) {
-        storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
-        return new StoryReportResponse(storyDao.reportCount(requestBody.getStory_id()));
+    public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Story story = storyDao.getById(requestBody.getStory_id());
+
+        reportStoryDao.reportStory(current_user, story);
+
+        return new StoryReportResponse(story.getReport_count());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/vote")

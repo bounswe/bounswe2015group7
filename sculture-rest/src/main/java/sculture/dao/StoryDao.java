@@ -28,22 +28,6 @@ public class StoryDao {
         return;
     }
 
-    public void reportStory(long userId, long storyId) {
-        ReportStory reportStory = new ReportStory();
-        reportStory.setReporting_user_id(userId);
-        reportStory.setReported_story_id(storyId);
-        if (entityManager.contains(reportStory)) {
-            throw new InvalidReportException();
-        }
-        entityManager.persist(reportStory);
-        return;
-    }
-
-    public int reportCount(long story_id){
-        return entityManager.createQuery(
-                "from ReportStory where story_id = :story_id ")
-                .setParameter("story_id", story_id).getResultList().size();
-    }
 
     /**
      * Delete the story from the database.

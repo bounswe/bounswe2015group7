@@ -43,6 +43,12 @@ public class SCultureRest {
     @Autowired
     private TagStoryDao tagStoryDao;
 
+    @Autowired
+    private FollowUserDao followUserDao;
+
+    @Autowired
+    private ReportStoryDao reportStoryDao;
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/register")
     public LoginResponse user_register(@RequestBody RegisterRequestBody requestBody) {
         String email = requestBody.getEmail();
@@ -81,14 +87,7 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/update")
     public LoginResponse user_update(@RequestBody UserUpdateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        User u;
-        try {
-            String access_token;
-            access_token = headers.get("access-token").get(0);
-            u = userDao.getByAccessToken(access_token);
-        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new InvalidAccessTokenException();
-        }
+        User u = getCurrentUser(headers, true);
 
         String email = requestBody.getEmail();
         String username = requestBody.getUsername();
@@ -122,7 +121,9 @@ public class SCultureRest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/get")
-    public LoginResponse user_get(@RequestBody UserGetRequestBody requestBody) {
+    public UserGetResponse user_get(@RequestBody UserGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, false);
+
         long id = requestBody.getUserId();
         User u;
         try {
@@ -130,7 +131,16 @@ public class SCultureRest {
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-        return new LoginResponse(u);
+
+        UserGetResponse response = new UserGetResponse();
+        response.setEmail(u.getEmail());
+        response.setUser_id(u.getUser_id());
+        response.setUsername(u.getUsername());
+        if (current_user != null)
+            response.setIs_following(followUserDao.get(current_user.getUser_id(), u.getUser_id()).is_follow());
+        else
+            response.setIs_following(false);
+        return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search/all")
@@ -260,29 +270,15 @@ public class SCultureRest {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/follow")
-    public LoginResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        long id = requestBody.getUser_id();
-        String accessToken = headers.get("access-token").get(0);
-        User u;
-        try {
-            u = userDao.getByAccessToken(accessToken);
-            userDao.follow(u, id, requestBody.isFollow());
-        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new UserNotExistException();
-        }
-        return new LoginResponse(u);
+    public UserFollowResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        followUserDao.follow_user(current_user.getUser_id(), requestBody.getUser_id(), requestBody.is_follow());
+        return new UserFollowResponse(requestBody.is_follow());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/create")
     public BaseStoryResponse story_create(@RequestBody StoryCreateRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        User current_user;
-        try {
-            String access_token;
-            access_token = headers.get("access-token").get(0);
-            current_user = userDao.getByAccessToken(access_token);
-        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new InvalidAccessTokenException();
-        }
+        User current_user = getCurrentUser(headers, true);
 
         //TODO Exception handling
 
@@ -322,19 +318,15 @@ public class SCultureRest {
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
     public BaseStoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
-        User current_user;
-        try {
-            String access_token;
-            access_token = headers.get("access-token").get(0);
-            current_user = userDao.getByAccessToken(access_token);
-        } catch (NullPointerException | org.springframework.dao.EmptyResultDataAccessException e) {
-            throw new InvalidAccessTokenException();
+        User current_user = getCurrentUser(headers, true);
+        Story story = storyDao.getById(requestBody.getStory_id());
+        if (current_user.getUser_id() != story.getOwner_id()) {
+            throw new NotOwnerException();
         }
 
         //TODO Exception handling
 
         Date date = new Date();
-        Story story = new Story();
 
         story.setStory_id(requestBody.getStory_id());
         story.setTitle(requestBody.getTitle());
@@ -433,9 +425,13 @@ public class SCultureRest {
     }
 
     @RequestMapping("/story/report")
-    public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody) {
-        storyDao.reportStory(requestBody.getUser_id(), requestBody.getStory_id());
-        return new StoryReportResponse(storyDao.reportCount(requestBody.getStory_id()));
+    public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Story story = storyDao.getById(requestBody.getStory_id());
+
+        reportStoryDao.reportStory(current_user, story);
+
+        return new StoryReportResponse(story.getReport_count());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/story/vote")
@@ -444,6 +440,7 @@ public class SCultureRest {
         Story story = voteStoryDao.vote(current_user.getUser_id(), requestBody.getStory_id(), requestBody.getVote());
         return new VoteResponse(requestBody.getVote(), story);
     }
+
 
     @RequestMapping("/comment/list")
     public CommentListResponse commentList(@RequestBody CommentListRequestBody requestBody) {
@@ -456,18 +453,34 @@ public class SCultureRest {
 
         List<Comment> comments = commentDao.retrieveByStory(requestBody.getStory_id(), page, size);
         List<CommentResponse> responses = new LinkedList<>();
-        Collections.sort(comments);
-        for (int i = comments.size() - 1; i >= 0; i--) {
-            responses.add(new CommentResponse(comments.get(i), userDao));
-        }
-        /*for (Comment comment : comments) {
+
+        for (Comment comment : comments) {
             responses.add(new CommentResponse(comment, userDao));
-        }*/
+        }
 
 
         CommentListResponse commentListResponse = new CommentListResponse();
         commentListResponse.setResult(responses);
         return commentListResponse;
+    }
+
+
+    @RequestMapping("/admin/search/reindex")
+    public void admin_search_reindex() {
+        SearchEngine.removeAll();
+        for (int i = 1; ; i++) {
+            List<Story> stories = storyDao.getAllPaged(i, 20);
+            for (Story story : stories) {
+                List<String> tags = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
+                String tag_index = "";
+                for (String tag : tags)
+                    tag_index += tag + ", ";
+                SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
+            }
+            if (stories.size() == 0)
+                break;
+        }
+
     }
 
     /**

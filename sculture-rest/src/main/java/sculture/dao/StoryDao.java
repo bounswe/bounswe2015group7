@@ -1,18 +1,15 @@
 package sculture.dao;
 
-import org.apache.commons.logging.Log;
 import org.springframework.stereotype.Repository;
 import sculture.exceptions.InvalidReportException;
 import sculture.models.tables.Story;
 import sculture.models.tables.relations.ReportStory;
-import sculture.models.tables.relations.VoteStory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.logging.Logger;
 
 
 @Repository
@@ -31,22 +28,6 @@ public class StoryDao {
         return;
     }
 
-    public void reportStory(long userId, long storyId) {
-        ReportStory reportStory = new ReportStory();
-        reportStory.setReporting_user_id(userId);
-        reportStory.setReported_story_id(storyId);
-        if (entityManager.contains(reportStory)) {
-            throw new InvalidReportException();
-        }
-        entityManager.persist(reportStory);
-        return;
-    }
-
-    public int reportCount(long story_id){
-        return entityManager.createQuery(
-                "from ReportStory where story_id = :story_id ")
-                .setParameter("story_id", story_id).getResultList().size();
-    }
 
     /**
      * Delete the story from the database.
@@ -95,6 +76,15 @@ public class StoryDao {
     public void update(Story story) {
         entityManager.merge(story);
         return;
+    }
+
+    public List<Story> getAllPaged(int page, int size) {
+        Query query = entityManager.createQuery(
+                "from Story");
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+
+        return query.getResultList();
     }
 
     // ------------------------

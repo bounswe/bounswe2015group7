@@ -388,6 +388,7 @@ public class SCultureRest {
         List<BaseStoryResponse> responses = new LinkedList<>();
         for (long id : story_ids) {
             Story story = storyDao.getById(id);
+            System.out.println(id);
             responses.add(new BaseStoryResponse(story, tagStoryDao, userDao));
         }
         SearchResponse searchResponse = new SearchResponse();

@@ -24,6 +24,7 @@
         <servlet-name>getuser</servlet-name>
         <servlet-class>com.sculture.GetUser</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.sculture.Login</servlet-class>

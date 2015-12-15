@@ -29,15 +29,14 @@ public class ReportStory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String requestURL = request.getRequestURL().toString();
         String story_id = requestURL.substring(requestURL.lastIndexOf('/') + 1);
-        String user_id = request.getSession().getAttribute("userid").toString();
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("story_id", story_id);
-            jsonObject.put("user_id", user_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
             jsonResponse = Unirest.post("http://52.28.216.93:9000/story/report")
                     .header("Content-Type", "application/json")
+                    .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
                     .asJson();
         } catch (UnirestException e) {

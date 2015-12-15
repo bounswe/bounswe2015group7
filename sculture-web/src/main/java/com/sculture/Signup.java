@@ -40,14 +40,6 @@ public class Signup extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if (jsonResponse != null) {
-            request.setAttribute("isLoggedIn", true);
-            request.setAttribute("username", request.getParameter("form-username"));
-            request.getSession().setAttribute("username", request.getParameter("form-username"));
-        } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
-        }
         response.sendRedirect("/index");
     }
 

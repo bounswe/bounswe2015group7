@@ -5,6 +5,7 @@ import sculture.models.tables.Story;
 import sculture.models.tables.relations.VoteStory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -48,16 +49,16 @@ public class VoteStoryDao {
         Query queryVote = entityManager.createQuery("from VoteStory where user_id = :user_id AND story_id = :story_id");
         queryVote.setParameter("user_id", user_id);
         queryVote.setParameter("story_id", story_id);
-        List<VoteStory> voteStoryList = queryVote.getResultList();
-        VoteStory voteStory = null;
-        if (voteStoryList.size() > 0)
-            voteStory = voteStoryList.get(0);
-        else
-        {
+
+        VoteStory voteStory;
+        try {
+            voteStory = (VoteStory) queryVote.getSingleResult();
+        } catch (NoResultException exception) {
             voteStory = new VoteStory();
             voteStory.setVote(0);
             voteStory.setStory_id(story_id);
             voteStory.setUser_id(user_id);
+            entityManager.merge(voteStory);
         }
         return voteStory;
     }

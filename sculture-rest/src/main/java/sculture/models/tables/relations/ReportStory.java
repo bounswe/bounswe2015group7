@@ -2,23 +2,20 @@ package sculture.models.tables.relations;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by gmzrmks on 29.11.2015.
- */
 @Entity
 @Table(name = "REPORT_STORY")
+@IdClass(ReportStoryPK.class)
 public class ReportStory {
 
     @Id
-    private long id;
-    
-
     @NotNull
     private long user_id;
 
+    @Id
     @NotNull
     private long story_id;
 
@@ -29,7 +26,7 @@ public class ReportStory {
     public void setStory_id(long story_id) {
         this.story_id = story_id;
     }
-    
+
     public long getUser_id() {
         return this.user_id;
     }
@@ -46,11 +43,4 @@ public class ReportStory {
         this.story_id = reported_story_id;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 }

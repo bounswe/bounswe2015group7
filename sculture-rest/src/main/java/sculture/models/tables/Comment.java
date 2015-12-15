@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "COMMENT")
-public class Comment implements Comparable<Comment>{
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,8 +85,4 @@ public class Comment implements Comparable<Comment>{
         this.last_edit_date = last_edit_date;
     }
 
-    @Override
-    public int compareTo(Comment o) {
-        return getCreate_date().compareTo(o.getCreate_date());
-    }
 }

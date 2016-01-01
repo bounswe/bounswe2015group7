@@ -447,6 +447,19 @@ public class SCultureRest {
         return new CommentResponse(comment, userDao);
     }
 
+    @RequestMapping("/comment/edit")
+    public CommentResponse commentEdit(@RequestBody CommentEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Comment comment = commentDao.getById(requestBody.getComment_id());
+        if (current_user.getUser_id() != comment.getOwner_id())
+            throw new NotOwnerException();
+
+        comment.setContent(requestBody.getContent());
+        comment.setLast_edit_date(new Date());
+        commentDao.update(comment);
+        return new CommentResponse(comment, userDao);
+    }
+
     @RequestMapping("/story/report")
     public StoryReportResponse storyReport(@RequestBody StoryReportRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);

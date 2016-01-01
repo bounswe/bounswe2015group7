@@ -39,11 +39,12 @@ import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.VoteResponse;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_EDIT;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_VOTE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
-import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_ACCESS_TOKEN;
+import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
@@ -224,9 +225,33 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    Log.i("CLICK", "Save clicked");
-                    //TODO save
+                public void onClick(final View v) {
+                    v.setEnabled(false);
+                    JSONObject requestBody = new JSONObject();
+                    try {
+                        requestBody.put("comment_id", comment_id);
+                        requestBody.put("content", comment.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    addRequest(API_COMMENT_EDIT, requestBody, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            CommentResponse commentResponse = new CommentResponse(response);
+                            comment.setText(commentResponse.content);
+                            time.setText(Utils.timestampToPrettyString(commentResponse.last_edit_date));
+                            comment.setEnabled(false);
+                            editSave.setText(mActivity.getString(R.string.edit));
+                            save.setVisibility(View.GONE);
+                            v.setEnabled(true);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            v.setEnabled(true);
+                        }
+                    }, null);
+
                 }
             });
             writer.setOnClickListener(new View.OnClickListener() {
@@ -239,7 +264,6 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             editSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     if (is_on_edit) {
                         comment.setEnabled(false);
                         editSave.setText(mActivity.getString(R.string.edit));

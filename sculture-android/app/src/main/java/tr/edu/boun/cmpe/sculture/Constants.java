@@ -10,6 +10,7 @@ public class Constants {
     public static final String API_SEARCH = API_BASE_URL + "/search";
     public static final String API_COMMENT_LIST = API_BASE_URL + "/comment/list";
     public static final String API_COMMENT_GET = API_BASE_URL + "/comment/get";
+    public static final String API_COMMENT_EDIT = API_BASE_URL + "/comment/edit";
     public static final String API_STORY_EDIT = API_BASE_URL + "/story/edit";
     public static final String API_USER_STORIES = API_BASE_URL + "/user/stories";
     public static final String API_COMMENT_NEW = API_BASE_URL + "/comment/new";

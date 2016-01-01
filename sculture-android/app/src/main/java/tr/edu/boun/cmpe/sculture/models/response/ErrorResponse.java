@@ -10,7 +10,7 @@ public class ErrorResponse {
     public int status;
     public String error;
     public String exception;
-    public String message;
+    public String message = "";
     public String path;
 
     private String full;

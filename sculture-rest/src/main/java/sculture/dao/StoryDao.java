@@ -83,6 +83,15 @@ public class StoryDao {
         return;
     }
 
+    public List<Story> storiesFromFollowedUsers(long current_user_id, int page, int size) {
+        Query query = entityManager.createQuery(
+                "from Story WHERE EXISTS (SELECT '*' FROM FollowUser WHERE followed_id = owner_id AND follower_id = :current_user_id) ORDER BY create_date DESC");
+        query.setParameter("current_user_id", current_user_id);
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+        return query.getResultList();
+    }
+
     public List<Story> getAllPaged(int page, int size) {
         Query query = entityManager.createQuery(
                 "from Story  ORDER BY create_date DESC");

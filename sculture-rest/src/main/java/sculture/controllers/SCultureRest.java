@@ -18,7 +18,6 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
-import javax.persistence.NoResultException;
 import java.io.FileOutputStream;
 import java.util.*;
 
@@ -477,6 +476,24 @@ public class SCultureRest {
         return new VoteResponse(requestBody.getVote(), story);
     }
 
+    @RequestMapping("/story/fromFollowedUsers")
+    public SearchResponse storyFromFollowedUser(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+
+        User current_user = getCurrentUser(headers, true);
+        List<Story> stories = storyDao.storiesFromFollowedUsers(current_user.getUser_id(), page, size);
+        SearchResponse response = new SearchResponse();
+        List<StoryResponse> storyResponses = new ArrayList<>();
+        for (Story story : stories)
+            storyResponses.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        response.setResult(storyResponses);
+        return response;
+    }
 
     @RequestMapping("/comment/list")
     public CommentListResponse commentList(@RequestBody CommentListRequestBody requestBody) {

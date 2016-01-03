@@ -363,7 +363,7 @@ public class SCultureRest {
             }
             story.setMedia(str.substring(0, str.length() - 1));
         }
-        storyDao.edit(story);
+        storyDao.update(story);
         String tag_index = "";
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();
@@ -476,7 +476,72 @@ public class SCultureRest {
         return new VoteResponse(requestBody.getVote(), story);
     }
 
-    @RequestMapping("/story/fromFollowedUsers")
+    /**
+     * Returns a list of stories which similar to the liked stories by this user.
+     *
+     * @param requestBody page and size information for pagination
+     * @param headers     Requires access-token to find followed user
+     * @return List of stories
+     */
+    @RequestMapping("/recommendation/similarToLiked")
+    public SearchResponse storySimilarLiked(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+        User current_user = getCurrentUser(headers, true);
+        List<String> tags = tagStoryDao.getTagsLikedStories(current_user.getUser_id());
+        String q = "";
+        for (String s : tags)
+            q += s + " ";
+        List<Long> story_ids = SearchEngine.search(q, page, size);
+        SearchResponse searchResponse = new SearchResponse();
+        List<StoryResponse> storyResponseList = new ArrayList<>();
+        for (long id : story_ids) {
+            Story story = storyDao.getById(id);
+            storyResponseList.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        }
+        searchResponse.setResult(storyResponseList);
+        return searchResponse;
+
+    }
+
+    /**
+     * Returns a list of trending stories of the system
+     *
+     * @param requestBody page and size information for pagination
+     * @param headers     May contain optional access-token
+     * @return List of trending stories
+     */
+    @RequestMapping("/recommendation/trending")
+    public SearchResponse storyTrending(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+        User current_user = getCurrentUser(headers, false);
+        List<Story> stories = storyDao.getTrendingStories(page, size);
+        SearchResponse searchResponse = new SearchResponse();
+        List<StoryResponse> storyResponseList = new ArrayList<>();
+        for (Story story : stories) {
+            storyResponseList.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        }
+        searchResponse.setResult(storyResponseList);
+        return searchResponse;
+    }
+
+    /**
+     * Returns a list of newest stories of followed user
+     *
+     * @param requestBody page and size information for pagination
+     * @param headers     Requires access-token to find followed user
+     * @return List of stories
+     */
+    @RequestMapping("/recommendation/fromFollowedUser")
     public SearchResponse storyFromFollowedUser(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         int page = requestBody.getPage();
         int size = requestBody.getSize();
@@ -522,7 +587,7 @@ public class SCultureRest {
     public void admin_search_reindex() {
         SearchEngine.removeAll();
         for (int i = 1; ; i++) {
-            List<Story> stories = storyDao.getAllPaged(i, 20);
+            List<Story> stories = storyDao.getAll(i, 20);
             for (Story story : stories) {
                 List<String> tags = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
                 String tag_index = "";

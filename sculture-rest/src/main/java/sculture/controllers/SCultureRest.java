@@ -336,6 +336,13 @@ public class SCultureRest {
         return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
+    /**
+     * Edits a story
+     *
+     * @param requestBody Request information
+     * @param headers     Access-token should be included, a story can only be changed by owner of it
+     * @return Response
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
     public StoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);
@@ -343,8 +350,6 @@ public class SCultureRest {
         if (current_user.getUser_id() != story.getOwner_id()) {
             throw new NotOwnerException();
         }
-
-        //TODO Exception handling
 
         Date date = new Date();
 
@@ -364,6 +369,9 @@ public class SCultureRest {
             story.setMedia(str.substring(0, str.length() - 1));
         }
         storyDao.update(story);
+
+        tagStoryDao.deleteByStoryId(story.getStory_id());
+
         String tag_index = "";
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();

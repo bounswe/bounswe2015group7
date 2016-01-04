@@ -48,7 +48,6 @@ public class ReportStoryDao {
     }
 
     public void deleteByStoryId(long story_id) {
-        //TODO Update counts
         entityManager.createQuery("DELETE FROM ReportStory WHERE story_id = :story_id")
                 .setParameter("story_id", story_id)
                 .executeUpdate();

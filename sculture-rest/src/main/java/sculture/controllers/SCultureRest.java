@@ -390,6 +390,35 @@ public class SCultureRest {
         return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
+    /**
+     * Deletes a story and all related entries from database
+     *
+     * @param requestBody A JSON modell which contains id variable
+     * @param headers     access-token only the owner can delete a story
+     * @return
+     */
+    @RequestMapping("/story/delete")
+    public String storyDelete(@RequestBody StoriesGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Story story = storyDao.getById(requestBody.getId());
+        if (current_user.getUser_id() != story.getOwner_id()) {
+            throw new NotOwnerException();
+        }
+
+        List<String> medias = story.getMediaList();
+        for (String m : medias)
+            deleteImage(m);
+
+        commentDao.deleteByStoryId(story.getStory_id());
+        tagStoryDao.deleteByStoryId(story.getStory_id());
+        reportStoryDao.deleteByStoryId(story.getStory_id());
+        voteStoryDao.deleteByStoryId(story.getStory_id());
+
+        storyDao.delete(story);
+        return "{ status : \"DELETED\" }";
+    }
+
+
     @RequestMapping("/story/get")
     public StoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, false);

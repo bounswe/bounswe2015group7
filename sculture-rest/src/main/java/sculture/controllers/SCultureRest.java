@@ -512,6 +512,38 @@ public class SCultureRest {
     }
 
     /**
+     * Search similar stories based on a story id
+     *
+     * @param requestBody Contains story_id page and size information
+     * @param headers     If user is logged in, access-token is used
+     * @return List of stories
+     */
+    @RequestMapping("/story/similar")
+    public SearchResponse storySimilar(@RequestBody SimilarStoryRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+        User current_user = getCurrentUser(headers, false);
+        List<String> tags = tagStoryDao.getTagTitlesByStoryId(requestBody.getStory_id());
+        String q = "";
+        for (String s : tags)
+            q += s + " ";
+        List<Long> story_ids = SearchEngine.search(q, page, size);
+        SearchResponse searchResponse = new SearchResponse();
+        List<StoryResponse> storyResponseList = new ArrayList<>();
+        for (long id : story_ids) {
+            Story story = storyDao.getById(id);
+            if (story.getStory_id() != requestBody.getStory_id())
+                storyResponseList.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        }
+        searchResponse.setResult(storyResponseList);
+        return searchResponse;
+    }
+
+    /**
      * Returns a list of stories which similar to the liked stories by this user.
      *
      * @param requestBody page and size information for pagination
@@ -519,7 +551,8 @@ public class SCultureRest {
      * @return List of stories
      */
     @RequestMapping("/recommendation/similarToLiked")
-    public SearchResponse storySimilarLiked(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public SearchResponse storySimilarLiked(@RequestBody SearchAllRequestBody
+                                                    requestBody, @RequestHeader HttpHeaders headers) {
         int page = requestBody.getPage();
         int size = requestBody.getSize();
         if (size < 1)
@@ -551,7 +584,8 @@ public class SCultureRest {
      * @return List of trending stories
      */
     @RequestMapping("/recommendation/trending")
-    public SearchResponse storyTrending(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public SearchResponse storyTrending(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders
+            headers) {
         int page = requestBody.getPage();
         int size = requestBody.getSize();
         if (size < 1)
@@ -577,7 +611,8 @@ public class SCultureRest {
      * @return List of stories
      */
     @RequestMapping("/recommendation/fromFollowedUser")
-    public SearchResponse storyFromFollowedUser(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+    public SearchResponse storyFromFollowedUser(@RequestBody SearchAllRequestBody
+                                                        requestBody, @RequestHeader HttpHeaders headers) {
         int page = requestBody.getPage();
         int size = requestBody.getSize();
         if (size < 1)

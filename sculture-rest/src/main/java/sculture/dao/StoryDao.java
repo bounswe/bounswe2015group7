@@ -110,7 +110,7 @@ public class StoryDao {
      */
     public List<Story> storiesFromFollowedUsers(long current_user_id, int page, int size) {
         Query query = entityManager.createQuery(
-                "FROM Story WHERE EXISTS (SELECT '*' FROM FollowUser WHERE followed_id = owner_id AND follower_id = :current_user_id) ORDER BY create_date DESC");
+                "FROM Story WHERE EXISTS (SELECT '*' FROM FollowUser WHERE followed_id = owner_id AND follower_id = :current_user_id AND is_follow = true) ORDER BY create_date DESC");
         query.setParameter("current_user_id", current_user_id);
         query.setFirstResult((page - 1) * size);
         query.setMaxResults(size);

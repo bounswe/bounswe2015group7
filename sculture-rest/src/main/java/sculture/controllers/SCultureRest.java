@@ -18,6 +18,7 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.*;
 
@@ -256,7 +257,6 @@ public class SCultureRest {
         return resourceLoader.getResource("file:/image/" + id + ".jpg");
     }
 
-
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {
         String email = requestBody.getEmail();
@@ -288,7 +288,6 @@ public class SCultureRest {
             throw new WrongPasswordException();
     }
 
-
     @RequestMapping(method = RequestMethod.POST, value = "/user/follow")
     public UserFollowResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);
@@ -311,14 +310,7 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
-        if (requestBody.getMedia() != null) {
-            String str = "";
-            for (String media : requestBody.getMedia()) {
-                str += media;
-                str += ",";
-            }
-            story.setMedia(str.substring(0, str.length() - 1));
-        }
+        story.setMediaList(requestBody.getMedia());
         storyDao.create(story);
 
         List<String> tags = requestBody.getTags();
@@ -336,6 +328,13 @@ public class SCultureRest {
         return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
 
+    /**
+     * Edits a story
+     *
+     * @param requestBody Request information
+     * @param headers     Access-token should be included, a story can only be changed by owner of it
+     * @return Response
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/story/edit")
     public StoryResponse story_edit(@RequestBody StoryEditRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);
@@ -343,8 +342,6 @@ public class SCultureRest {
         if (current_user.getUser_id() != story.getOwner_id()) {
             throw new NotOwnerException();
         }
-
-        //TODO Exception handling
 
         Date date = new Date();
 
@@ -355,15 +352,25 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
+
+        List<String> old_media = story.getMediaList();
+
         if (requestBody.getMedia() != null) {
-            String str = "";
-            for (String media : requestBody.getMedia()) {
-                str += media;
-                str += ",";
-            }
-            story.setMedia(str.substring(0, str.length() - 1));
+            List<String> new_media = requestBody.getMedia();
+            story.setMediaList(new_media);
+            old_media.removeAll(new_media);
+        } else
+            story.setMedia("");
+
+
+        for (String old_image : old_media) {
+            deleteImage(old_image);
         }
-        storyDao.edit(story);
+
+        storyDao.update(story);
+
+        tagStoryDao.deleteByStoryId(story.getStory_id());
+
         String tag_index = "";
         if (requestBody.getTags() != null) {
             List<String> tags = requestBody.getTags();
@@ -382,6 +389,35 @@ public class SCultureRest {
 
         return new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao);
     }
+
+    /**
+     * Deletes a story and all related entries from database
+     *
+     * @param requestBody A JSON modell which contains id variable
+     * @param headers     access-token only the owner can delete a story
+     * @return
+     */
+    @RequestMapping("/story/delete")
+    public String storyDelete(@RequestBody StoriesGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        User current_user = getCurrentUser(headers, true);
+        Story story = storyDao.getById(requestBody.getId());
+        if (current_user.getUser_id() != story.getOwner_id()) {
+            throw new NotOwnerException();
+        }
+
+        List<String> medias = story.getMediaList();
+        for (String m : medias)
+            deleteImage(m);
+
+        commentDao.deleteByStoryId(story.getStory_id());
+        tagStoryDao.deleteByStoryId(story.getStory_id());
+        reportStoryDao.deleteByStoryId(story.getStory_id());
+        voteStoryDao.deleteByStoryId(story.getStory_id());
+
+        storyDao.delete(story);
+        return "{ status : \"DELETED\" }";
+    }
+
 
     @RequestMapping("/story/get")
     public StoryResponse storyGet(@RequestBody StoryGetRequestBody requestBody, @RequestHeader HttpHeaders headers) {
@@ -416,7 +452,6 @@ public class SCultureRest {
         searchResponse.setResult(responses);
         return searchResponse;
     }
-
 
     @RequestMapping("/comment/get")
     public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
@@ -476,7 +511,72 @@ public class SCultureRest {
         return new VoteResponse(requestBody.getVote(), story);
     }
 
-    @RequestMapping("/story/fromFollowedUsers")
+    /**
+     * Returns a list of stories which similar to the liked stories by this user.
+     *
+     * @param requestBody page and size information for pagination
+     * @param headers     Requires access-token to find followed user
+     * @return List of stories
+     */
+    @RequestMapping("/recommendation/similarToLiked")
+    public SearchResponse storySimilarLiked(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+        User current_user = getCurrentUser(headers, true);
+        List<String> tags = tagStoryDao.getTagsLikedStories(current_user.getUser_id());
+        String q = "";
+        for (String s : tags)
+            q += s + " ";
+        List<Long> story_ids = SearchEngine.search(q, page, size);
+        SearchResponse searchResponse = new SearchResponse();
+        List<StoryResponse> storyResponseList = new ArrayList<>();
+        for (long id : story_ids) {
+            Story story = storyDao.getById(id);
+            storyResponseList.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        }
+        searchResponse.setResult(storyResponseList);
+        return searchResponse;
+
+    }
+
+    /**
+     * Returns a list of trending stories of the system
+     *
+     * @param requestBody page and size information for pagination
+     * @param headers     May contain optional access-token
+     * @return List of trending stories
+     */
+    @RequestMapping("/recommendation/trending")
+    public SearchResponse storyTrending(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
+        int page = requestBody.getPage();
+        int size = requestBody.getSize();
+        if (size < 1)
+            size = 10;
+        if (page < 1)
+            page = 1;
+        User current_user = getCurrentUser(headers, false);
+        List<Story> stories = storyDao.getTrendingStories(page, size);
+        SearchResponse searchResponse = new SearchResponse();
+        List<StoryResponse> storyResponseList = new ArrayList<>();
+        for (Story story : stories) {
+            storyResponseList.add(new StoryResponse(story, current_user, tagStoryDao, userDao, voteStoryDao));
+        }
+        searchResponse.setResult(storyResponseList);
+        return searchResponse;
+    }
+
+    /**
+     * Returns a list of newest stories of followed user
+     *
+     * @param requestBody page and size information for pagination
+     * @param headers     Requires access-token to find followed user
+     * @return List of stories
+     */
+    @RequestMapping("/recommendation/fromFollowedUser")
     public SearchResponse storyFromFollowedUser(@RequestBody SearchAllRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         int page = requestBody.getPage();
         int size = requestBody.getSize();
@@ -522,7 +622,7 @@ public class SCultureRest {
     public void admin_search_reindex() {
         SearchEngine.removeAll();
         for (int i = 1; ; i++) {
-            List<Story> stories = storyDao.getAllPaged(i, 20);
+            List<Story> stories = storyDao.getAll(i, 20);
             for (Story story : stories) {
                 List<String> tags = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
                 String tag_index = "";
@@ -604,5 +704,10 @@ public class SCultureRest {
                 throw new InvalidAccessTokenException();
         }
         return current_user;
+    }
+
+    private void deleteImage(String id) {
+        File file = new File("/image/" + id + ".jpg");
+        file.delete();
     }
 }

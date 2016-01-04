@@ -18,6 +18,7 @@ import sculture.models.tables.Tag;
 import sculture.models.tables.User;
 import sculture.models.tables.relations.TagStory;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.*;
 
@@ -256,7 +257,6 @@ public class SCultureRest {
         return resourceLoader.getResource("file:/image/" + id + ".jpg");
     }
 
-
     @RequestMapping(method = RequestMethod.POST, value = "/user/login")
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {
         String email = requestBody.getEmail();
@@ -288,7 +288,6 @@ public class SCultureRest {
             throw new WrongPasswordException();
     }
 
-
     @RequestMapping(method = RequestMethod.POST, value = "/user/follow")
     public UserFollowResponse user_follow(@RequestBody UserFollowRequestBody requestBody, @RequestHeader HttpHeaders headers) {
         User current_user = getCurrentUser(headers, true);
@@ -311,14 +310,7 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
-        if (requestBody.getMedia() != null) {
-            String str = "";
-            for (String media : requestBody.getMedia()) {
-                str += media;
-                str += ",";
-            }
-            story.setMedia(str.substring(0, str.length() - 1));
-        }
+        story.setMediaList(requestBody.getMedia());
         storyDao.create(story);
 
         List<String> tags = requestBody.getTags();
@@ -360,14 +352,21 @@ public class SCultureRest {
         story.setCreate_date(date);
         story.setLast_edit_date(date);
         story.setLast_editor_id(current_user.getUser_id());
+
+        List<String> old_media = story.getMediaList();
+
         if (requestBody.getMedia() != null) {
-            String str = "";
-            for (String media : requestBody.getMedia()) {
-                str += media;
-                str += ",";
-            }
-            story.setMedia(str.substring(0, str.length() - 1));
+            List<String> new_media = requestBody.getMedia();
+            story.setMediaList(new_media);
+            old_media.removeAll(new_media);
+        } else
+            story.setMedia("");
+
+
+        for (String old_image : old_media) {
+            deleteImage(old_image);
         }
+
         storyDao.update(story);
 
         tagStoryDao.deleteByStoryId(story.getStory_id());
@@ -424,7 +423,6 @@ public class SCultureRest {
         searchResponse.setResult(responses);
         return searchResponse;
     }
-
 
     @RequestMapping("/comment/get")
     public CommentResponse commentGet(@RequestBody CommentGetRequestBody requestBody) {
@@ -677,5 +675,10 @@ public class SCultureRest {
                 throw new InvalidAccessTokenException();
         }
         return current_user;
+    }
+
+    private void deleteImage(String id) {
+        File file = new File("/image/" + id + ".jpg");
+        file.delete();
     }
 }

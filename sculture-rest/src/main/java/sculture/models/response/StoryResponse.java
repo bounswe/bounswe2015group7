@@ -57,11 +57,7 @@ public class StoryResponse {
         this.last_editor.username = userDao.getById(story.getLast_editor_id()).getUsername();
 
         this.content = story.getContent();
-        if (story.getMedia() != null)
-            this.media = Arrays.asList(story.getMedia().split("\\s*,\\s*"));
-        else {
-            this.media = new ArrayList<>();
-        }
+        this.media = story.getMediaList();
         if (current_user == null)
             vote = 0;
         else {

@@ -2,7 +2,11 @@ package sculture.models.tables;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -44,7 +48,7 @@ public class Story {
 
     @Column(name = "media", nullable = true) //Default automatically 0
     private String media;
-    
+
     public Story() {
     }
 
@@ -101,21 +105,37 @@ public class Story {
         this.last_edit_date = last_edit_date;
     }
 
-    public long getPositive_vote(){return positive_vote; }
+    public long getPositive_vote() {
+        return positive_vote;
+    }
 
-    public void setPositive_vote(long positive_vote){this.positive_vote=positive_vote; }
+    public void setPositive_vote(long positive_vote) {
+        this.positive_vote = positive_vote;
+    }
 
-    public long getNegative_vote(){return negative_vote; }
+    public long getNegative_vote() {
+        return negative_vote;
+    }
 
-    public void setNegative_vote(long negative_vote){this.negative_vote=negative_vote; }
+    public void setNegative_vote(long negative_vote) {
+        this.negative_vote = negative_vote;
+    }
 
-    public long getReport_count(){return report_count; }
+    public long getReport_count() {
+        return report_count;
+    }
 
-    public void setReport_count(long report_count){this.report_count=report_count; }
+    public void setReport_count(long report_count) {
+        this.report_count = report_count;
+    }
 
-    public String getTitle(){return title; }
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title){this.title=title; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getMedia() {
         return media;
@@ -123,5 +143,32 @@ public class Story {
 
     public void setMedia(String media) {
         this.media = media;
+    }
+
+    public String setMediaList(List<String> m) {
+        if (m == null || m.size() == 0) {
+            setMedia("");
+            return "";
+        }
+        String s = m.get(0);
+        for (int i = 1; i < m.size(); i++) {
+            s += "," + m.get(i);
+        }
+        setMedia(s);
+        return s;
+    }
+
+    public List<String> getMediaList() {
+        String s = getMedia();
+        if (s == null)
+            return new ArrayList<>();
+        String[] ss = s.split(",");
+        List<String> r = Arrays.asList(ss);
+        ArrayList<String> result = new ArrayList<>();
+        for (String string : r) {
+            if (!string.isEmpty())
+                result.add(string);
+        }
+        return result;
     }
 }

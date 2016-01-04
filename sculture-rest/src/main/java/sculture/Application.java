@@ -13,8 +13,6 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
         SearchEngine.initialize();
-        File image_root = new File("/image");
-        if (!image_root.exists())
-            image_root.mkdirs();
+        new File("/image").mkdirs();
     }
 }

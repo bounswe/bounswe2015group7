@@ -26,20 +26,20 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="public/js/sweetalert.min.js"></script>
-  <script src="/public/js/scripts.js"></script>
-  <script src="/public/js/bootstrap.min.js"></script>
-  <script src="/public/js/jquery.backstretch.min.js"></script>
+  <script src="public/js/scripts.js"></script>
+  <script src="public/js/bootstrap.min.js"></script>
+  <script src="public/js/jquery.backstretch.min.js"></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-  <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/public/css/font-awesome.css">
-  <link rel="stylesheet" href="/public/css/form-elements.css">
-  <link rel="stylesheet" href="/public/css/sweetalert.css">
-  <link rel="stylesheet" href="/public/css/style.css">
-  <link rel="stylesheet" href="/public/css/homepage_style.css">
-  <link rel="stylesheet" href="/public/css/storystyle.css">
+  <link rel="stylesheet" href="public/css/bootstrap.min.css">
+  <link rel="stylesheet" href="public/css/font-awesome.css">
+  <link rel="stylesheet" href="public/css/form-elements.css">
+  <link rel="stylesheet" href="public/css/sweetalert.css">
+  <link rel="stylesheet" href="public/css/style.css">
+  <link rel="stylesheet" href="public/css/homepage_style.css">
+  <link rel="stylesheet" href="public/css/storystyle.css">
 
 
 </head>
@@ -53,24 +53,24 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="/index"><img src="/public/images/logo.png" style="width:204px;height:58px"></a>
+      <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li>
           <div class="top-big-link">
-            <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+            <a class="btn btn-link-2" href="addstory" data-modal-id="modal-create-story">Add Story</a>
           </div>
         </li>
         <% Boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn"); %>
         <% if (isLoggedIn) { %>
         <li>
           <div class="top-big-link">
-            <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+            <a class="btn btn-link-2" href="logout" data-modal-id="modal-logout">Log Out</a>
           </div>
         </li>
         <li>
-          <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+          <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
           <div class="top-big-link">
             <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
           </div>
@@ -110,7 +110,7 @@
 
 
       </div>
-      <div class="col-sm-2" align="right"><a href="/users" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="http://www.african-youthmovement.org/wp-content/uploads/2014/10/Blank_woman_placeholder.svg.png" align="left"></a>
+      <div class="col-sm-2" align="right"><a href="users" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="http://www.african-youthmovement.org/wp-content/uploads/2014/10/Blank_woman_placeholder.svg.png" align="left"></a>
       </div>
 
     </div>
@@ -180,7 +180,7 @@
                     }%>
                     </p>
                     <p>
-                      <%String refUrl = "/get/story/" + userStories.get(i).getId();%>
+                      <%String refUrl = "get/story/" + userStories.get(i).getId();%>
                       <a href="<%out.print(refUrl);%>"> Read More</a>
                     </p>
                   </div>
@@ -199,9 +199,9 @@
     </div>
 
 
-    <script src="/plugins/bootstrap-select.min.js"></script>
-    <script src="/codemirror/jquery.codemirror.js"></script>
-    <script src="/beautifier.js"></script>
+    <script src="plugins/bootstrap-select.min.js"></script>
+    <script src="codemirror/jquery.codemirror.js"></script>
+    <script src="beautifier.js"></script>
     <script>
       jQuery.fn.shake = function(intShakes, intDistance, intDuration, foreColor) {
         this.each(function() {
@@ -256,7 +256,7 @@
 
 
 
-    <script src="/plugins/bootstrap-pager.js"></script>
+    <script src="plugins/bootstrap-pager.js"></script>
   </div>
 
 </div>
@@ -287,7 +287,7 @@
 
       <div class="modal-body">
 
-        <form role="form" action="/login" method="post" class="login-form">
+        <form role="form" action="login" method="post" class="login-form">
           <div class="form-group">
             <label class="sr-only" for="form-username">E-mail</label>
             <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">

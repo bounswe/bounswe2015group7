@@ -18,9 +18,9 @@
     <link rel="icon" href="../../favicon.ico">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="public/js/sweetalert.min.js"></script>
-    <script src="/public/js/scripts.js"></script>
-    <script src="/public/js/bootstrap.min.js"></script>
-    <script src="/public/js/jquery.backstretch.min.js"></script>
+    <script src="public/js/scripts.js"></script>
+    <script src="public/js/bootstrap.min.js"></script>
+    <script src="public/js/jquery.backstretch.min.js"></script>
     <title>Sign up for Sculture!</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.min.js"></script>

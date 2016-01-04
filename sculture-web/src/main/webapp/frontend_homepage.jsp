@@ -48,7 +48,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/addstory">Add Story</a>
+                        <a class="btn btn-link-2" href="addstory">Add Story</a>
                     </div>
                 </li>
                 <% boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn"); %>

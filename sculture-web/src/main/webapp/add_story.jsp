@@ -13,9 +13,9 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="public/js/sweetalert.min.js"></script>
-    <script src="/public/js/scripts.js"></script>
-    <script src="/public/js/bootstrap.min.js"></script>
-    <script src="/public/js/jquery.backstretch.min.js"></script>
+    <script src="public/js/scripts.js"></script>
+    <script src="public/js/bootstrap.min.js"></script>
+    <script src="public/js/jquery.backstretch.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,24 +38,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                        <a class="btn btn-link-2" href="addstory" data-modal-id="modal-create-story">Add Story</a>
                     </div>
                 </li>
                 <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
                 <% if (isLoggedIn.booleanValue()) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="logout" data-modal-id="modal-logout">Log Out</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
                     </div>
@@ -85,7 +85,7 @@
 
 <div class="container">
     <div class="row">
-        <form role="form" method="post" action="/savestory">
+        <form role="form" method="post" action="savestory">
             <div class="col-md-8 col-md-offset-2">
                 <div class="form-group">
                     <label for="story-title">Title</label>
@@ -147,7 +147,7 @@
 
             <div class="modal-body">
 
-                <form role="form" action="/login" method="post" class="login-form">
+                <form role="form" action="login" method="post" class="login-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-username">E-mail</label>
                         <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">

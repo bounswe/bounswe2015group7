@@ -2,6 +2,8 @@ This is Android project of Sculture.
 
 We recommend you to use [Android Studio](https://developer.android.com/sdk/index.html)
 
+Before running, modify BASE_API_URL on app/build.gradle
+
 You can also use command line. For using command line tools, you still have to install Android SDK.
 
 Some essential commands:

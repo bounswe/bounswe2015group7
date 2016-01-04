@@ -5,7 +5,7 @@
     tools:context="tr.edu.boun.cmpe.sculture.fragment.main.HomeFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/stories"
+        android:id="@+id/subscription_stories"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

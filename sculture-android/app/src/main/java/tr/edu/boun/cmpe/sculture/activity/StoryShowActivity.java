@@ -1,14 +1,16 @@
 package tr.edu.boun.cmpe.sculture.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,6 +27,7 @@ import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_COMMENT_LIST;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_DELETE;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_REPORT;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_IS_EDIT;
@@ -51,10 +54,13 @@ public class StoryShowActivity extends AppCompatActivity {
     private boolean is_reach_end = false;
     MenuItem report_menu;
     MenuItem edit_menu;
+    MenuItem delete_menu;
+    StoryShowActivity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = this;
         setContentView(R.layout.activity_story_show);
         bundle = getIntent().getExtras();
         if (bundle != null)
@@ -136,6 +142,7 @@ public class StoryShowActivity extends AppCompatActivity {
 
                         edit_menu.setVisible(story.owner.id == BaseApplication.baseApplication.getUSER_ID());
                         report_menu.setVisible(story.owner.id != BaseApplication.baseApplication.getUSER_ID());
+                        delete_menu.setVisible(story.owner.id == BaseApplication.baseApplication.getUSER_ID());
 
                         load_comment();
                     }
@@ -157,7 +164,7 @@ public class StoryShowActivity extends AppCompatActivity {
 
         report_menu = menu.findItem(R.id.action_report);
         edit_menu = menu.findItem(R.id.action_edit);
-
+        delete_menu = menu.findItem(R.id.action_delete);
         return true;
     }
 
@@ -196,9 +203,48 @@ public class StoryShowActivity extends AppCompatActivity {
                 intent.putExtra(BUNDLE_IS_EDIT, true);
                 startActivity(intent);
                 break;
+            case R.id.action_delete:
+                action_delete_clicked();
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void action_delete_clicked() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.action_delete)
+                .setMessage(R.string.delete_message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        delete_story();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    private void delete_story() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("id", story_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        addRequest(API_STORY_DELETE, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(mActivity, R.string.deleted, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mActivity, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, null);
     }
 }

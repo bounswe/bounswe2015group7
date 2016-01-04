@@ -35,6 +35,32 @@ public class MainServlet extends HttpServlet {
             request.setAttribute("isLoggedIn", true);
         }
 
+
+        //Get recommended stories
+        StoriesResponse recommendedStoriesResponse = null;
+
+        if((Boolean)request.getAttribute("isLoggedIn")) {
+            JSONObject params = new JSONObject();
+            params.put("page", 1);
+            params.put("size", 4);
+
+            HttpResponse<JsonNode> jsonStoriesResponse = null;
+            try {
+                jsonStoriesResponse = Unirest.post("http://52.59.252.52:9000/recommendation/similarToLiked")
+                        .header("Content-Type", "application/json")
+                        .header("access_token", (String)request.getSession().getAttribute("access_token"))
+                        .body(new JsonNode(params.toString()))
+                        .asJson();
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
+
+
+            Gson gson = MyGson.create();
+
+            recommendedStoriesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
+        }
+
         //Get popular stories using /search/all
 
         JSONObject params = new JSONObject();
@@ -54,13 +80,17 @@ public class MainServlet extends HttpServlet {
 
         Gson gson = MyGson.create();
 
-        StoriesResponse storiesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
+        StoriesResponse allStoriesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
 
         //Set the topStory attribute
-        request.setAttribute("topStory", storiesResponse.getResult().get(3));
+        request.setAttribute("topStory", allStoriesResponse.getResult().get(3));
 
         //Set the popularStories
-        request.setAttribute("popularStories", storiesResponse);
+        request.setAttribute("popularStories", allStoriesResponse);
+
+        //Set recommendedStories
+        request.setAttribute(("recommendedStories"), recommendedStoriesResponse);
+
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
 
     }

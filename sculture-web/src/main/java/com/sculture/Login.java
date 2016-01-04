@@ -1,12 +1,9 @@
 package com.sculture;
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.model.response.StoriesResponse;
-import com.sculture.util.MyGson;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 @WebServlet(name = "login")
@@ -48,32 +44,8 @@ public class Login extends HttpServlet {
             request.setAttribute("isLoggedIn", false);
             request.setAttribute("username", "");
         }
-        //Get popular stories using /search/all
 
-        JSONObject params = new JSONObject();
-        params.put("page", 1);
-        params.put("size", 4);
-
-        HttpResponse<JsonNode> popularStoriesResponse = null;
-        try {
-            popularStoriesResponse = Unirest.post("http://52.59.252.52:9000/search/all")
-                    .header("Content-Type", "application/json")
-                    .body(new JsonNode(params.toString()))
-                    .asJson();
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
-
-
-        Gson gson = MyGson.create();
-        StoriesResponse storiesResponse = gson.fromJson(popularStoriesResponse.getBody().getObject().toString(), StoriesResponse.class);
-
-        //Set the topStory attribute
-        request.setAttribute("topStory", storiesResponse.getResult().get(3));
-
-        //Set the popularStories
-        request.setAttribute("popularStories", storiesResponse);
-        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
+        response.sendRedirect("/index");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

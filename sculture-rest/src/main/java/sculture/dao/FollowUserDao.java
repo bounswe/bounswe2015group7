@@ -24,7 +24,7 @@ public class FollowUserDao {
     }
 
     public FollowUser get(long follower_id, long followed_id) {
-        Query queryVote = entityManager.createQuery("from FollowUser where follower_id = :follower_id AND followed_id = :followed_id");
+        Query queryVote = entityManager.createQuery("from FollowUser where follower_id = :follower_id AND followed_id = :followed_id AND is_follow = true");
         queryVote.setParameter("follower_id", follower_id);
         queryVote.setParameter("followed_id", followed_id);
 

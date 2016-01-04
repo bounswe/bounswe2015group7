@@ -174,7 +174,7 @@
                         out.print(popularContent.replace("\n", "<br>").substring(0, 400) + "...");
                     } %></p>
                     <p>
-                        <%String refUrl = "/get/story/" + popularStories.getResult().get(i).getId();%>
+                        <%String refUrl = "get/story/" + popularStories.getResult().get(i).getId();%>
                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                     </p>
                 </div>

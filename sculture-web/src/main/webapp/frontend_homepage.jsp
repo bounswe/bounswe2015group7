@@ -16,9 +16,9 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="public/js/sweetalert.min.js"></script>
-    <script src="/public/js/scripts.js"></script>
-    <script src="/public/js/bootstrap.min.js"></script>
-    <script src="/public/js/jquery.backstretch.min.js"></script>
+    <script src="public/js/scripts.js"></script>
+    <script src="public/js/bootstrap.min.js"></script>
+    <script src="public/js/jquery.backstretch.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,7 +42,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/index"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
+            <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px";></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -55,11 +55,11 @@
                 <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/logout">Log Out</a>
+                        <a class="btn btn-link-2" href="logout">Log Out</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
                     </div>
@@ -86,12 +86,12 @@
     <% String username = (String)request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="/search" method="post">
+    <form class="form-inline" action="search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50" placeholder="Search stories" required>
     </form>
     <br>
-    <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
+    <a class="btn btn-link-2" href="search/all" data-modal-id="modal-create-story">All stories</a>
     <br>
 </div>
 
@@ -128,7 +128,7 @@
 
         <div class="col-md-4">
             <% String title = topStory.getTitle(); %>
-            <% String refUrl1 = "/get/story/" + topStory.getId();%>
+            <% String refUrl1 = "get/story/" + topStory.getId();%>
             <h3> <a href="<%out.print(refUrl1);%>"> <%out.print(title);%></a></h3>
             <p><% if(topStory.getContent().length() < 300){
                 out.print(topStory.getContent().replace("\n", "<br>"));

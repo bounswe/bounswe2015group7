@@ -7,4 +7,6 @@ The Sculture project had its head-start in the astonishing course CMPE 352 of Bo
 
 You can read through and get impressed by our wiki, or if you are feeling cool enough, you can take a look at the source code.
 
-Pay us a visit: http://52.28.216.93:8080/
+API URL = http://52.59.252.52:9000
+
+Pay us a visit: http://52.59.252.52

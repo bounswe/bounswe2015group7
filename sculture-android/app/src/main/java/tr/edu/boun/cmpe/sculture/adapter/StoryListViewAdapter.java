@@ -8,13 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.ArrayList;
 
+import tr.edu.boun.cmpe.sculture.BaseApplication;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.activity.StoryShowActivity;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 
+import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 
 public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdapter.ViewHolder> {
@@ -43,6 +47,10 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
         holder.story_update_date.setText(s);
         String s2 = mActivity.getString(R.string.written_by_username, story.owner.username);
         holder.story_creator.setText(s2);
+        if (story.media.size() > 0)
+            holder.imageView.setImageUrl(API_IMAGE_GET + story.media.get(0), BaseApplication.baseApplication.mImageLoader);
+        else
+            holder.imageView.setImageUrl("", BaseApplication.baseApplication.mImageLoader);
     }
 
 
@@ -52,6 +60,8 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     }
 
     public void addElement(StoryResponse story) {
+        if (stories.contains(story))
+            return;
         stories.add(story);
         this.notifyDataSetChanged();
     }
@@ -75,6 +85,7 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
         public final TextView story_title;
         public final TextView story_update_date;
         public final TextView story_creator;
+        public final NetworkImageView imageView;
         public long story_id;
 
         public ViewHolder(View v) {
@@ -82,6 +93,7 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
             story_title = (TextView) v.findViewById(R.id.story_title);
             story_update_date = (TextView) v.findViewById(R.id.story_update_date);
             story_creator = (TextView) v.findViewById(R.id.story_creator);
+            imageView = (NetworkImageView) v.findViewById(R.id.image);
             v.setOnClickListener(this);
 
         }

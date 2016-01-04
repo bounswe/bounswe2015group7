@@ -24,25 +24,22 @@ import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 
-import static tr.edu.boun.cmpe.sculture.Constants.API_RECOMMENDATION_SIMILIAR;
-import static tr.edu.boun.cmpe.sculture.Constants.API_RECOMMENDATION_TRENDING;
+import static tr.edu.boun.cmpe.sculture.Constants.API_RECOMMENDATION_FOLLOW;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
-public class HomeFragment extends Fragment {
-    private RecyclerView story_list_recycler;
+public class SubscriptionFragment extends Fragment {
+
+
     LinearLayoutManager mLayoutManager;
     StoryListViewAdapter mStoryListViewAdapter;
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private static int SIZE = 5;
-    private int TRENDING_PAGE = 1;
-    private int SIMILAR_PAGE = 1;
-    private int QUEUE = 0;
+    private RecyclerView story_list_recycler;
+    private int PAGE = 1;
     private boolean is_loading_more = false;
+    private boolean is_reach_end = false;
 
-    public HomeFragment() {
+    public SubscriptionFragment() {
         // Required empty public constructor
     }
 
@@ -50,9 +47,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        story_list_recycler = (RecyclerView) view.findViewById(R.id.stories);
+        View view = inflater.inflate(R.layout.fragment_subscription, container, false);
+        story_list_recycler = (RecyclerView) view.findViewById(R.id.subscription_stories);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mStoryListViewAdapter = new StoryListViewAdapter(getActivity());
         story_list_recycler.setLayoutManager(mLayoutManager);
@@ -60,8 +56,10 @@ public class HomeFragment extends Fragment {
 
         setRecyclerListeners();
 
+        load_story();
         return view;
     }
+
 
     private void setRecyclerListeners() {
         story_list_recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -76,46 +74,34 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (mStoryListViewAdapter.getItemCount() == 0) {
-            TRENDING_PAGE = 1;
-            SIMILAR_PAGE = 1;
-            QUEUE = 0;
+            PAGE = 1;
             is_loading_more = false;
+            is_reach_end = false;
             load_story();
         }
     }
 
     private void load_story() {
+        if (!BaseApplication.baseApplication.checkLogin()) {
+            Toast.makeText(getActivity(), R.string.loginAdvice, Toast.LENGTH_SHORT).show();
+            return;
+        }
         int totalItemCount = mLayoutManager.getItemCount();
         int lastVisibleIndex = mLayoutManager.findLastVisibleItemPosition();
 
         boolean loadMore = lastVisibleIndex == totalItemCount - 1;
 
-
-        if (loadMore && !is_loading_more) {
+        if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
             is_loading_more = true;
-            if (QUEUE % 2 == 1 && !BaseApplication.baseApplication.checkLogin())
-                QUEUE++;
             JSONObject requestBody = new JSONObject();
             try {
-                if (QUEUE % 2 == 0)
-                    requestBody.put(FIELD_PAGE, TRENDING_PAGE++);
-                else
-                    requestBody.put(FIELD_PAGE, SIMILAR_PAGE++);
-                requestBody.put(FIELD_SIZE, SIZE);
-
+                requestBody.put(FIELD_PAGE, PAGE);
+                requestBody.put(FIELD_SIZE, 10);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            final int q = QUEUE;
-            String API;
-            if (QUEUE % 2 == 0)
-                API = API_RECOMMENDATION_TRENDING;
-            else
-                API = API_RECOMMENDATION_SIMILIAR;
-
-            QUEUE++;
-            addRequest(API, requestBody, new Response.Listener<JSONObject>() {
+            PAGE++;
+            addRequest(API_RECOMMENDATION_FOLLOW, requestBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     SearchResponse searchResponse = new SearchResponse(response);
@@ -123,12 +109,8 @@ public class HomeFragment extends Fragment {
                     for (StoryResponse story : searchResponse.result)
                         mStoryListViewAdapter.addElement(story);
 
-                    if (searchResponse.result.size() == 0) {
-                        if (q % 2 == 0)
-                            TRENDING_PAGE--;
-                        else
-                            SIMILAR_PAGE--;
-                    }
+                    if (searchResponse.result.size() == 0)
+                        is_reach_end = true;
 
                     is_loading_more = false;
                 }
@@ -144,5 +126,4 @@ public class HomeFragment extends Fragment {
         }
 
     }
-
 }

@@ -21,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.R;
@@ -43,7 +42,6 @@ import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 public class StoryCreateActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
-    private final ArrayList<Uri> mediaUris = new ArrayList<>();
     private EditText titleText;
     private EditText contentText;
     private Activity mActivity;
@@ -51,6 +49,7 @@ public class StoryCreateActivity extends AppCompatActivity {
     private StoryImageViewAdapter mAdapter;
     private boolean isEdit;
     private long storyId;
+    private boolean isSaveClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class StoryCreateActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(llm);
-        mAdapter = new StoryImageViewAdapter(mediaUris, null, true);
+        mAdapter = new StoryImageViewAdapter(true);
         mRecyclerView.setAdapter(mAdapter);
 
         //If it is edit, pre-fill the view
@@ -99,7 +98,8 @@ public class StoryCreateActivity extends AppCompatActivity {
                     for (String string : storyResponse.tags)
                         completionView.addObject(string);
 
-                    //TODO Get media files and put on recycler view
+                    for (String media_id : storyResponse.media)
+                        mAdapter.add(media_id);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -115,6 +115,9 @@ public class StoryCreateActivity extends AppCompatActivity {
 
 
     private void clickSaveButton() {
+        if (isSaveClicked)
+            return;
+        isSaveClicked = true;
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put(FIELD_TITLE, titleText.getText());
@@ -133,9 +136,21 @@ public class StoryCreateActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        new StoryUploader(titleText.getText().toString(), contentText.getText().toString(), completionView.getObjects(), mediaUris);
-        //TODO Edit
-        startActivity(new Intent(this, MainActivity.class));
+        if (isEdit)
+            new StoryUploader(storyId,
+                    titleText.getText().toString(),
+                    contentText.getText().toString(),
+                    completionView.getObjects(),
+                    mAdapter.getImageLocations());
+        else
+            new StoryUploader(titleText.getText().toString(),
+                    contentText.getText().toString(),
+                    completionView.getObjects(),
+                    mAdapter.getImageLocations());
+        isSaveClicked = false;
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override
@@ -167,7 +182,7 @@ public class StoryCreateActivity extends AppCompatActivity {
             Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
-                mAdapter.addElement(uri);
+                mAdapter.add(uri);
             }
         }
     }

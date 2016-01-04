@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -36,6 +37,7 @@ import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.fragment.main.HomeFragment;
 import tr.edu.boun.cmpe.sculture.fragment.main.ProfileFragment;
+import tr.edu.boun.cmpe.sculture.fragment.main.SubscriptionFragment;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
@@ -252,15 +254,37 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return new HomeFragment();
                 case 1:
+                    return new SubscriptionFragment();
+                case 2:
                     return new ProfileFragment();
                 default:
                     return new HomeFragment();
             }
         }
 
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+
+            switch (position) {
+                case 0:
+                    setTitle(R.string.home);
+                    break;
+                case 1:
+                    setTitle(R.string.subscriptions);
+                    break;
+                case 2:
+                    setTitle(R.string.profile);
+                    break;
+                default:
+                    setTitle(R.string.home);
+                    break;
+            }
+
+        }
+
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -271,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
                     id = R.drawable.ic_home_white_48dp;
                     break;
                 case 1:
+                    id = R.drawable.ic_library_books_white_48dp;
+                    break;
+                case 2:
                     id = R.drawable.ic_person_white_48dp;
                     break;
                 default:

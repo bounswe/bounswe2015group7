@@ -59,4 +59,16 @@ public class StoryResponse {
             e.printStackTrace();
         }
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof StoryResponse))
+            return false;
+        if (obj == this)
+            return true;
+
+        StoryResponse rhs = (StoryResponse) obj;
+        return rhs.id == this.id;
+    }
 }

@@ -66,7 +66,6 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         private StoryImageViewAdapter adapter;
         private long owner_id;
         private long editor_id;
-        private ArrayList<String> media_ids = new ArrayList<>();
         private ImageButton likeButton;
         private ImageButton dislikeButton;
         private int likeStatus = 0;
@@ -109,7 +108,7 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
             llm.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(llm);
-            adapter = new StoryImageViewAdapter(null, media_ids, false);
+            adapter = new StoryImageViewAdapter(false);
             recyclerView.setAdapter(adapter);
         }
 
@@ -340,8 +339,8 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 viewHolder.update.setMovementMethod(LinkMovementMethod.getInstance());
 
                 viewHolder.editor_id = story.last_editor.id;
-                viewHolder.media_ids.clear();
-                viewHolder.media_ids.addAll(story.media);
+                viewHolder.adapter.removeAll();
+                viewHolder.adapter.addIds(story.media);
 
                 viewHolder.setVote(story.vote);
 

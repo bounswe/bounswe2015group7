@@ -1,6 +1,7 @@
 package tr.edu.boun.cmpe.sculture;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.ImageResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_CREATE;
+import static tr.edu.boun.cmpe.sculture.Constants.API_STORY_EDIT;
 import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_CONTENT;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TAGS;
@@ -26,23 +28,66 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_STORY_CREATE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
-
+/**
+ * A class which handles background story uploading with image uploads
+ */
 public class StoryUploader {
-    ArrayList<Uri> uris;
+    ArrayList<Uri> uris = new ArrayList<>();
     String title;
     String content;
     List<String> tags;
     ArrayList<String> image_ids = new ArrayList<>();
+    boolean isEdit = false;
+    long id;
 
-    public StoryUploader(String title, String content, List<String> tags, ArrayList<Uri> uris) {
+    /**
+     * Creates a story and uploads it to the server
+     *
+     * @param title          Title of the story
+     * @param content        Content of the story
+     * @param tags           Tags of the story
+     * @param imageLocations Image locations of the story
+     */
+    public StoryUploader(String title, String content, List<String> tags, ArrayList<ImageLocation> imageLocations) {
         this.content = content;
         this.title = title;
         this.tags = tags;
-        this.uris = uris;
-        upload();
+        for (ImageLocation imageLocation : imageLocations) {
+            if (imageLocation.isLocal())
+                uris.add(imageLocation.getUri());
+            else
+                image_ids.add(imageLocation.getId());
+        }
+        new UploadStoryTask().execute(this);
     }
 
+    /**
+     * Edits an existing story on database
+     *
+     * @param id             ID of the story
+     * @param title          Title of the story
+     * @param content        Content of the story
+     * @param tags           Tags of the story
+     * @param imageLocations Image locations of the story
+     */
+    public StoryUploader(long id, String title, String content, List<String> tags, ArrayList<ImageLocation> imageLocations) {
+        this.id = id;
+        this.isEdit = true;
+        this.content = content;
+        this.title = title;
+        this.tags = tags;
+        for (ImageLocation imageLocation : imageLocations) {
+            if (imageLocation.isLocal())
+                uris.add(imageLocation.getUri());
+            else
+                image_ids.add(imageLocation.getId());
+        }
+        new UploadStoryTask().execute(this);
+    }
 
+    /**
+     * Uploads the story and images
+     */
     private void upload() {
         if (uris.size() == 0) {
             JSONObject requestBody = new JSONObject();
@@ -62,11 +107,16 @@ public class StoryUploader {
                     requestBody.put("media", medias);
                 }
 
+                if (isEdit)
+                    requestBody.put("story_id", id);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            addRequest(API_STORY_CREATE, requestBody,
+            String API_URL = API_STORY_CREATE;
+            if (isEdit)
+                API_URL = API_STORY_EDIT;
+            addRequest(API_URL, requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -115,5 +165,22 @@ public class StoryUploader {
         }
     }
 
+    /**
+     * Async upload starter
+     */
+    private class UploadStoryTask extends AsyncTask<StoryUploader, Integer, Long> {
+        protected void onProgressUpdate(Integer... progress) {
 
+        }
+
+        @Override
+        protected Long doInBackground(StoryUploader... params) {
+            params[0].upload();
+            return null;
+        }
+
+        protected void onPostExecute(Long result) {
+
+        }
+    }
 }

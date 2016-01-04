@@ -14,9 +14,11 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 
 import tr.edu.boun.cmpe.sculture.BaseApplication;
-import tr.edu.boun.cmpe.sculture.BuildConfig;
+import tr.edu.boun.cmpe.sculture.ImageLocation;
+import tr.edu.boun.cmpe.sculture.LargeBundle;
 import tr.edu.boun.cmpe.sculture.R;
 
+import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
@@ -27,17 +29,19 @@ public class ImageShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_show);
         Bundle bundle = getIntent().getExtras();
-        ArrayList<String> image_ids = null;
+        ArrayList<ImageLocation> imageLocations = null;
         int index = 0;
         if (bundle != null) {
-            image_ids = bundle.getStringArrayList(BUNDLE_MEDIA_IDS);
+            int address = bundle.getInt(BUNDLE_MEDIA_IDS, -1);
+            if (address != -1)
+                imageLocations = (ArrayList<ImageLocation>) LargeBundle.getItem(address);
             index = bundle.getInt(BUNDLE_INDEX);
         }
 
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         ImagePagerAdapter adapter = new ImagePagerAdapter();
-        adapter.ids = image_ids;
+        adapter.imageLocations = imageLocations;
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(index);
 
@@ -46,11 +50,11 @@ public class ImageShowActivity extends AppCompatActivity {
     private class ImagePagerAdapter extends PagerAdapter {
 
 
-        private ArrayList<String> ids;
+        private ArrayList<ImageLocation> imageLocations;
 
         @Override
         public int getCount() {
-            return ids.size();
+            return imageLocations.size();
         }
 
         @Override
@@ -61,16 +65,29 @@ public class ImageShowActivity extends AppCompatActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Context context = ImageShowActivity.this;
-            NetworkImageView imageView = new NetworkImageView(context);
 
             int padding = context.getResources().getDimensionPixelSize(
                     R.dimen.padding_medium);
-            imageView.setPadding(padding, padding, padding, padding);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setImageUrl(BuildConfig.API_BASE_URL + "/image/get/" + ids.get(position), BaseApplication.baseApplication.mImageLoader);
+            ImageLocation imageLocation = imageLocations.get(position);
+            if (imageLocation.isLocal()) {
+                ImageView imageView = new ImageView(context);
+                imageView.setPadding(padding, padding, padding, padding);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                imageView.setImageURI(imageLocation.getUri());
+                container.addView(imageView, 0);
+                return imageView;
+            } else {
 
-            container.addView(imageView, 0);
-            return imageView;
+                NetworkImageView imageView = new NetworkImageView(context);
+
+
+                imageView.setPadding(padding, padding, padding, padding);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                imageView.setImageUrl(API_IMAGE_GET + imageLocation.getId(), BaseApplication.baseApplication.mImageLoader);
+
+                container.addView(imageView, 0);
+                return imageView;
+            }
         }
 
         @Override

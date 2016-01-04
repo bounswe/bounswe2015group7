@@ -12,27 +12,84 @@ import android.widget.ImageView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.BaseApplication;
-import tr.edu.boun.cmpe.sculture.BuildConfig;
+import tr.edu.boun.cmpe.sculture.ImageLocation;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.activity.ImageShowActivity;
+import tr.edu.boun.cmpe.sculture.LargeBundle;
 
+import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
-    private ArrayList<Uri> uris = null;
-    private boolean is_create;
-    private ArrayList<String> urls = null;
+    private ArrayList<ImageLocation> imageLocations = new ArrayList<>();
 
-    public StoryImageViewAdapter(ArrayList<Uri> uris, ArrayList<String> urls, boolean is_create) {
-        //TODO This class could be better
-        this.uris = uris;
-        this.urls = urls;
-        this.is_create = is_create;
+    private boolean isEditable = false;
+
+    public StoryImageViewAdapter(boolean isEditable) {
+        this.isEditable = isEditable;
     }
 
+    /**
+     * Adds a local image to the adapter
+     *
+     * @param uri Uri of local file
+     */
+    public void add(Uri uri) {
+        imageLocations.add(new ImageLocation(uri));
+        notifyItemInserted(imageLocations.size() - 1);
+    }
+
+    /**
+     * Adds a remote image to the adapter
+     *
+     * @param id The ID of the image
+     */
+    public void add(String id) {
+        imageLocations.add(new ImageLocation(id));
+        notifyItemInserted(imageLocations.size() - 1);
+    }
+
+    /**
+     * Adds a list of local images to the adapter
+     *
+     * @param uris List of the uris of local images
+     */
+    public void addUris(List<Uri> uris) {
+        for (Uri uri : uris)
+            add(uri);
+    }
+
+    /**
+     * Adds a list of remote images to the adapter
+     *
+     * @param ids List of the IDs of remote images
+     */
+    public void addIds(List<String> ids) {
+        for (String id : ids)
+            imageLocations.add(new ImageLocation(id));
+    }
+
+    /**
+     * Removes an image from adapter
+     *
+     * @param index Index of the image
+     */
+    public void removeElement(int index) {
+        imageLocations.remove(index);
+        notifyItemRemoved(index);
+    }
+
+    /**
+     * Removes all images from the adapter
+     */
+    public void removeAll() {
+        imageLocations.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public StoryImageViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -42,43 +99,26 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (is_create) {
+        ImageLocation imageLocation = imageLocations.get(position);
+        if (imageLocation.isLocal()) {
             holder.local_imageView.setVisibility(View.VISIBLE);
-            holder.local_imageView.setImageURI(uris.get(position));
+            holder.local_imageView.setImageURI(imageLocation.getUri());
             holder.imageView.setVisibility(View.GONE);
-
         } else {
             holder.imageView.setVisibility(View.VISIBLE);
-            holder.imageView.setImageUrl(BuildConfig.API_BASE_URL + "/image/get/" + urls.get(position), BaseApplication.baseApplication.mImageLoader);
+            holder.imageView.setImageUrl(API_IMAGE_GET + imageLocation.getId(), BaseApplication.baseApplication.mImageLoader);
             holder.local_imageView.setVisibility(View.GONE);
         }
         holder.index = position;
-
     }
 
     @Override
     public int getItemCount() {
-        if (urls != null)
-            return urls.size();
-        else if (uris != null)
-            return uris.size();
-        return 0;
+        return imageLocations.size();
     }
 
-    public void addElement(Uri uri) {
-        if (!uris.contains(uri)) {
-            uris.add(uri);
-            this.notifyItemInserted(uris.size() - 1);
-        }
-    }
-
-    private void removeElement(Uri uri) {
-        removeElement(uris.indexOf(uri));
-    }
-
-    private void removeElement(int index) {
-        uris.remove(index);
-        this.notifyItemRemoved(index);
+    public ArrayList<ImageLocation> getImageLocations() {
+        return imageLocations;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,23 +130,31 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
         public ViewHolder(View v) {
             super(v);
             imageView = (NetworkImageView) v.findViewById(R.id.image);
-            if (!is_create) {
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), ImageShowActivity.class);
-                        intent.putExtra(BUNDLE_MEDIA_IDS, urls);
-                        intent.putExtra(BUNDLE_INDEX, index);
-                        v.getContext().startActivity(intent);
-                    }
-                });
-            }
-            local_imageView = (ImageView) v.findViewById(R.id.image_local);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), ImageShowActivity.class);
 
+                    intent.putExtra(BUNDLE_MEDIA_IDS, LargeBundle.addItem(imageLocations));
+                    intent.putExtra(BUNDLE_INDEX, index);
+                    v.getContext().startActivity(intent);
+                }
+            });
+            local_imageView = (ImageView) v.findViewById(R.id.image_local);
+            local_imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), ImageShowActivity.class);
+                    intent.putExtra(BUNDLE_MEDIA_IDS, LargeBundle.addItem(imageLocations));
+                    intent.putExtra(BUNDLE_INDEX, index);
+                    v.getContext().startActivity(intent);
+                }
+            });
             button = (ImageButton) v.findViewById(R.id.button);
-            if (!is_create) {
+            if (isEditable)
+                button.setVisibility(View.VISIBLE);
+            else
                 button.setVisibility(View.GONE);
-            }
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

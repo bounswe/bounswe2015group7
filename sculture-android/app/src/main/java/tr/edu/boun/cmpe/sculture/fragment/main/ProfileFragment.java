@@ -51,7 +51,6 @@ public class ProfileFragment extends Fragment {
 
     private int PAGE = 1;
     private boolean is_loading_more = false;
-    private boolean is_reach_end = false;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -77,7 +76,6 @@ public class ProfileFragment extends Fragment {
 
         setRecyclerListeners();
 
-        load_story();
         Button login_register_button = (Button) view.findViewById(R.id.login_register);
         login_register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +110,6 @@ public class ProfileFragment extends Fragment {
         //TODO Find a better way to refresh this fragment
         profileFragment.PAGE = 1;
         profileFragment.is_loading_more = false;
-        profileFragment.is_reach_end = false;
         profileFragment.mStoryListViewAdapter.clearElements();
     }
 
@@ -126,6 +123,15 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    public void onStart() {
+        super.onStart();
+        if (mStoryListViewAdapter.getItemCount() == 0) {
+            PAGE = 1;
+            is_loading_more = false;
+            load_story();
+        }
+    }
+
     private void load_story() {
 
         int totalItemCount = mLayoutManager.getItemCount();
@@ -133,16 +139,13 @@ public class ProfileFragment extends Fragment {
 
         boolean loadMore = lastVisibleIndex == totalItemCount - 1;
 
-        if (is_reach_end)
-            Log.i("HERE", "HERE");
-        if ((loadMore && !is_loading_more && !is_reach_end) || PAGE == 1) {
+        if (loadMore && !is_loading_more) {
             is_loading_more = true;
             JSONObject requestBody = new JSONObject();
             try {
                 requestBody.put(FIELD_ID, baseApplication.getUSER_ID());
                 requestBody.put(FIELD_PAGE, PAGE);
                 requestBody.put(FIELD_SIZE, 10);
-                Log.i("HEREd", "" + baseApplication.getUSER_ID());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -156,7 +159,7 @@ public class ProfileFragment extends Fragment {
                         mStoryListViewAdapter.addElement(story);
 
                     if (searchResponse.result.size() == 0)
-                        is_reach_end = true;
+                        PAGE--;
 
                     is_loading_more = false;
                 }
@@ -172,4 +175,5 @@ public class ProfileFragment extends Fragment {
         }
 
     }
+
 }

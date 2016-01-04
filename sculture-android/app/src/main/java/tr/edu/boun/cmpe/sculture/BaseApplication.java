@@ -49,6 +49,9 @@ public class BaseApplication extends Application {
         autoLogin();
     }
 
+    /**
+     * Automatically logs in according to Preferences data
+     */
     private void autoLogin() {
         if (TOKEN.equals("")) {
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -93,7 +96,7 @@ public class BaseApplication extends Application {
     /**
      * Checks whether there is a user session.
      *
-     * @return Whether tare is a user session.
+     * @return True:user logged in, False: user not logged in
      */
     public boolean checkLogin() {
         return isLoggedIn;
@@ -119,7 +122,7 @@ public class BaseApplication extends Application {
     }
 
     /**
-     * Retrieve the access token of current user.
+     * Retrieves the access token of current user.
      *
      * @return Access token of current user
      */
@@ -127,14 +130,29 @@ public class BaseApplication extends Application {
         return TOKEN;
     }
 
+    /**
+     * Retrieves the email address of current user.
+     *
+     * @return Email address of current user
+     */
     public String getEMAIL() {
         return EMAIL;
     }
 
+    /**
+     * Retrieves the username of current user
+     *
+     * @return Username of current user
+     */
     public String getUSERNAME() {
         return USERNAME;
     }
 
+    /**
+     * Retrieves the user id of current user
+     *
+     * @return User id of current user
+     */
     public long getUSER_ID() {
         return USER_ID;
     }

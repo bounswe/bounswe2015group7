@@ -90,6 +90,7 @@ public class TagDescCreateActivity extends AppCompatActivity {
                         TagResponse tagResponse = new TagResponse(response);
                         Intent intent = new Intent(mActivity, TagActivity.class);
                         intent.putExtra(BUNDLE_TAG_TITLE, tagResponse.tag_title);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         mActivity.startActivity(intent);
                     }
                 },

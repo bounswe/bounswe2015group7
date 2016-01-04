@@ -27,11 +27,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static tr.edu.boun.cmpe.sculture.BaseApplication.baseApplication;
+import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_UPLOAD;
 import static tr.edu.boun.cmpe.sculture.Constants.HEADER_ACCESS_TOKEN;
 
 public class Utils {
 
-
+    /**
+     * Checks whether the given email has valid syntax
+     *
+     * @param enteredEmail email address
+     * @return True: valid, false: invalid
+     */
     public static boolean isEmailValid(String enteredEmail) {
         String EMAIL_REGEX =
                 "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -41,10 +47,23 @@ public class Utils {
         return !enteredEmail.isEmpty() && matcher.matches();
     }
 
+    /**
+     * Checks whether the password is valid
+     * Password should be longer than 5 chars
+     *
+     * @param password Password text
+     * @return True: valid, false: invalid
+     */
     public static boolean isPasswordValid(String password) {
         return !(password == null || password.isEmpty() || password.length() < 6);
     }
 
+    /**
+     * Checks whether the username is valid
+     *
+     * @param username Username
+     * @return True: valid, false: invalid
+     */
     public static boolean isUserNameValid(String username) {
         return !(username == null || username.isEmpty());
     }
@@ -91,6 +110,13 @@ public class Utils {
         baseApplication.mRequestQueue.add(request);
     }
 
+    /**
+     * Adds a request which uploads an image to the server
+     *
+     * @param uri           The local uri of the image
+     * @param listener      The listener function which will be called when the upload is completed successfully.
+     * @param errorListener The error function which will be called when the upload fails.
+     */
     public static void uploadImage(Uri uri, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         if (!isOnline()) {
             Toast.makeText(baseApplication.getApplicationContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
@@ -114,7 +140,7 @@ public class Utils {
         }
 
         final byte[] finalByteArray = byteArray;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, BuildConfig.API_BASE_URL + "/image/upload", listener, errorListener) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, API_IMAGE_UPLOAD, listener, errorListener) {
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(HEADER_ACCESS_TOKEN, baseApplication.getTOKEN());
@@ -141,7 +167,6 @@ public class Utils {
     public static void removeRequests(Object tag) {
         baseApplication.mRequestQueue.cancelAll(tag);
     }
-
 
     /**
      * Checks whether there is internet connection or not

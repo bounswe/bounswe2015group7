@@ -51,7 +51,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="<%out.print(contextPath);%>/index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="<%out.print(contextPath);%>/index"><img src="<%out.print(contextPath);%>/public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -276,7 +276,7 @@
 
             <div class="modal-body">
 
-                <form role="form" action="login" method="post" class="login-form">
+                <form role="form" action="<%out.print(contextPath);%>/login" method="post" class="login-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-username">E-mail</label>
                         <input type="text" name="form-username" placeholder="Username..."
@@ -319,7 +319,7 @@
 
             <div class="modal-body">
 
-                <form role="form" action="signup" method="post" class="register-form">
+                <form role="form" action="<%out.print(contextPath);%>/signup" method="post" class="register-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-email">E-mail</label>
                         <input type="text" name="form-email" placeholder="Enter your email"

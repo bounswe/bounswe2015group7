@@ -101,10 +101,9 @@
                 </div>
                 <div class="form-group">
                     <label for="story-content">Content</label>
-
                     <div class="input-group">
-                        <textarea name="story-content" id="story-content" class="form-control"
-                                  placeholder="Enter your story" rows="5" required></textarea>
+                        <input type="text" name="story-content" id="story-content" class="form-control" style="padding-bottom: 7px; line-height: 14px; padding-left: 8px; word-break: break-word; padding-right: 8px; height: 330px; font-size: 14px; top: 0px; padding-top: 8px; left: 0px;"
+                                  placeholder="Enter your story" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>

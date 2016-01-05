@@ -36,13 +36,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-  <link rel="stylesheet" href="public/css/bootstrap.min.css">
-  <link rel="stylesheet" href="public/css/font-awesome.css">
-  <link rel="stylesheet" href="public/css/form-elements.css">
-  <link rel="stylesheet" href="public/css/sweetalert.css">
-  <link rel="stylesheet" href="public/css/style.css">
-  <link rel="stylesheet" href="public/css/homepage_style.css">
-  <link rel="stylesheet" href="public/css/storystyle.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/font-awesome.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/form-elements.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/sweetalert.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/style.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/homepage_style.css">
+  <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/storystyle.css">
 
 
 </head>
@@ -56,7 +56,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px"></a>
+      <a href="<%out.print(contextPath);%>/index"><img src="<%out.print(contextPath);%>/public/images/logo.png" style="width:204px;height:58px"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
@@ -183,7 +183,7 @@
                     }%>
                     </p>
                     <p>
-                      <%String refUrl = contextPath+ "get/story/" + userStories.get(i).getId();%>
+                      <%String refUrl = contextPath+ "/get/story/" + userStories.get(i).getId();%>
                       <a href="<%out.print(refUrl);%>"> Read More</a>
                     </p>
                   </div>
@@ -290,7 +290,7 @@
 
       <div class="modal-body">
 
-        <form role="form" action="login" method="post" class="login-form">
+        <form role="form" action="<%out.print(contextPath);%>/login" method="post" class="login-form">
           <div class="form-group">
             <label class="sr-only" for="form-username">E-mail</label>
             <input type="text" name="form-username" placeholder="Username..." class="form-email form-control" id="form-username">
@@ -329,7 +329,7 @@
 
       <div class="modal-body">
 
-        <form role="form" action="signup" method="post" class="register-form">
+        <form role="form" action="<%out.print(contextPath);%>/signup" method="post" class="register-form">
           <div class="form-group">
             <label class="sr-only" for="form-email">E-mail</label>
             <input type="text" name="form-email" placeholder="Enter your email" class="form-email form-control" id="form-email">

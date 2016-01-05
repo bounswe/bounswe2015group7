@@ -24,7 +24,33 @@ import java.util.ArrayList;
 public class Search extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("isLoggedIn", false);
+        request.setAttribute("username", "");
+        if (request.getSession().getAttribute("username") != null) {
+            request.setAttribute("username", request.getSession().getAttribute("username"));
+            request.setAttribute("isLoggedIn", true);
+        }
+        String requestURL = request.getRequestURL().toString();
+        String query = requestURL.substring(requestURL.lastIndexOf('/') + 1);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("query", query);
 
+        HttpResponse<JsonNode> searchJsonResponse = null;
+        try {
+            searchJsonResponse = Unirest.post("http://52.59.252.52:9000/search")
+                    .header("Content-Type", "application/json")
+                    .body(new JsonNode(jsonObject.toString()))
+                    .asJson();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+
+        Gson gson = MyGson.create();
+        StoriesResponse storiesResponse = gson.fromJson(searchJsonResponse.getBody().toString(), StoriesResponse.class);
+
+        request.setAttribute("results", storiesResponse);
+        request.getRequestDispatcher("/search_result.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -33,8 +33,15 @@ public class SearchEngine {
 
     public static void initialize() {
         String u = SearchEngine.class.getClassLoader().getResource("WordNet-3.0").getPath();
+        System.out.println(u + "\n\n\n\n\n\n\n\n\n\n\n");
         System.setProperty("wordnet.database.dir", u + File.separator + "dict");
         database = WordNetDatabase.getFileInstance();
+
+        if (database == null) {
+            System.out.println("null" + "\n\n\n\n\n\n\n\n\n\n\n");
+        } else
+            System.out.println("notnull" + "\n\n\n\n\n\n\n\n\n\n\n");
+
 
         analyzer = new SynonymAnalyzer();
         try {
@@ -45,6 +52,9 @@ public class SearchEngine {
     }
 
     public static void addDoc(long id, String title, String content, String tags) {
+        if (database == null)
+            initialize();
+
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter w;
         try {
@@ -62,6 +72,9 @@ public class SearchEngine {
     }
 
     public static void removeDoc(long id) {
+        if (database == null)
+            initialize();
+
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter w;
         try {
@@ -75,6 +88,9 @@ public class SearchEngine {
     }
 
     public static List<Long> search(String search_term, int page, int size) {
+        if (database == null)
+            initialize();
+
         String wordnet = "";
         String[] searches = search_term.split(" ");
 
@@ -129,6 +145,9 @@ public class SearchEngine {
     }
 
     public static void removeAll() {
+        if (database == null)
+            initialize();
+
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter w;
         try {

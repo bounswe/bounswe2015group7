@@ -33,7 +33,7 @@ public class Signup extends HttpServlet {
             jsonObject.put("password", request.getParameter("form-password"));
 
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/user/register")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.USER_REGISTER)
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();

@@ -1,4 +1,5 @@
 <%@ page import="com.sculture.model.response.StoriesResponse" %>
+<%@ page import="com.sculture.Const" %>
 
 <!DOCTYPE html>
 
@@ -116,7 +117,7 @@
                 <% try { %>
                 <%if (trendingStories.getResult().get(i).getMedia() != null) { %>
                 <img style="width: 200px; height: 200px"
-                     src="<%out.print("http://52.59.252.52:9000/image/get/" + trendingStories.getResult().get(i).getMedia().get(0));%>"
+                     src="<%out.print(Const.REST_BASE_URL + Const.Api.IMAGE_GET + trendingStories.getResult().get(i).getMedia().get(0));%>"
                      alt="">
                 <% } %>
                 <%} catch (Exception e) {%>
@@ -160,7 +161,7 @@
                 <% try { %>
                 <%if (recommendedStories.getResult().get(i).getMedia() != null) { %>
                 <img style="width: 200px; height: 200px"
-                     src="<%out.print("http://52.59.252.52:9000/image/get/" + recommendedStories.getResult().get(i).getMedia().get(0));%>"
+                     src="<%out.print(Const.REST_BASE_URL + Const.Api.IMAGE_GET + recommendedStories.getResult().get(i).getMedia().get(0));%>"
                      alt="">
                 <% } %>
                 <%} catch (Exception e) {%>
@@ -205,7 +206,7 @@
                 <% try { %>
                 <%if (allStories.getResult().get(i).getMedia() != null) { %>
                 <img style="width: 200px; height: 200px"
-                     src="<%out.print("http://52.59.252.52:9000/image/get/" + allStories.getResult().get(i).getMedia().get(0));%>"
+                     src="<%out.print(Const.REST_BASE_URL + Const.Api.IMAGE_GET + allStories.getResult().get(i).getMedia().get(0));%>"
                      alt="">
                 <% } %>
                 <%} catch (Exception e) {%>

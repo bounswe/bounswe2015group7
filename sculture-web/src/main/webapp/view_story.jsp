@@ -1,8 +1,9 @@
+<%@ page import="com.sculture.Const" %>
+<%@ page import="com.sculture.model.response.CommentResponse" %>
+<%@ page import="com.sculture.model.response.StoryResponse" %>
+<%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.sql.Timestamp" %>
-<%@ page import="com.sculture.model.response.StoryResponse" %>
-<%@ page import="com.sculture.model.response.CommentResponse" %>
 <!DOCTYPE html>
 <%
     String contextPath =request.getContextPath();
@@ -127,7 +128,7 @@
 
                 <ul class="bjqs">
                     <%for(int i = 0; i < story.getMedia().size(); i++) { %>
-                    <li><img src="<%out.print("http://52.59.252.52:9000/image/get/" + story.getMedia().get(i));%>"></li>
+                    <li><img src="<%out.print(Const.REST_BASE_URL + Const.Api.IMAGE_GET + story.getMedia().get(i));%>"></li>
                     <%}%>
                 </ul>
             </div>            <% } %>
@@ -360,6 +361,8 @@
 <script>
     $(document).ready(function () {
         $('#banner-fade').bjqs({
+            height: 300,
+            width: 700,
             responsive  : true,
             automatic   : false,
             usecaptions : false
@@ -409,7 +412,7 @@
                 beforeSend: function (request)                {
                     request.setRequestHeader("access-token", definitelynottheaccesstoken);
                 },
-                url: 'http://52.59.252.52:9000/story/vote',
+                url: "<%=Const.REST_BASE_URL + Const.Api.STORY_VOTE %>",
                 contentType: "application/json",
                 data: JSON.stringify({
                     "story_id": story_id,

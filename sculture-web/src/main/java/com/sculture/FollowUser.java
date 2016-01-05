@@ -1,6 +1,5 @@
 package com.sculture;
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -32,7 +31,7 @@ public class FollowUser extends HttpServlet {
             jsonObject.put("user_id", user_id);
             jsonObject.put("is_follow", true);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/user/follow")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.USER_FOLLOW)
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)

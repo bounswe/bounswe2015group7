@@ -186,8 +186,8 @@
                     'width'         : '100%'
                 });
                 $slides.children('img').css({
-                    'height'        : settings.height,
-                    'width'         : '100%'
+                    'max-height'        : settings.height,
+                    'max-width'         : '100%'
                 });
                 $slider.css({
                     'height'        : settings.height,

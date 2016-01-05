@@ -3,6 +3,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="com.sculture.model.response.StoryResponse" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.sculture.Const" %>
 <%
     String contextPath =request.getContextPath();
 %>
@@ -124,7 +125,7 @@
                                 <% try { %>
                                 <%if (results.get(i).getMedia() != null) { %>
                                 <img style="width: 300px; height: 250px"
-                                     src="<%out.print("http://52.59.252.52:9000/image/get/" + results.get(i).getMedia().get(0));%>"
+                                     src="<%out.print(Const.REST_BASE_URL + Const.Api.IMAGE_GET + results.get(i).getMedia().get(0));%>"
                                      alt="">
                                 <% } %>
                                 <%} catch (Exception e) {%>

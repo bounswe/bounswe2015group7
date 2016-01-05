@@ -94,7 +94,7 @@ public class SaveStory extends HttpServlet {
         if(jsonResponse != null){
             System.out.println(jsonResponse.getBody().toString());
         }
-        response.sendRedirect("/index");
+        response.sendRedirect("/sculture/index");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -43,7 +43,7 @@ public class AddComment extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        String url = "/get/story/" + request.getParameter("story_id");
+        String url = "/sculture/get/story/" + request.getParameter("story_id");
         response.sendRedirect(url);
     }
 

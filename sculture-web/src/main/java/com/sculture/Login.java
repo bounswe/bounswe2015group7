@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
             request.setAttribute("username", "");
         }
 
-        response.sendRedirect("/index");
+        response.sendRedirect("/sculture/index");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

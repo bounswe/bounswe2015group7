@@ -46,7 +46,7 @@ public class EditStory extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/get/story/" + story_id);
+        response.sendRedirect("/sculture/get/story/" + story_id);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -40,7 +40,7 @@ public class Signup extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/index");
+        response.sendRedirect("/sculture/index");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

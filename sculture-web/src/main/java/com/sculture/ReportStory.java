@@ -39,7 +39,7 @@ public class ReportStory extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/get/story/" + story_id);
+        response.sendRedirect("/sculture/get/story/" + story_id);
     }
 
 }

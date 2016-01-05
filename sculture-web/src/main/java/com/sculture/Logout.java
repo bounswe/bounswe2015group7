@@ -23,7 +23,7 @@ public class Logout extends HttpServlet {
         request.getSession().setAttribute("userid", null);
         request.getSession().setAttribute("access_token", null);
         request.setAttribute("isLoggedIn", false);
-        response.sendRedirect("/index");
+        response.sendRedirect("/sculture/index");
     }
 
 }

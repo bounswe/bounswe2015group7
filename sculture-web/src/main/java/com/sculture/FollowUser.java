@@ -39,6 +39,6 @@ public class FollowUser extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/get/user/" + user_id);
+        response.sendRedirect("/sculture/get/user/" + user_id);
     }
 }

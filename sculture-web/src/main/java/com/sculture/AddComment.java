@@ -35,7 +35,7 @@ public class AddComment extends HttpServlet {
             jsonObject.put("storyId", request.getParameter("story_id"));
             jsonObject.put("content", request.getParameter("form-commentbody"));
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/comment/new")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.COMMENT_NEW)
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)

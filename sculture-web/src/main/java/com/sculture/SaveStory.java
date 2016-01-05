@@ -8,24 +8,17 @@ import com.sculture.model.response.StoryResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.*;
-import javax.servlet.http.Part;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +58,7 @@ public class SaveStory extends HttpServlet {
                 } else { // photo
                     InputStream fileContent = item.getInputStream();
                     byte[] bytes = IOUtils.toByteArray(fileContent);
-                    jsonResponse = Unirest.post("http://52.59.252.52:9000/image/upload")
+                    jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.IMAGE_UPLOAD)
                             .header("Content-Type", "application/json")
                             .body(bytes)
                             .asJson();
@@ -90,7 +83,7 @@ public class SaveStory extends HttpServlet {
             jsonObject.put("media", media);
             jsonObject.put("tags", tags);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/story/create")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.STORY_CREATE)
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)

@@ -46,10 +46,10 @@ public class MainServlet extends HttpServlet {
         }
 
 
-        StoriesResponse allStories = getStories("/search/all", null);
-        StoriesResponse trendingStories = getStories("/recommendation/trending", null);
-        StoriesResponse likedStories = getStories("/recommendation/similarToLiked", accessToken);
-        StoriesResponse followedStories = getStories("/recommendation/fromFollowedUser", accessToken);
+        StoriesResponse allStories = getStories(Const.Api.SEARCH_ALL, null);
+        StoriesResponse trendingStories = getStories(Const.Api.RECOMMENDATION_TRENDING, null);
+        StoriesResponse likedStories = getStories(Const.Api.RECOMMENDATION_SIMILAR_TO_LIKED, accessToken);
+        StoriesResponse followedStories = getStories(Const.Api.RECOMMENDATION_FROM_FOLLOWED_USER, accessToken);
 
 
         // Merge liked and followed, removing duplicates
@@ -81,7 +81,7 @@ public class MainServlet extends HttpServlet {
         params.put("page", 1);
         params.put("size", 4);
 
-        HttpRequestWithBody requestWithBody = Unirest.post("http://52.59.252.52:9000" + endPoint)
+        HttpRequestWithBody requestWithBody = Unirest.post(Const.REST_BASE_URL + endPoint)
                 .header("Content-Type", "application/json");
         if(accessToken != null) {
             requestWithBody.header("access-token", accessToken);

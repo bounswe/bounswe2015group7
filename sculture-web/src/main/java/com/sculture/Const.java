@@ -4,7 +4,7 @@ package com.sculture;
  * Created by safa on 05/01/16.
  */
 public class Const {
-    public static final String REST_BASE_URI = "http://52.59.252.52:9000";
+    public static final String REST_BASE_URL = "http://52.59.252.52:9000";
 
     public class Api {
         public static final String USER_REGISTER = "/user/register";
@@ -21,7 +21,7 @@ public class Const {
         public static final String TAG_EDIT = "/tag/edit";
 
         public static final String IMAGE_UPLOAD = "/image/upload";
-        public static final String IMAGE_GET = "/image/get/{id}";
+        public static final String IMAGE_GET = "/image/get/";
 
         public static final String STORY_CREATE = "/story/create";
         public static final String STORY_EDIT = "/story/edit";

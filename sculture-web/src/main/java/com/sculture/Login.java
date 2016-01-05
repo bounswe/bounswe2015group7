@@ -26,7 +26,7 @@ public class Login extends HttpServlet {
             jsonObject.put("username", request.getParameter("form-username"));
             jsonObject.put("password", request.getParameter("form-password"));
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/user/login")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.USER_LOGIN)
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();

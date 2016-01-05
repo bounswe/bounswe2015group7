@@ -5,10 +5,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sculture.model.response.StoryResponse;
 import com.sculture.model.response.StoriesResponse;
 import com.sculture.util.MyGson;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 @WebServlet(name = "search")
@@ -37,7 +34,7 @@ public class Search extends HttpServlet {
 
         HttpResponse<JsonNode> searchJsonResponse = null;
         try {
-            searchJsonResponse = Unirest.post("http://52.59.252.52:9000/search")
+            searchJsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.SEARCH)
                     .header("Content-Type", "application/json")
                     .body(new JsonNode(jsonObject.toString()))
                     .asJson();
@@ -67,7 +64,7 @@ public class Search extends HttpServlet {
 
         HttpResponse<JsonNode> searchJsonResponse = null;
         try {
-            searchJsonResponse = Unirest.post("http://52.59.252.52:9000/search")
+            searchJsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.SEARCH)
                     .header("Content-Type", "application/json")
                     .body(new JsonNode(jsonObject.toString()))
                     .asJson();

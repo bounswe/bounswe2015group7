@@ -41,7 +41,7 @@ public class SearchAll extends HttpServlet {
 
         HttpResponse<JsonNode> jsonStoriesResponse = null;
         try {
-            jsonStoriesResponse = Unirest.post("http://52.59.252.52:9000/search/all")
+            jsonStoriesResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.SEARCH_ALL)
                     .header("Content-Type", "application/json")
                     .body(new JsonNode(params.toString()))
                     .asJson();

@@ -123,7 +123,7 @@
                     <input type="text" class="form-control" id="story-tags" name="story-tags" value="<%out.print(tagsSeparated);%>">
                     <span class="input-group-addon"></span>
                 </div>
-                <%String mediaSeparated = String.join(" ", story.getTags().toArray(new String[story.getMedia().size()]));%>
+                <%String mediaSeparated = String.join(" ", story.getMedia().toArray(new String[story.getMedia().size()]));%>
 
                 <input type="hidden" class="form-control" id="story-media" name="story-media" value="<%out.print(mediaSeparated);%>">
 

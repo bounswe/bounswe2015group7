@@ -13,6 +13,9 @@
 <%@ page import="com.sculture.model.response.StoriesResponse" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  String contextPath =request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,10 +28,10 @@
   <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="public/js/sweetalert.min.js"></script>
-  <script src="public/js/scripts.js"></script>
-  <script src="public/js/bootstrap.min.js"></script>
-  <script src="public/js/jquery.backstretch.min.js"></script>
+  <script src="<%out.print(user.getId());%>/public/js/sweetalert.min.js"></script>
+  <script src="<%out.print(user.getId());%>/public/js/scripts.js"></script>
+  <script src="<%out.print(user.getId());%>/public/js/bootstrap.min.js"></script>
+  <script src="<%out.print(user.getId());%>/public/js/jquery.backstretch.min.js"></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,7 +73,7 @@
           </div>
         </li>
         <li>
-          <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
+          <%String refUrl = contextPath+ "get/user/" + request.getSession().getAttribute("userid");%>
           <div class="top-big-link">
             <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
           </div>
@@ -104,7 +107,7 @@
         <%if(user.is_following()) {%>
           You are following this user.
         <%}else {%>
-        <a href="/follow/user/<%out.print(user.getId());%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Follow User </a>
+        <a href="<%out.print(contextPath);%>/follow/user/<%out.print(user.getId());%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Follow User </a>
         <%}%>
         <br><br>
 
@@ -180,7 +183,7 @@
                     }%>
                     </p>
                     <p>
-                      <%String refUrl = "get/story/" + userStories.get(i).getId();%>
+                      <%String refUrl = contextPath+ "get/story/" + userStories.get(i).getId();%>
                       <a href="<%out.print(refUrl);%>"> Read More</a>
                     </p>
                   </div>

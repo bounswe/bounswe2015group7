@@ -39,8 +39,7 @@ public class SearchEngine {
 
         if (database == null) {
             System.out.println("null" + "\n\n\n\n\n\n\n\n\n\n\n");
-        }
-        else
+        } else
             System.out.println("notnull" + "\n\n\n\n\n\n\n\n\n\n\n");
 
 
@@ -53,6 +52,9 @@ public class SearchEngine {
     }
 
     public static void addDoc(long id, String title, String content, String tags) {
+        if (database == null)
+            initialize();
+
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter w;
         try {
@@ -70,6 +72,9 @@ public class SearchEngine {
     }
 
     public static void removeDoc(long id) {
+        if (database == null)
+            initialize();
+
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter w;
         try {
@@ -83,6 +88,9 @@ public class SearchEngine {
     }
 
     public static List<Long> search(String search_term, int page, int size) {
+        if (database == null)
+            initialize();
+
         String wordnet = "";
         String[] searches = search_term.split(" ");
 
@@ -137,6 +145,9 @@ public class SearchEngine {
     }
 
     public static void removeAll() {
+        if (database == null)
+            initialize();
+
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter w;
         try {

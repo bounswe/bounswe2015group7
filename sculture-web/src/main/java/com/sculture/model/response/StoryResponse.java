@@ -137,4 +137,20 @@ public class StoryResponse {
     public void setVote(int vote) {
         this.vote = vote;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StoryResponse that = (StoryResponse) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }

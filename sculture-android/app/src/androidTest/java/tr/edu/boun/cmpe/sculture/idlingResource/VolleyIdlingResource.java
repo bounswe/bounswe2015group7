@@ -1,4 +1,4 @@
-package tr.edu.boun.cmpe.sculture.activity;
+package tr.edu.boun.cmpe.sculture.idlingResource;
 
 import android.support.test.espresso.IdlingResource;
 
@@ -6,7 +6,7 @@ import com.android.volley.RequestQueue;
 
 import tr.edu.boun.cmpe.sculture.BaseApplication;
 
-final class VolleyIdlingResource implements IdlingResource {
+public final class VolleyIdlingResource implements IdlingResource {
     private static final String TAG = "VolleyIdlingResource";
     private final String resourceName = "resource";
 
@@ -18,6 +18,7 @@ final class VolleyIdlingResource implements IdlingResource {
     public VolleyIdlingResource() throws SecurityException, NoSuchFieldException {
         mVolleyRequestQueue = BaseApplication.baseApplication.mRequestQueue;
     }
+
     public String getName() {
         return VolleyIdlingResource.class.getName();
     }

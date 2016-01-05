@@ -19,7 +19,9 @@ import com.ocpsoft.pretty.time.PrettyTime;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -179,5 +181,28 @@ public class Utils {
                 (ConnectivityManager) baseApplication.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    /**
+     * Saves a image whose uri is given to the destination
+     * @param source Source uri
+     * @param destination Destination path
+     * @return New uri
+     */
+    public static Uri saveImage(Uri source, String destination) {
+
+        try {
+            ParcelFileDescriptor parcelFileDescriptor = baseApplication.getApplicationContext().getContentResolver().openFileDescriptor(source, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            parcelFileDescriptor.close();
+            FileOutputStream out = new FileOutputStream(destination);
+            image.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.close();
+            return Uri.fromFile(new File(destination));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

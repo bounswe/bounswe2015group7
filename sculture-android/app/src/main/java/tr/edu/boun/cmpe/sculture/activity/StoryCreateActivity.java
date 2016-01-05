@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.R;
@@ -38,6 +40,7 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TAGS;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
+import static tr.edu.boun.cmpe.sculture.Utils.saveImage;
 
 public class StoryCreateActivity extends AppCompatActivity {
 
@@ -182,7 +185,10 @@ public class StoryCreateActivity extends AppCompatActivity {
             Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
-                mAdapter.add(uri);
+                File file = new File(String.valueOf(uri));
+                Uri mUri = saveImage(uri, getCacheDir() + File.separator + new Date().getTime());
+
+                mAdapter.add(mUri);
             }
         }
     }

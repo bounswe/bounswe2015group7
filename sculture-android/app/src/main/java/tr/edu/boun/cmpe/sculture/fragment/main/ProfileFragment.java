@@ -121,9 +121,11 @@ public class ProfileFragment extends Fragment {
 
     public static void reset() {
         //TODO Find a better way to refresh this fragment
-        profileFragment.PAGE = 1;
-        profileFragment.is_loading_more = false;
-        profileFragment.mStoryListViewAdapter.clearElements();
+        if (profileFragment != null) {
+            profileFragment.PAGE = 1;
+            profileFragment.is_loading_more = false;
+            profileFragment.mStoryListViewAdapter.clearElements();
+        }
     }
 
     private void setRecyclerListeners() {

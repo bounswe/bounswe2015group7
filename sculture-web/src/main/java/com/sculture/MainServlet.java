@@ -5,7 +5,9 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequestWithBody;
 import com.sculture.model.response.StoriesResponse;
+import com.sculture.model.response.StoryResponse;
 import com.sculture.util.MyGson;
 import org.json.JSONObject;
 
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by bilal on 14/10/15.
@@ -28,71 +32,67 @@ public class MainServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //User login state
+
+        boolean isLoggedIn = false;
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
+
         if (request.getSession().getAttribute("username") != null) {
             request.setAttribute("username", request.getSession().getAttribute("username"));
             request.setAttribute("isLoggedIn", true);
+            isLoggedIn = true;
         }
 
-
-        //Get recommended stories
-        StoriesResponse recommendedStoriesResponse = null;
-
-        if((Boolean)request.getAttribute("isLoggedIn")) {
-            JSONObject params = new JSONObject();
-            params.put("page", 1);
-            params.put("size", 4);
-
-            HttpResponse<JsonNode> jsonStoriesResponse = null;
-            try {
-                jsonStoriesResponse = Unirest.post("http://52.59.252.52:9000/recommendation/similarToLiked")
-                        .header("Content-Type", "application/json")
-                        .header("access_token", (String)request.getSession().getAttribute("access_token"))
-                        .body(new JsonNode(params.toString()))
-                        .asJson();
-            } catch (UnirestException e) {
-                e.printStackTrace();
-            }
+        StoriesResponse allStories = getStories("/search/all", null);
+        StoriesResponse trendingStories = getStories("/recommendation/trending", null);
+        StoriesResponse likedStories = getStories("/recommendation/similarToLiked", null);
+        StoriesResponse followedStories = getStories("/recommendation/fromFollowedUser", null);
 
 
-            Gson gson = MyGson.create();
+        // Merge liked and followed, removing duplicates
+        HashSet<StoryResponse> recommendedSet = new HashSet<StoryResponse>();
+        if(likedStories.getResult() != null) recommendedSet.addAll(likedStories.getResult());
+        if(followedStories.getResult() != null) recommendedSet.addAll(followedStories.getResult());
 
-            recommendedStoriesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
-        }
+        ArrayList<StoryResponse> recommendedList = new ArrayList<StoryResponse>();
+        recommendedList.addAll(recommendedSet);
 
-        //Get popular stories using /search/all
+        StoriesResponse recommendedStories = new StoriesResponse();
+        recommendedStories.setResult(recommendedList);
+
+
+        request.setAttribute("allStories", allStories);
+        request.setAttribute("trendingStories", trendingStories);
+        request.setAttribute("recommendedStories", recommendedStories);
+
+        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
+
+    }
+
+
+
+    StoriesResponse getStories(String endPoint, String accessToken) {
+        StoriesResponse storiesResponse = null;
 
         JSONObject params = new JSONObject();
         params.put("page", 1);
         params.put("size", 4);
 
-        HttpResponse<JsonNode> jsonStoriesResponse = null;
+        HttpRequestWithBody requestWithBody = Unirest.post("http://52.59.252.52:9000" + endPoint)
+                .header("Content-Type", "application/json");
+        if(accessToken != null) {
+            requestWithBody.header("access_token", accessToken);
+        }
+
         try {
-            jsonStoriesResponse = Unirest.post("http://52.59.252.52:9000/search/all")
-                    .header("Content-Type", "application/json")
-                    .body(new JsonNode(params.toString()))
-                    .asJson();
+            HttpResponse<JsonNode> jsonStoriesResponse = requestWithBody.body(new JsonNode(params.toString())).asJson();
+            Gson gson = MyGson.create();
+            storiesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
         } catch (UnirestException e) {
             e.printStackTrace();
         }
 
-
-        Gson gson = MyGson.create();
-
-        StoriesResponse allStoriesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
-
-        //Set the topStory attribute
-        request.setAttribute("topStory", allStoriesResponse.getResult().get(3));
-
-        //Set the popularStories
-        request.setAttribute("popularStories", allStoriesResponse);
-
-        //Set recommendedStories
-        request.setAttribute(("recommendedStories"), recommendedStoriesResponse);
-
-        request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
-
+        return storiesResponse;
     }
 
 }

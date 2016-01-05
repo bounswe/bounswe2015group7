@@ -20,6 +20,7 @@
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/sweetalert.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/bootstrap.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
@@ -92,7 +93,7 @@
     <% String username = (String) request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="search" method="post">
+    <form class="form-inline" action="<%out.print(contextPath);%>/search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50"
                placeholder="Search stories" required>
@@ -366,13 +367,6 @@
 <!-- Javascript -->
 <script>
     $(document).ready(function () {
-        $('#banner-fade').bjqs({
-            height: 300,
-            width: 700,
-            responsive  : true,
-            automatic   : false,
-            usecaptions : false
-        });
             // Add smooth scrolling to all links in navbar + footer link
         $(".navbar a, footer a[href='#myPage']").on('click', function (event) {
 
@@ -431,6 +425,13 @@
                     alert("error!");
                 }
             });
+        });
+        $('#banner-fade').bjqs({
+            height: 300,
+            width: 700,
+            responsive  : true,
+            automatic   : false,
+            usecaptions : false
         });
     })
 </script>

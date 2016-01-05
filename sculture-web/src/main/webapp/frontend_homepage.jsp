@@ -1,6 +1,8 @@
 <%@ page import="com.sculture.model.response.StoriesResponse" %>
 <%@ page import="com.sculture.Const" %>
-
+<%
+    String contextPath =request.getContextPath();
+%>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -14,21 +16,20 @@
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="public/js/sweetalert.min.js"></script>
-    <script src="public/js/scripts.js"></script>
-    <script src="public/js/bootstrap.min.js"></script>
-    <script src="public/js/jquery.backstretch.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/sweetalert.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/bootstrap.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="public/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="public/css/form-elements.css">-->
-    <link rel="stylesheet" href="public/css/sweetalert.css">
-    <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="public/css/homepage_style.css">
-    <link rel="stylesheet" href="public/css/font-awesome.css">
-    <link rel="stylesheet" href="public/css/form-elements.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/sweetalert.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/style.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/homepage_style.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/font-awesome.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/form-elements.css">
 
 </head>
 
@@ -41,24 +42,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="<%out.print(contextPath);%>/index"><img src="<%out.print(contextPath);%>/public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="addstory">Add Story</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
                     </div>
                 </li>
                 <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
                 <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="logout">Log Out</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
+                    <%String refUrl = contextPath + "/get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My
                             Profile</a>
@@ -86,13 +87,13 @@
     <% String username = (String) request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="search" method="post">
+    <form class="form-inline" action="<%out.print(contextPath);%>/search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50"
                placeholder="Search stories" required>
     </form>
     <br>
-    <a class="btn btn-link-2" href="search/all" data-modal-id="modal-create-story">All stories</a>
+    <a class="btn btn-link-2" href="<%out.print(contextPath);%>/search/all" data-modal-id="modal-create-story">All stories</a>
     <br>
 </div>
 
@@ -133,7 +134,7 @@
                         out.print(popularContent.replace("\n", "<br>").substring(0, 400) + "...");
                     } %></p>
                     <p>
-                        <%String refUrl = "get/story/" + trendingStories.getResult().get(i).getId();%>
+                        <%String refUrl = contextPath + "/get/story/" + trendingStories.getResult().get(i).getId();%>
                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                     </p>
                 </div>
@@ -177,7 +178,7 @@
                         out.print(popularContent.replace("\n", "<br>").substring(0, 400) + "...");
                     } %></p>
                     <p>
-                        <%String refUrl = "get/story/" + recommendedStories.getResult().get(i).getId();%>
+                        <%String refUrl = contextPath + "/get/story/" + recommendedStories.getResult().get(i).getId();%>
                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                     </p>
                 </div>
@@ -222,7 +223,7 @@
                         out.print(popularContent.replace("\n", "<br>").substring(0, 400) + "...");
                     } %></p>
                     <p>
-                        <%String refUrl = "get/story/" + allStories.getResult().get(i).getId();%>
+                        <%String refUrl = contextPath + "/get/story/" + allStories.getResult().get(i).getId();%>
                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                     </p>
                 </div>
@@ -255,7 +256,7 @@
 
                 <div class="modal-body">
 
-                    <form role="form" action="/login" method="post" class="login-form">
+                    <form role="form" action="<%out.print(contextPath);%>/login" method="post" class="login-form">
                         <div class="form-group">
                             <label class="sr-only" for="form-username">E-mail</label>
                             <input type="text" name="form-username" placeholder="Username..."
@@ -297,7 +298,7 @@
 
                 <div class="modal-body">
 
-                    <form role="form" action="/signup" method="post" class="register-form">
+                    <form role="form" action="<%out.print(contextPath);%>/signup" method="post" class="register-form">
                         <div class="form-group">
                             <label class="sr-only" for="form-email">E-mail</label>
                             <input type="text" name="form-email" placeholder="Enter your email"

@@ -90,13 +90,13 @@
     <% String username = (String) request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="search" method="post">
+    <form class="form-inline" action="<%out.print(contextPath);%>/search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50"
                placeholder="Search stories" required>
     </form>
     <br>
-    <a class="btn btn-link-2" href="search/all" data-modal-id="modal-create-story">All stories</a>
+    <a class="btn btn-link-2" href="<%out.print(contextPath);%>/search/all" data-modal-id="modal-create-story">All stories</a>
     <br>
     <br> <br>
 </div>

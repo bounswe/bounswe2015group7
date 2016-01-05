@@ -63,7 +63,7 @@ public class SaveStory extends HttpServlet {
                             .body(bytes)
                             .asJson();
                     // ... (do your job here)
-                    if(jsonResponse != null){
+                    if(jsonResponse != null && jsonResponse.getBody().getObject().getString("id") != null){
                         fields[2] += jsonResponse.getBody().getObject().getString("id") + " ";
                         System.out.println("fields[2]: " + fields[2]);
                     }

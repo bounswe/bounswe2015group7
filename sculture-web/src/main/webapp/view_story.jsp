@@ -17,25 +17,25 @@
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="public/js/scripts.js"></script>
-    <script src="public/js/bootstrap.min.js"></script>
-    <script src="public/js/jquery.backstretch.min.js"></script>
-    <script src="public/js/scripts.js"></script>
-    <script src="public/js/bootstrap.min.js"></script>
-    <script src="public/js/jquery.backstretch.min.js"></script>
-    <script type="text/javascript" src="/public/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/public/js/jssor.slider.mini.js"></script>
+    <script src="../../public/js/scripts.js"></script>
+    <script src="../../public/js/bootstrap.min.js"></script>
+    <script src="../../public/js/jquery.backstretch.min.js"></script>
+    <script src="../../public/js/scripts.js"></script>
+    <script src="../../public/js/bootstrap.min.js"></script>
+    <script src="../../public/js/jquery.backstretch.min.js"></script>
+    <script type="text/javascript" src="../..//public/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../..//public/js/jssor.slider.mini.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="public/css/font-awesome.css">
-    <link rel="stylesheet" href="public/css/sweetalert.css">
-    <link rel="stylesheet" href="public/css/form-elements.css">
-    <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="public/css/homepage_style.css">
-    <link rel="stylesheet" href="public/css/storystyle.css">
+    <link rel="stylesheet" href="../../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../public/css/font-awesome.css">
+    <link rel="stylesheet" href="../../public/css/sweetalert.css">
+    <link rel="stylesheet" href="../../public/css/form-elements.css">
+    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="../../public/css/homepage_style.css">
+    <link rel="stylesheet" href="../../public/css/storystyle.css">
 
 
 </head>

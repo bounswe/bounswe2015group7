@@ -225,7 +225,8 @@
                         <ul class="list-unstyled">
                             <%if(story.getTags() != null)  { %>
                             <% for (int i = 0; i < story.getTags().size(); i++) { %>
-                            <li><a href="#"><% out.print(story.getTags().get(i)); %> </a>
+                            <%String tagRefUrl = contextPath+ "/search/" + story.getTags().get(i);%>
+                            <li><a href="<%out.print(tagRefUrl);%>"><% out.print(story.getTags().get(i)); %> </a>
                             </li>
                             <%}
                                 }%>
@@ -403,6 +404,7 @@
             if(definitelynottheaccesstoken == null) vote = 0;
             $.ajax({
                 type: 'POST',
+                crossDomain: true,
                 beforeSend: function (request)                {
                     request.setRequestHeader("access-token", definitelynottheaccesstoken);
                 },

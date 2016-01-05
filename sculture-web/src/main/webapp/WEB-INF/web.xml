@@ -108,7 +108,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>search</servlet-name>
-        <url-pattern>/search</url-pattern>
+        <url-pattern>/search/*</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>js</extension>

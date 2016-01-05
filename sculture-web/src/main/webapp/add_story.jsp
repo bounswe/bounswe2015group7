@@ -85,7 +85,7 @@
 
 <div class="container">
     <div class="row">
-        <form role="form" method="post" action="/savestory">
+        <form role="form" method="post" action="/savestory" enctype="multipart/form-data">
             <div class="col-md-8 col-md-offset-2">
                 <div class="form-group">
                     <label for="story-title">Title</label>
@@ -106,9 +106,9 @@
                     </div>
                 </div>
                 <fieldset class="form-group">
-                    <label for="story-photo">Upload a photo</label>
+                    <label for="story-photo">Upload photo(s)</label>
                     <div align="center">
-                        <input type="file" class="form-control-file" name="story-photo" id="story-photo" style="center">
+                        <input type="file" class="form-control-file" name="story-photo" id="story-photo" style="center" multiple>
                     </div>
                 </fieldset>
                 <div class="form-group">

@@ -21,7 +21,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
-    <script src="<%out.print(contextPath);%>public/js/bootstrap.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/bootstrap.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/bjqs-1.3.js"></script>
     <meta charset="utf-8">
@@ -123,7 +123,7 @@
             <hr>
             <!-- Preview Image -->
             <% try { %>
-            <%if (story.getMedia() != null) { %>
+            <%if (story.getMedia() != null && story.getMedia().size() > 0) { %>
             <div id="banner-fade" style="align-self: center">
 
                 <ul class="bjqs">
@@ -231,16 +231,22 @@
                 <!-- /.row -->
             </div>
 
+                <%if(request.getSession().getAttribute("userid") != null &&
+                        story.getOwner().getId() == Long.parseLong(request.getSession().getAttribute("userid").toString())) {%>
             <div class="well">
 
-            <%if(story.getOwner().getId() == Long.parseLong(request.getSession().getAttribute("userid").toString())) {%>
-                    <%String asd2 = contextPath+"/edit/story/" + story.getId();%>
-                    <a href="<%out.print(asd2);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Edit Story </a>
-                <%} else {%>
-                    <%String asd = contextPath+"/report/story/" + story.getId();%>
-                    <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
-                <%}%>
+            <%String asd2 = contextPath+"/edit/story/" + story.getId();%>
+                <a href="<%out.print(asd2);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Edit Story </a>
             </div>
+                <%} else if (request.getSession().getAttribute("userid") != null &&
+                        story.getOwner().getId() != Long.parseLong(request.getSession().getAttribute("userid").toString())) {%>
+            <div class="well">
+
+            <%String asd = contextPath+"/report/story/" + story.getId();%>
+                <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
+            </div>
+
+            <%}%>
 
         </div>
 

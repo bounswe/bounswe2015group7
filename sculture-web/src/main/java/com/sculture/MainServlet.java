@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by bilal on 14/10/15.
@@ -57,19 +58,15 @@ public class MainServlet extends HttpServlet {
         if(likedStories != null && likedStories.getResult() != null) recommendedSet.addAll(likedStories.getResult());
         if(followedStories != null && followedStories.getResult() != null) recommendedSet.addAll(followedStories.getResult());
 
-        ArrayList<StoryResponse> recommendedList = new ArrayList<StoryResponse>();
+        List<StoryResponse> recommendedList = new ArrayList<StoryResponse>();
         recommendedList.addAll(recommendedSet);
-
+        if(recommendedList.size() > 4) recommendedList =  recommendedList.subList(0, 4);
         StoriesResponse recommendedStories = new StoriesResponse();
         recommendedStories.setResult(recommendedList);
-
-
         request.setAttribute("allStories", allStories);
         request.setAttribute("trendingStories", trendingStories);
         request.setAttribute("recommendedStories", recommendedStories);
-
         request.getRequestDispatcher("/frontend_homepage.jsp").forward(request, response);
-
     }
 
 

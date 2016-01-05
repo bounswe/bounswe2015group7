@@ -34,6 +34,7 @@ public class MainServlet extends HttpServlet {
         //User login state
 
         boolean isLoggedIn = false;
+        String accessToken = null;
         request.setAttribute("isLoggedIn", false);
         request.setAttribute("username", "");
 
@@ -41,18 +42,20 @@ public class MainServlet extends HttpServlet {
             request.setAttribute("username", request.getSession().getAttribute("username"));
             request.setAttribute("isLoggedIn", true);
             isLoggedIn = true;
+            accessToken = request.getSession().getAttribute("access_token").toString();
         }
+
 
         StoriesResponse allStories = getStories("/search/all", null);
         StoriesResponse trendingStories = getStories("/recommendation/trending", null);
-        StoriesResponse likedStories = getStories("/recommendation/similarToLiked", null);
-        StoriesResponse followedStories = getStories("/recommendation/fromFollowedUser", null);
+        StoriesResponse likedStories = getStories("/recommendation/similarToLiked", accessToken);
+        StoriesResponse followedStories = getStories("/recommendation/fromFollowedUser", accessToken);
 
 
         // Merge liked and followed, removing duplicates
         HashSet<StoryResponse> recommendedSet = new HashSet<StoryResponse>();
-        if(likedStories.getResult() != null) recommendedSet.addAll(likedStories.getResult());
-        if(followedStories.getResult() != null) recommendedSet.addAll(followedStories.getResult());
+        if(likedStories != null && likedStories.getResult() != null) recommendedSet.addAll(likedStories.getResult());
+        if(followedStories != null && followedStories.getResult() != null) recommendedSet.addAll(followedStories.getResult());
 
         ArrayList<StoryResponse> recommendedList = new ArrayList<StoryResponse>();
         recommendedList.addAll(recommendedSet);
@@ -81,7 +84,7 @@ public class MainServlet extends HttpServlet {
         HttpRequestWithBody requestWithBody = Unirest.post("http://52.59.252.52:9000" + endPoint)
                 .header("Content-Type", "application/json");
         if(accessToken != null) {
-            requestWithBody.header("access_token", accessToken);
+            requestWithBody.header("access-token", accessToken);
         }
 
         try {

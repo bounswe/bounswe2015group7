@@ -22,9 +22,6 @@
     <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
     <script src="<%out.print(contextPath);%>public/js/bootstrap.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
-    <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
-    <script src="<%out.print(contextPath);%>/public/js/bootstrap.min.js"></script>
-    <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
     <script src="<%out.print(contextPath);%>/public/js/bjqs-1.3.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -213,36 +210,40 @@
                 <h4>Created by:</h4>
                 <%String refUrl = contextPath+ "/get/user/" + story.getOwner().getId();%>
                 <a href="<%out.print(refUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> <%out.print(story.getOwner().getUsername());%> </a>
-
             </div>
 
             <!-- Tags -->
             <div class="well">
                 <h4>Story Tags</h4>
-
                 <div class="row">
                     <div class="col-lg">
                         <ul class="list-unstyled">
                             <%if(story.getTags() != null)  { %>
-                            <% for (int i = 0; i < story.getTags().size(); i++) { %>
-                            <%String tagRefUrl = contextPath+ "/search/" + story.getTags().get(i);%>
-                            <li><a href="<%out.print(tagRefUrl);%>"><% out.print(story.getTags().get(i)); %> </a>
-                            </li>
-                            <%}
-                                }%>
+                                <% for (int i = 0; i < story.getTags().size(); i++) { %>
+                                <%String tagRefUrl = contextPath+ "/search/" + story.getTags().get(i);%>
+                                <li><a href="<%out.print(tagRefUrl);%>"><% out.print(story.getTags().get(i)); %> </a> </li>
+                                <%}
+                            }%>
                         </ul>
                     </div>
                 </div>
                 <!-- /.row -->
             </div>
-            <div class="well">
-                <%String asd = contextPath+"/report/story/" + story.getId();%>
-                <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
 
+            <div class="well">
+
+            <%if(story.getOwner().getId() == Long.parseLong(request.getSession().getAttribute("userid").toString())) {%>
+                    <%String asd2 = contextPath+"/edit/story/" + story.getId();%>
+                    <a href="<%out.print(asd2);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Edit Story </a>
+                <%} else {%>
+                    <%String asd = contextPath+"/report/story/" + story.getId();%>
+                    <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
+                <%}%>
             </div>
 
-
         </div>
+
+
 
     </div>
     <!-- /.row -->

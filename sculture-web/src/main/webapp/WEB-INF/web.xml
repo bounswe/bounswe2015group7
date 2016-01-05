@@ -57,6 +57,10 @@
         <servlet-name>followuser</servlet-name>
         <servlet-class>com.sculture.FollowUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>editstory</servlet-name>
+        <servlet-class>com.sculture.EditStory</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>signup</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -109,6 +113,10 @@
     <servlet-mapping>
         <servlet-name>search</servlet-name>
         <url-pattern>/search/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>editstory</servlet-name>
+        <url-pattern>/edit/story/*</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>js</extension>

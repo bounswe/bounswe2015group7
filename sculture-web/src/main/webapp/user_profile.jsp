@@ -56,26 +56,27 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="<%out.print(contextPath);%>/index"><img src="<%out.print(contextPath);%>/public/images/logo.png" style="width:204px;height:58px"></a>
+      <a href="<%out.print(contextPath);%>/index"><img src="<%out.print(contextPath);%>/public/images/logo.png" style="width:204px;height:58px" ;></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li>
           <div class="top-big-link">
-            <a class="btn btn-link-2" href="addstory" data-modal-id="modal-create-story">Add Story</a>
+            <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
           </div>
         </li>
-        <% Boolean isLoggedIn = (Boolean)request.getAttribute("isLoggedIn"); %>
+        <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
         <% if (isLoggedIn) { %>
         <li>
           <div class="top-big-link">
-            <a class="btn btn-link-2" href="logout" data-modal-id="modal-logout">Log Out</a>
+            <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
           </div>
         </li>
         <li>
-          <%String refUrl = contextPath+ "get/user/" + request.getSession().getAttribute("userid");%>
+          <%String refUrl = contextPath + "/get/user/" + request.getSession().getAttribute("userid");%>
           <div class="top-big-link">
-            <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+            <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My
+              Profile</a>
           </div>
         </li>
         <% } else { %>

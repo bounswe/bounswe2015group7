@@ -33,8 +33,16 @@ public class SearchEngine {
 
     public static void initialize() {
         String u = SearchEngine.class.getClassLoader().getResource("WordNet-3.0").getPath();
+        System.out.println(u + "\n\n\n\n\n\n\n\n\n\n\n");
         System.setProperty("wordnet.database.dir", u + File.separator + "dict");
         database = WordNetDatabase.getFileInstance();
+
+        if (database == null) {
+            System.out.println("null" + "\n\n\n\n\n\n\n\n\n\n\n");
+        }
+        else
+            System.out.println("notnull" + "\n\n\n\n\n\n\n\n\n\n\n");
+
 
         analyzer = new SynonymAnalyzer();
         try {

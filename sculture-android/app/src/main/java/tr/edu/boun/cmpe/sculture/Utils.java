@@ -94,7 +94,7 @@ public class Utils {
             return;
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody.toString(), listener, errorListener) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, listener, errorListener) {
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(HEADER_ACCESS_TOKEN, baseApplication.getTOKEN());
@@ -140,7 +140,8 @@ public class Utils {
         }
 
         final byte[] finalByteArray = byteArray;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, API_IMAGE_UPLOAD, listener, errorListener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, API_IMAGE_UPLOAD, new JSONObject(), listener, errorListener) {
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(HEADER_ACCESS_TOKEN, baseApplication.getTOKEN());

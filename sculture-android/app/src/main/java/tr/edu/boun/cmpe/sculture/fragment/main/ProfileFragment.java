@@ -74,6 +74,19 @@ public class ProfileFragment extends Fragment {
         story_list_recycler.setLayoutManager(mLayoutManager);
         story_list_recycler.setAdapter(mStoryListViewAdapter);
 
+        if (!baseApplication.checkLogin()) {
+            loggedOutLayout.setVisibility(View.VISIBLE);
+            loggedInLayout.setVisibility(View.GONE);
+        } else {
+            loggedOutLayout.setVisibility(View.GONE);
+            loggedInLayout.setVisibility(View.VISIBLE);
+
+
+            username.setText(baseApplication.getUSERNAME());
+            email.setText(baseApplication.getEMAIL());
+        }
+
+
         setRecyclerListeners();
 
         Button login_register_button = (Button) view.findViewById(R.id.login_register);

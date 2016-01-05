@@ -3,7 +3,9 @@ package tr.edu.boun.cmpe.sculture;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -45,6 +47,18 @@ public class BaseApplication extends Application {
                 return mCache.get(url);
             }
         });
+
+        final Handler handler = new Handler();
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                Log.i("asdsa", mRequestQueue.getSize() + "");
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        handler.postDelayed(r, 1000);
+
 
         autoLogin();
     }

@@ -23,13 +23,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/public/css/font-awesome.css">
-    <link rel="stylesheet" href="/public/css/form-elements.css">
-    <link rel="stylesheet" href="/public/css/sweetalert.css">
-    <link rel="stylesheet" href="/public/css/style.css">
-    <link rel="stylesheet" href="/public/css/homepage_style.css">
-    <link rel="stylesheet" href="/public/css/searchstyle.css">
+    <link rel="stylesheet" href="public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/font-awesome.css">
+    <link rel="stylesheet" href="public/css/form-elements.css">
+    <link rel="stylesheet" href="public/css/sweetalert.css">
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/homepage_style.css">
+    <link rel="stylesheet" href="public/css/searchstyle.css">
 
 
 </head>
@@ -43,24 +43,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/index"><img src="/public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/addstory" data-modal-id="modal-create-story">Add Story</a>
+                        <a class="btn btn-link-2" href="addstory" data-modal-id="modal-create-story">Add Story</a>
                     </div>
                 </li>
                 <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
                 <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="/logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="logout" data-modal-id="modal-logout">Log Out</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
                     </div>
@@ -87,13 +87,13 @@
     <% String username = (String) request.getAttribute("username"); %>
     <h1>Sculture!</h1>
     <h3a>Looking good, <%out.print(username);%>!</h3a>
-    <form class="form-inline" action="/search" method="post">
+    <form class="form-inline" action="search" method="post">
         <br> <br>
         <input type="text" name="main-search" id="main-search" class="form-control" size="50"
                placeholder="Search stories" required>
     </form>
     <br>
-    <a class="btn btn-link-2" href="/search/all" data-modal-id="modal-create-story">All stories</a>
+    <a class="btn btn-link-2" href="search/all" data-modal-id="modal-create-story">All stories</a>
     <br>
     <br> <br>
 </div>
@@ -149,7 +149,7 @@
                                         <%
                                             Date storyCreationDate = results.get(i).getCreation_date();
                                             out.print(storyCreationDate);%> •
-                                        <% String refUrl = "/get/story/" + results.get(i).getId();%>
+                                        <% String refUrl = "get/story/" + results.get(i).getId();%>
                                         <a href="<%out.print(refUrl);%>"> Read More</a></small>
                                 </div>
                                 <div class="col-xs-3"></div>
@@ -199,7 +199,7 @@
 
             <div class="modal-body">
 
-                <form role="form" action="/login" method="post" class="login-form">
+                <form role="form" action="login" method="post" class="login-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-username">Username</label>
                         <input type="text" name="form-username" placeholder="Username..."
@@ -242,7 +242,7 @@
 
             <div class="modal-body">
 
-                <form role="form" action="/signup" method="post" class="register-form">
+                <form role="form" action="signup" method="post" class="register-form">
                     <div class="form-group">
                         <label class="sr-only" for="form-email">E-mail</label>
                         <input type="text" name="form-email" placeholder="Enter your email"

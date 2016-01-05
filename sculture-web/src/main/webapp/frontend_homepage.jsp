@@ -142,6 +142,7 @@
     </div>
 
 
+        <% if(isLoggedIn) { %>
         <% StoriesResponse recommendedStories = (StoriesResponse) request.getAttribute("recommendedStories"); %>
 
     <div class="row">
@@ -183,6 +184,8 @@
         </div>
         <% } %>
     </div>
+
+        <% } %>
 
 
         <% StoriesResponse allStories = (StoriesResponse) request.getAttribute("allStories"); %>
@@ -226,9 +229,6 @@
         </div>
         <% } %>
     </div>
-
-
-
 
 
     <div id="contact" class="container-fluid bg-grey">

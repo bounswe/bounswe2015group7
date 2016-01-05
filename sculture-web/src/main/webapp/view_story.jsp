@@ -4,7 +4,9 @@
 <%@ page import="com.sculture.model.response.StoryResponse" %>
 <%@ page import="com.sculture.model.response.CommentResponse" %>
 <!DOCTYPE html>
-
+<%
+    String contextPath =request.getContextPath();
+%>
 
 <html lang="en">
 
@@ -17,25 +19,25 @@
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="../../public/js/scripts.js"></script>
-    <script src="../../public/js/bootstrap.min.js"></script>
-    <script src="../../public/js/jquery.backstretch.min.js"></script>
-    <script src="../../public/js/scripts.js"></script>
-    <script src="../../public/js/bootstrap.min.js"></script>
-    <script src="../../public/js/jquery.backstretch.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
+    <script src="<%out.print(contextPath);%>public/js/bootstrap.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/bootstrap.min.js"></script>
+    <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
     <script type="text/javascript" src="../..//public/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="../..//public/js/jssor.slider.mini.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="../../public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../public/css/font-awesome.css">
-    <link rel="stylesheet" href="../../public/css/sweetalert.css">
-    <link rel="stylesheet" href="../../public/css/form-elements.css">
-    <link rel="stylesheet" href="../../public/css/style.css">
-    <link rel="stylesheet" href="../../public/css/homepage_style.css">
-    <link rel="stylesheet" href="../../public/css/storystyle.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/font-awesome.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/sweetalert.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/form-elements.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/style.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/homepage_style.css">
+    <link rel="stylesheet" href="<%out.print(contextPath);%>/public/css/storystyle.css">
 
 
 </head>
@@ -156,24 +158,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
+            <a href="<%out.print(contextPath);%>/index"><img src="public/images/logo.png" style="width:204px;height:58px" ;></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="addstory" data-modal-id="modal-create-story">Add Story</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory" data-modal-id="modal-create-story">Add Story</a>
                     </div>
                 </li>
                 <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
                 <% if (isLoggedIn.booleanValue()) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout" data-modal-id="modal-logout">Log Out</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = "get/user/" + request.getSession().getAttribute("userid");%>
+                    <%String refUrl = contextPath +"get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
                     </div>
@@ -205,7 +207,7 @@
                placeholder="Search stories" required>
     </form>
     <br>
-    <a class="btn btn-link-2" href="search/all" data-modal-id="modal-create-story">All stories</a>
+    <a class="btn btn-link-2" href="<%out.print(contextPath);%>/search/all" data-modal-id="modal-create-story">All stories</a>
     <br>
 </div>
 
@@ -302,7 +304,7 @@
             <div class="well">
                 <h4>Leave a Comment:</h4>
 
-                <form action="addcomment" method="POST" role="form">
+                <form action=<%out.print(contextPath);%>"/addcomment" method="POST" role="form">
                     <div class="form-group">
                         <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
@@ -343,7 +345,7 @@
 
             <div class="well">
                 <h4>Created by:</h4>
-                <%String refUrl = "get/user/" + story.getOwner().getId();%>
+                <%String refUrl = contextPath+ "/get/user/" + story.getOwner().getId();%>
                 <a href="<%out.print(refUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> <%out.print(story.getOwner().getUsername());%> </a>
 
             </div>
@@ -367,7 +369,7 @@
                 <!-- /.row -->
             </div>
             <div class="well">
-                <%String asd = "report/story/" + story.getId();%>
+                <%String asd = contextPath+"/report/story/" + story.getId();%>
                 <a href="<%out.print(asd);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Report Story </a>
 
             </div>

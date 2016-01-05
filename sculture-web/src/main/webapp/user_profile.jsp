@@ -28,10 +28,10 @@
   <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="<%out.print(user.getId());%>/public/js/sweetalert.min.js"></script>
-  <script src="<%out.print(user.getId());%>/public/js/scripts.js"></script>
-  <script src="<%out.print(user.getId());%>/public/js/bootstrap.min.js"></script>
-  <script src="<%out.print(user.getId());%>/public/js/jquery.backstretch.min.js"></script>
+  <script src="<%out.print(contextPath);%>/public/js/sweetalert.min.js"></script>
+  <script src="<%out.print(contextPath);%>/public/js/scripts.js"></script>
+  <script src="<%out.print(contextPath);%>/public/js/bootstrap.min.js"></script>
+  <script src="<%out.print(contextPath);%>/public/js/jquery.backstretch.min.js"></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">

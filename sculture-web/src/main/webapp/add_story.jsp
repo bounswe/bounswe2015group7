@@ -240,7 +240,12 @@
                 window.location.hash = hash;
             });
         });
-
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
         // Slide in elements on scroll
         $(window).scroll(function() {
             $(".slideanim").each(function(){

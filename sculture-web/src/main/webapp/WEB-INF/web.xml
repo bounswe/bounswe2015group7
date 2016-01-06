@@ -58,6 +58,10 @@
         <servlet-class>com.sculture.ReportStory</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>deletestory</servlet-name>
+        <servlet-class>com.sculture.DeleteStory</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>signup</servlet-name>
         <servlet-class>com.sculture.Signup</servlet-class>
     </servlet>
@@ -116,6 +120,10 @@
     <servlet-mapping>
         <servlet-name>reportstory</servlet-name>
         <url-pattern>/report/story/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deletestory</servlet-name>
+        <url-pattern>/delete/story/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>followuser</servlet-name>

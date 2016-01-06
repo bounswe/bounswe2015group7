@@ -38,7 +38,7 @@ public class EditStory extends HttpServlet {
             ArrayList<String> media = new ArrayList<String>(Arrays.asList(request.getParameter("story-media").trim().split(" ")));
             jsonObject.put("media", media);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/story/edit")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.STORY_EDIT)
                     .header("Content-Type", "application/json")
                     .header("access-token", request.getSession().getAttribute("access_token").toString())
                     .body(jsonNode)
@@ -64,7 +64,7 @@ public class EditStory extends HttpServlet {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", story_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post("http://52.59.252.52:9000/story/get")
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.STORY_EDIT)
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();

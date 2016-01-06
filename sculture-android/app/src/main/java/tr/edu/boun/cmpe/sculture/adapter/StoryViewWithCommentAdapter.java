@@ -46,6 +46,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_VISITED_USER_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.ERROR_INVALID_ACCESS_TOKEN;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * Recyler view adapter which store main story view, and its comments
+ */
 public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int VIEW_TYPE_STORY = 1;
     private static final int VIEW_TYPE_COMMENT_EDIT = 2;
@@ -56,6 +59,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
     private Activity mActivity;
 
+    /**
+     * Story view holder. Title, content, tags, images, like/dislike buttons,
+     */
     class StoryViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView content;
@@ -132,7 +138,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //TODO Error handling
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+                    Toast.makeText(mActivity, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("STORY VOTE", errorResponse.toString());
                     setVote(previous_status);
                 }
             }, null);
@@ -154,6 +162,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
     }
 
+    /**
+     * Comment edit view holder. A text edit and button
+     */
     class CommentEditViewHolder extends RecyclerView.ViewHolder {
 
         private EditText comment;
@@ -202,6 +213,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         }
     }
 
+    /**
+     * Comment view holder. Shows comment, and handles editing
+     */
     class CommentViewHolder extends RecyclerView.ViewHolder {
         private EditText comment;
         private TextView writer;
@@ -247,6 +261,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            ErrorResponse errorResponse = new ErrorResponse(error);
+                            Toast.makeText(mActivity, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                            Log.e("COMMENT EDIT", errorResponse.toString());
                             v.setEnabled(true);
                         }
                     }, null);
@@ -405,6 +422,10 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         return size;
     }
 
+    /**
+     * Ssets the story of the adapter
+     * @param story Story
+     */
     public void addStory(StoryResponse story) {
         this.story = story;
         is_story_added = true;
@@ -413,16 +434,27 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
 
     }
 
+    /**
+     * Adds a comment at the end of the comments
+     * @param commentResponse Comment
+     */
     public void addComment(CommentResponse commentResponse) {
         comments.add(commentResponse);
         this.notifyItemInserted(comments.size() + 2);
     }
 
+    /**
+     * Inserts a comment at the beginning of the comments
+     * @param commentResponse Comment
+     */
     public void insertCommentAtStart(CommentResponse commentResponse) {
         comments.add(0, commentResponse);
         this.notifyItemInserted(2);
     }
 
+    /**
+     * A clickable span which open tag activity when it is clicked
+     */
     public class TagSpan extends ClickableSpan {
         String tag_title;
 
@@ -439,6 +471,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
         }
     }
 
+    /**
+     * A clickable span which opens a user profile page when it is clicked.
+     */
     public class UserSpan extends ClickableSpan {
         long user_id;
 

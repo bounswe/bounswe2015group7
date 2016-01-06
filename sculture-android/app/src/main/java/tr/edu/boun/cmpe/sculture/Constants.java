@@ -1,5 +1,8 @@
 package tr.edu.boun.cmpe.sculture;
 
+/**
+ * A class which contains constants.
+ */
 public class Constants {
     //API URLS
     private static final String API_BASE_URL = BuildConfig.API_BASE_URL;

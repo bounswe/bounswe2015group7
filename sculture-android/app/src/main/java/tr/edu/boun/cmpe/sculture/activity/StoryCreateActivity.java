@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import tr.edu.boun.cmpe.sculture.R;
@@ -38,7 +40,15 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_ID;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TAGS;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
+import static tr.edu.boun.cmpe.sculture.Utils.saveImage;
 
+/**
+ * Story creation and editing screen. Default is creating
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_IS_EDIT}: Boolean, if true, editing screen. Default false
+ *  <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_STORY_ID}: long: the id of the edited story
+ */
 public class StoryCreateActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
@@ -106,8 +116,7 @@ public class StoryCreateActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                    Log.e("STORY", errorResponse.toString());
-
+                    Log.e("STORY GET", errorResponse.toString());
                 }
             }, null);
         }
@@ -117,6 +126,22 @@ public class StoryCreateActivity extends AppCompatActivity {
     private void clickSaveButton() {
         if (isSaveClicked)
             return;
+
+        boolean error = false;
+        if (titleText.getText().toString().equals("")) {
+            titleText.setError(getString(R.string.invalid_title));
+            error |= true;
+        } else
+            titleText.setError(null);
+        if (contentText.getText().toString().equals("")) {
+            contentText.setError(getString(R.string.invalid_content));
+            error |= true;
+        } else
+            contentText.setError(null);
+
+        if (error)
+            return;
+
         isSaveClicked = true;
         JSONObject requestBody = new JSONObject();
         try {
@@ -182,7 +207,10 @@ public class StoryCreateActivity extends AppCompatActivity {
             Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
-                mAdapter.add(uri);
+                File file = new File(String.valueOf(uri));
+                Uri mUri = saveImage(uri, getCacheDir() + File.separator + new Date().getTime());
+
+                mAdapter.add(mUri);
             }
         }
     }

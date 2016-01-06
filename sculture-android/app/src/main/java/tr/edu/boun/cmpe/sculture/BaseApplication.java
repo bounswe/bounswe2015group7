@@ -16,16 +16,48 @@ import static tr.edu.boun.cmpe.sculture.Constants.PREF_EMAIL;
 import static tr.edu.boun.cmpe.sculture.Constants.PREF_USERNAME;
 import static tr.edu.boun.cmpe.sculture.Constants.PREF_USER_ID;
 
+/**
+ * Entry point of the application.
+ */
 public class BaseApplication extends Application {
+    /**
+     * The only instance of Base Application
+     */
     public static BaseApplication baseApplication;
 
+    /**
+     * Request queue which manages API requests
+     */
+
     public RequestQueue mRequestQueue;
+    /**
+     * Image loader which handles NetworkImage objects
+     */
     public ImageLoader mImageLoader;
 
+    /**
+     * Access token of current user
+     */
     private String TOKEN = "";
+
+    /**
+     * Username of current user
+     */
     private String USERNAME = "";
+
+    /**
+     * Email address of current user
+     */
     private String EMAIL = "";
+
+    /**
+     * User id of current user
+     */
     private long USER_ID = -1;
+
+    /**
+     * Whether current user is logged in or not
+     */
     private boolean isLoggedIn = false;
 
     @Override

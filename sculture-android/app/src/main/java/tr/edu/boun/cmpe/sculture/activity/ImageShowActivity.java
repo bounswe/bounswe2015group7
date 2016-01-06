@@ -22,6 +22,13 @@ import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
+/**
+ * Media browsing screen
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_MEDIA_IDS}: An integer which points the data index on {@link LargeBundle} class
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_INDEX}: An integer which points the index of image which will be opened on start
+ */
 public class ImageShowActivity extends AppCompatActivity {
 
     @Override

@@ -29,6 +29,10 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * A {@link tr.edu.boun.cmpe.sculture.activity.MainActivity} fragment which shows recent stories of
+ * followed users.
+ */
 public class SubscriptionFragment extends Fragment {
 
 
@@ -119,8 +123,7 @@ public class SubscriptionFragment extends Fragment {
                 public void onErrorResponse(VolleyError error) {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getActivity(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                    Log.e("USER PROFILE", errorResponse.toString());
-
+                    Log.e("SUBSCRIPTIONS", errorResponse.toString());
                 }
             }, null);
         }

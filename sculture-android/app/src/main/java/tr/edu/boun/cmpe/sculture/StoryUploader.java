@@ -122,8 +122,7 @@ public class StoryUploader {
                         public void onResponse(JSONObject response) {
                             ProfileFragment.reset();
                         }
-                    },
-                    new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             ErrorResponse errorResponse = new ErrorResponse(error);
@@ -135,7 +134,6 @@ public class StoryUploader {
                                     Toast.makeText(BaseApplication.baseApplication, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                                     Log.e("CREATE", errorResponse.toString());
                                     break;
-
                             }
                         }
                     }, REQUEST_TAG_STORY_CREATE);

@@ -8,7 +8,7 @@
 
     <application
         android:name=".BaseApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,7 +31,7 @@
             android:label="@string/title_activity_story_create"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.StoryShowActivity" />
-        <activity android:name=".activity.ImageShowActivity"></activity>
+        <activity android:name=".activity.ImageShowActivity" />
         <activity android:name=".activity.ProfilePageActivity" />
         <activity android:name=".activity.TagActivity" />
         <activity android:name=".activity.TagDescCreateActivity" />

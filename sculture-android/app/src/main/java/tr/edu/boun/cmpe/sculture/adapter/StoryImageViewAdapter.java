@@ -24,6 +24,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
+/**
+ * Recycler view adapter which stores thumbnails of media images
+ */
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
     private ArrayList<ImageLocation> imageLocations = new ArrayList<>();
 
@@ -76,11 +79,12 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
     /**
      * Removes an image from adapter
      *
-     * @param index Index of the image
+     * @param imageLocation Image
      */
-    public void removeElement(int index) {
-        imageLocations.remove(index);
-        notifyItemRemoved(index);
+    public void removeElement(ImageLocation imageLocation) {
+        int i = imageLocations.indexOf(imageLocation);
+        imageLocations.remove(imageLocation);
+        notifyItemRemoved(i);
     }
 
     /**
@@ -109,7 +113,7 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
             holder.imageView.setImageUrl(API_IMAGE_GET + imageLocation.getId(), BaseApplication.baseApplication.mImageLoader);
             holder.local_imageView.setVisibility(View.GONE);
         }
-        holder.index = position;
+        holder.imageLocation = imageLocation;
     }
 
     @Override
@@ -121,11 +125,14 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
         return imageLocations;
     }
 
+    /**
+     * View holder of a image with delete button
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final NetworkImageView imageView;
         public final ImageView local_imageView;
         public final ImageButton button;
-        private int index = -1;
+        private ImageLocation imageLocation;
 
         public ViewHolder(View v) {
             super(v);
@@ -136,7 +143,7 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
                     Intent intent = new Intent(v.getContext(), ImageShowActivity.class);
 
                     intent.putExtra(BUNDLE_MEDIA_IDS, LargeBundle.addItem(imageLocations));
-                    intent.putExtra(BUNDLE_INDEX, index);
+                    intent.putExtra(BUNDLE_INDEX, imageLocations.indexOf(imageLocation));
                     v.getContext().startActivity(intent);
                 }
             });
@@ -146,7 +153,7 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ImageShowActivity.class);
                     intent.putExtra(BUNDLE_MEDIA_IDS, LargeBundle.addItem(imageLocations));
-                    intent.putExtra(BUNDLE_INDEX, index);
+                    intent.putExtra(BUNDLE_INDEX, imageLocations.indexOf(imageLocation));
                     v.getContext().startActivity(intent);
                 }
             });
@@ -158,7 +165,7 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeElement(index);
+                    removeElement(imageLocation);
                 }
             });
         }

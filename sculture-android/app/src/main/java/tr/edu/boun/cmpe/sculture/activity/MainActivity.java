@@ -51,6 +51,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
+/**
+ * Main activity which is started when icon clicked on app drawer.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int SIZE = 10;
@@ -234,8 +237,6 @@ public class MainActivity extends AppCompatActivity {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                     Log.e("SEARCH", errorResponse.toString());
-
-
                 }
             }, REQUEST_TAG_SEARCH);
         }

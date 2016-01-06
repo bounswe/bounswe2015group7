@@ -36,7 +36,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link tr.edu.boun.cmpe.sculture.activity.MainActivity} fragment which shows
+ * profile of current user with his/her stories. If there is no logged in user,
+ * registration and login buttons visible
  */
 public class ProfileFragment extends Fragment {
     private static ProfileFragment profileFragment;
@@ -74,6 +76,19 @@ public class ProfileFragment extends Fragment {
         story_list_recycler.setLayoutManager(mLayoutManager);
         story_list_recycler.setAdapter(mStoryListViewAdapter);
 
+        if (!baseApplication.checkLogin()) {
+            loggedOutLayout.setVisibility(View.VISIBLE);
+            loggedInLayout.setVisibility(View.GONE);
+        } else {
+            loggedOutLayout.setVisibility(View.GONE);
+            loggedInLayout.setVisibility(View.VISIBLE);
+
+
+            username.setText(baseApplication.getUSERNAME());
+            email.setText(baseApplication.getEMAIL());
+        }
+
+
         setRecyclerListeners();
 
         Button login_register_button = (Button) view.findViewById(R.id.login_register);
@@ -106,11 +121,16 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    /**
+     * After a story is uploaded, clears the story list
+     */
     public static void reset() {
         //TODO Find a better way to refresh this fragment
-        profileFragment.PAGE = 1;
-        profileFragment.is_loading_more = false;
-        profileFragment.mStoryListViewAdapter.clearElements();
+        if (profileFragment != null) {
+            profileFragment.PAGE = 1;
+            profileFragment.is_loading_more = false;
+            profileFragment.mStoryListViewAdapter.clearElements();
+        }
     }
 
     private void setRecyclerListeners() {
@@ -169,7 +189,6 @@ public class ProfileFragment extends Fragment {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getActivity(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                     Log.e("USER PROFILE", errorResponse.toString());
-
                 }
             }, null);
         }

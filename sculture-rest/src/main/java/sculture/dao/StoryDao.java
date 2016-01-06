@@ -141,8 +141,8 @@ public class StoryDao {
                 "    GROUP BY vs.story_id ) " +
                 "  AS jj " +
                 "  on jj.story_id = s.story_id " +
-                "  ORDER BY (total-1 )/POW((:now - create_date)/3600000 + 2, 1.5)  DESC, create_date DESC", Story.class);
-        q.setParameter("now", new Date().getTime());
+                "  ORDER BY (total-1 )/POW(:now - create_date/3600000 + 2, 1.5)  DESC, create_date DESC", Story.class);
+        q.setParameter("now", new Date().getTime()/3600000);
         q.setFirstResult((page - 1) * size);
         q.setMaxResults(size);
 

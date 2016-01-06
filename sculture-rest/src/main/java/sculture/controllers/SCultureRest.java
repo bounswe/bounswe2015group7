@@ -410,7 +410,10 @@ public class SCultureRest {
         reportStoryDao.deleteByStoryId(story.getStory_id());
         voteStoryDao.deleteByStoryId(story.getStory_id());
 
+        SearchEngine.removeDoc(story.getStory_id());
+
         storyDao.delete(story);
+
         return "{ status : \"DELETED\" }";
     }
 

@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -16,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.TagResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_TAG_EDIT;
@@ -68,7 +71,9 @@ public class TagDescCreateActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                ErrorResponse errorResponse = new ErrorResponse(error);
+                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                Log.e("TAG GET", errorResponse.toString());
             }
         }, null);
     }
@@ -93,11 +98,12 @@ public class TagDescCreateActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         mActivity.startActivity(intent);
                     }
-                },
-                new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //TODO ERROR HANDLING
+                        ErrorResponse errorResponse = new ErrorResponse(error);
+                        Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                        Log.e("TAG EDIT", errorResponse.toString());
                     }
                 }, REQUEST_TAG_DESC_CREATE);
     }

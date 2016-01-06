@@ -119,8 +119,7 @@ public class SubscriptionFragment extends Fragment {
                 public void onErrorResponse(VolleyError error) {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getActivity(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                    Log.e("USER PROFILE", errorResponse.toString());
-
+                    Log.e("SUBSCRIPTIONS", errorResponse.toString());
                 }
             }, null);
         }

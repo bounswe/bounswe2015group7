@@ -234,8 +234,6 @@ public class MainActivity extends AppCompatActivity {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                     Log.e("SEARCH", errorResponse.toString());
-
-
                 }
             }, REQUEST_TAG_SEARCH);
         }

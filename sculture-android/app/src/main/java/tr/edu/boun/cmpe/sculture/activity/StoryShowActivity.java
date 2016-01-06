@@ -117,7 +117,7 @@ public class StoryShowActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                    Log.e("COMMENT", errorResponse.toString());
+                    Log.e("COMMENT LIST", errorResponse.toString());
                 }
             }, REQUEST_TAG_SEARCH);
         }
@@ -146,13 +146,12 @@ public class StoryShowActivity extends AppCompatActivity {
 
                         load_comment();
                     }
-                },
-                new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         ErrorResponse errorResponse = new ErrorResponse(error);
                         Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                        Log.e("STORY", errorResponse.toString());
+                        Log.e("STORY GET", errorResponse.toString());
                     }
                 },
                 REQUEST_TAG_STORY_GET);
@@ -188,11 +187,9 @@ public class StoryShowActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //TODO Error handling
-                        try {
-                            Log.i("here", new String(error.networkResponse.data));
-                        } catch (NullPointerException ignored) {
-                        }
+                        ErrorResponse errorResponse = new ErrorResponse(error);
+                        Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                        Log.e("STORY REPORT", errorResponse.toString());
                     }
                 }, null);
 
@@ -243,7 +240,9 @@ public class StoryShowActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                ErrorResponse errorResponse = new ErrorResponse(error);
+                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                Log.e("STORY DELETE", errorResponse.toString());
             }
         }, null);
     }

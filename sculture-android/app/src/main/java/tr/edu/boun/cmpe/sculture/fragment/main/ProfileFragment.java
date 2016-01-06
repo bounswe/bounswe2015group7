@@ -184,7 +184,6 @@ public class ProfileFragment extends Fragment {
                     ErrorResponse errorResponse = new ErrorResponse(error);
                     Toast.makeText(getActivity(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                     Log.e("USER PROFILE", errorResponse.toString());
-
                 }
             }, null);
         }

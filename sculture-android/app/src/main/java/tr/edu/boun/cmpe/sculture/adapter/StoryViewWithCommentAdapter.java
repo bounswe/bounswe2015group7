@@ -132,7 +132,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //TODO Error handling
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+                    Toast.makeText(mActivity, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("STORY VOTE", errorResponse.toString());
                     setVote(previous_status);
                 }
             }, null);
@@ -247,6 +249,9 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            ErrorResponse errorResponse = new ErrorResponse(error);
+                            Toast.makeText(mActivity, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                            Log.e("COMMENT EDIT", errorResponse.toString());
                             v.setEnabled(true);
                         }
                     }, null);

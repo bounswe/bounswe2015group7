@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 import tr.edu.boun.cmpe.sculture.models.response.UserFollowResponse;
@@ -104,7 +107,9 @@ public class ProfilePageActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //TODO error handling
+                ErrorResponse errorResponse = new ErrorResponse(error);
+                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                Log.e("PROFILE GET", errorResponse.toString());
             }
         }, null);
     }
@@ -128,7 +133,9 @@ public class ProfilePageActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                ErrorResponse errorResponse = new ErrorResponse(error);
+                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                Log.e("PROFILE FOLLOW", errorResponse.toString());
             }
         }, null);
     }
@@ -185,7 +192,9 @@ public class ProfilePageActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+                    Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("PROFILE STORIES", errorResponse.toString());
                 }
             }, null);
         }

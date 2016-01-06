@@ -44,7 +44,13 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% boolean isLoggedIn;
+                    try {
+                        isLoggedIn = (Boolean) request.getAttribute("isLoggedIn");
+                    } catch(Exception ex) {
+                        isLoggedIn = false;
+                    }
+                %>
                 <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">

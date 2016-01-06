@@ -261,9 +261,8 @@ public class SCultureRest {
     public LoginResponse user_login(@RequestBody LoginRequestBody requestBody) {
         String email = requestBody.getEmail();
         String password = requestBody.getPassword();
-        String username = requestBody.getUsername();
 
-        if (!checkEmailSyntax(email) && username == null)
+        if (!checkEmailSyntax(email))
             throw new InvalidEmailException();
 
 
@@ -273,13 +272,10 @@ public class SCultureRest {
 
         User u;
         try {
-            if (email != null) {
-                u = userDao.getByEmail(email);
-            } else u = userDao.getByUsername(username);
+            u = userDao.getByEmail(email);
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             throw new UserNotExistException();
         }
-
 
         if (u.getPassword_hash().equals(Utils.password_hash(password))) {
             return new LoginResponse(u);

@@ -67,11 +67,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>edu.smu.tspell.wordnet</groupId>
-            <artifactId>wordnet</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/WEB-INF/lib/jaws-bin.jar</systemPath>
+            <groupId>jaws</groupId>
+            <artifactId>jaws</artifactId>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

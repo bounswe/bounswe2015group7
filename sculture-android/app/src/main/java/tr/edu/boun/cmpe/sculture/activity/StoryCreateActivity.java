@@ -120,6 +120,22 @@ public class StoryCreateActivity extends AppCompatActivity {
     private void clickSaveButton() {
         if (isSaveClicked)
             return;
+
+        boolean error = false;
+        if (titleText.getText().toString().equals("")) {
+            titleText.setError(getString(R.string.invalid_title));
+            error |= true;
+        } else
+            titleText.setError(null);
+        if (contentText.getText().toString().equals("")) {
+            contentText.setError(getString(R.string.invalid_content));
+            error |= true;
+        } else
+            contentText.setError(null);
+
+        if (error)
+            return;
+
         isSaveClicked = true;
         JSONObject requestBody = new JSONObject();
         try {

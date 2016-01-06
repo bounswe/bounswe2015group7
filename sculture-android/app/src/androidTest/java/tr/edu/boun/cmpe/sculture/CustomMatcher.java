@@ -37,7 +37,7 @@ public class CustomMatcher {
     /**
      * Matcher a edit text which has no error.
      */
-    protected static Matcher<View> editTextNoError() {
+    public static Matcher<View> editTextNoError() {
         return new org.hamcrest.TypeSafeMatcher<View>() {
             @Override
             protected boolean matchesSafely(View view) {

@@ -44,13 +44,13 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
                     </div>
                 </li>
-                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>

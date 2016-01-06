@@ -60,13 +60,13 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
+        <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+        <% if (isLoggedIn) { %>
         <li>
           <div class="top-big-link">
             <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
           </div>
         </li>
-        <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-        <% if (isLoggedIn) { %>
         <li>
           <div class="top-big-link">
             <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
@@ -114,7 +114,7 @@
 
 
       </div>
-      <div class="col-sm-2" align="right"><a href="users" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="http://www.african-youthmovement.org/wp-content/uploads/2014/10/Blank_woman_placeholder.svg.png" align="left"></a>
+      <div class="col-sm-2" align="right"><a href="#" class="pull-left"><img title="profile image" class="img-circle img-responsive" src="http://www.african-youthmovement.org/wp-content/uploads/2014/10/Blank_woman_placeholder.svg.png" align="left"></a>
       </div>
 
     </div>

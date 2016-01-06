@@ -53,22 +53,23 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory" data-modal-id="modal-create-story">Add Story</a>
-                    </div>
-                </li>
-                <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-                <% if (isLoggedIn.booleanValue()) { %>
-                <li>
-                    <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = contextPath +"get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
+                    </div>
+                </li>
+                <li>
+                    <%String refUrl = contextPath + "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My
+                            Profile</a>
                     </div>
                 </li>
                 <% } else { %>
@@ -126,7 +127,7 @@
                 <%String mediaSeparated = String.join(" ", story.getMedia().toArray(new String[story.getMedia().size()]));%>
 
                 <input type="hidden" class="form-control" id="story-media" name="story-media" value="<%out.print(mediaSeparated);%>">
-
+                <br>
                 <div container>
                     <input type="submit" name="submit" id="submit" value="Edit Story" class="btn btn-info pull-right">
                 </div>

@@ -54,22 +54,23 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory" data-modal-id="modal-create-story">Add Story</a>
-                    </div>
-                </li>
-                <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-                <% if (isLoggedIn.booleanValue()) { %>
-                <li>
-                    <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = contextPath +"get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
+                    </div>
+                </li>
+                <li>
+                    <%String refUrl = contextPath + "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My
+                            Profile</a>
                     </div>
                 </li>
                 <% } else { %>
@@ -166,10 +167,12 @@
 
             <!-- Blog Comments -->
             <!-- Comments Form -->
+            <%if(request.getSession().getAttribute("userid") != null)  { %>
+
             <div class="well">
                 <h4>Leave a Comment:</h4>
 
-                <form action=<%out.print(contextPath);%>"/addcomment" method="POST" role="form">
+                <form action="<%out.print(contextPath);%>/addcomment" method="POST" role="form">
                     <div class="form-group">
                         <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
@@ -177,7 +180,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
-
+            <%}%>
             <hr>
 
             <!-- Posted Comments -->

@@ -121,11 +121,11 @@ public class SearchEngine {
                 System.out.println(hypernyms.length);
                 System.out.println(hyponyms.length);
                 for (NounSynset n : hypernyms) {
-                    wordnet = n.getWordForms()[0] + "^" + HYPERNYM_BOOST + " ";
+                    wordnet = "\"" + n.getWordForms()[0] + "\"^" + HYPERNYM_BOOST + " ";
                 }
 
                 for (NounSynset n : hyponyms) {
-                    wordnet = n.getWordForms()[0] + "^" + HYPONYM_BOOST + " ";
+                    wordnet = "\"" + n.getWordForms()[0] + "\"^" + HYPONYM_BOOST + " ";
                 }
             }
         }

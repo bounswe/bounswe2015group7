@@ -34,13 +34,11 @@ public class Login extends HttpServlet {
             e.printStackTrace();
         }
         if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
-            System.out.println(jsonResponse.getBody().toString());
             request.setAttribute("isLoggedIn", true);
             request.setAttribute("username", jsonResponse.getBody().getObject().get("username"));
             request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
             request.getSession().setAttribute("userid", jsonResponse.getBody().getObject().get("id"));
             request.getSession().setAttribute("access_token", jsonResponse.getBody().getObject().get("access_token").toString());
-            System.out.println(jsonResponse.getBody().getObject().get("access_token").toString());
         } else {
             request.setAttribute("isLoggedIn", false);
             request.setAttribute("username", "");

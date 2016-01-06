@@ -38,7 +38,6 @@ public class SaveStory extends HttpServlet {
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             int i = 0;
             for (FileItem item : items) {
-                System.out.println("2");
                 if (item.isFormField()) { // regular field (text, checkbox etc.)
                     String fieldName = item.getFieldName();
                     String fieldValue = item.getString();
@@ -55,7 +54,6 @@ public class SaveStory extends HttpServlet {
                 } else if(item.getString().length() > 0) { // photo
                     InputStream fileContent = item.getInputStream();
                     String fieldName = item.getString();
-                    System.out.println("asjldmhkjdshafads:" + fieldName);
                     byte[] bytes = IOUtils.toByteArray(fileContent);
                     jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.IMAGE_UPLOAD)
                             .header("Content-Type", "application/json")

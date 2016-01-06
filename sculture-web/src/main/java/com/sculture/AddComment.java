@@ -30,8 +30,6 @@ public class AddComment extends HttpServlet {
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             JSONObject jsonObject = new JSONObject();
-            System.out.println("id: " + request.getParameter("story_id"));
-            System.out.println("content: " + request.getParameter("form-commentbody"));
             jsonObject.put("storyId", request.getParameter("story_id"));
             jsonObject.put("content", request.getParameter("form-commentbody"));
             JsonNode jsonNode = new JsonNode(jsonObject.toString());

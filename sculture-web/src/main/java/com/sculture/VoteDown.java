@@ -38,6 +38,12 @@ public class VoteDown extends HttpServlet{
         } catch (UnirestException e) {
             e.printStackTrace();
         }
+        if (jsonResponse == null || jsonResponse.getBody().getObject().has("exception")) {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong voting down this story, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
         response.sendRedirect("/sculture/get/story/" + story_id);
     }
 }

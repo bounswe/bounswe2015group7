@@ -410,7 +410,10 @@ public class SCultureRest {
         reportStoryDao.deleteByStoryId(story.getStory_id());
         voteStoryDao.deleteByStoryId(story.getStory_id());
 
+        SearchEngine.removeDoc(story.getStory_id());
+
         storyDao.delete(story);
+
         return "{ status : \"DELETED\" }";
     }
 
@@ -652,11 +655,14 @@ public class SCultureRest {
     @RequestMapping("/admin/search/reindex")
     public void admin_search_reindex() {
         SearchEngine.removeAll();
+        List<Story> stories;
+        List<String> tags;
+        String tag_index;
         for (int i = 1; ; i++) {
-            List<Story> stories = storyDao.getAll(i, 20);
+            stories = storyDao.getAll(i, 5);
             for (Story story : stories) {
-                List<String> tags = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
-                String tag_index = "";
+                tags = tagStoryDao.getTagTitlesByStoryId(story.getStory_id());
+                tag_index = "";
                 for (String tag : tags)
                     tag_index += tag + ", ";
                 SearchEngine.addDoc(story.getStory_id(), story.getTitle(), story.getContent(), tag_index);
@@ -664,6 +670,7 @@ public class SCultureRest {
             if (stories.size() == 0)
                 break;
         }
+        System.gc();
 
     }
 

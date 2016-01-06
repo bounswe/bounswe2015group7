@@ -164,9 +164,11 @@
 
 
                     <% } %>
+                    <%String requrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
+
+                    if (requrl.contains("all")){%>
                     <div class="col-md-1">
-                        <%String requrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
-                            int pageNum = Integer.parseInt(requrl.substring(requrl.lastIndexOf('/')+1));
+                        <%  int pageNum = Integer.parseInt(requrl.substring(requrl.lastIndexOf('/')+1));
                             int left = pageNum - 1;
                             int right = pageNum + 1;
                             String leftUrl = contextPath + "/search/all/" + left;
@@ -182,7 +184,7 @@
                     <%if(results.size() != 0 && results.size() >= 10) {%>
                     <a href="<%out.print(rightUrl);%>" class="btn btn-primary pull-right btnNext"> <i
                             class="glyphicon glyphicon-chevron-right"></i></a>
-                    <%}%>
+                    <%} }%>
                 </div>
             </div>
         </div>

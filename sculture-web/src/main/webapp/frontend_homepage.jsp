@@ -93,7 +93,7 @@
                placeholder="Search stories" required>
     </form>
     <br>
-    <a class="btn btn-link-2" href="<%out.print(contextPath);%>/search/all" data-modal-id="modal-create-story">All stories</a>
+    <a class="btn btn-link-2" href="<%out.print(contextPath);%>/search/all/1" data-modal-id="modal-create-story">All stories</a>
     <br>
 </div>
 

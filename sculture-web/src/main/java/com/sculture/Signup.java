@@ -22,7 +22,6 @@ public class Signup extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Enumeration<String> enumeration = request.getParameterNames();
-//        while (enumeration.hasMoreElements()) System.out.println(enumeration.nextElement());
         HttpResponse<JsonNode> jsonResponse = null;
         try {
 

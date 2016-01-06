@@ -33,11 +33,13 @@ public class SearchAll extends HttpServlet {
             request.setAttribute("username", request.getSession().getAttribute("username"));
             request.setAttribute("isLoggedIn", true);
         }
+        String requestURL = request.getRequestURL().toString();
+        String page = requestURL.substring(requestURL.lastIndexOf('/') + 1);
 
         //Get all stories using /search/all
 
         JSONObject params = new JSONObject();
-        params.put("page", 1);
+        params.put("page", page);
         params.put("size", 10);
 
         HttpResponse<JsonNode> jsonStoriesResponse = null;

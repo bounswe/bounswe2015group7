@@ -131,7 +131,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>searchall</servlet-name>
-        <url-pattern>/search/all</url-pattern>
+        <url-pattern>/search/all/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>search</servlet-name>

@@ -21,6 +21,7 @@ import java.io.IOException;
 public class SearchAll extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("errormsg", "Something went wrong getting all the stories, please try again.");
         request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
 
@@ -49,11 +50,17 @@ public class SearchAll extends HttpServlet {
             e.printStackTrace();
         }
 
-        Gson gson = MyGson.create();
-        StoriesResponse storiesResponse = gson.fromJson(jsonStoriesResponse.getBody().getObject().toString(), StoriesResponse.class);
-
-        request.setAttribute("results", storiesResponse);
-        request.getRequestDispatcher("/search_result.jsp").forward(request, response);
+        if (jsonStoriesResponse != null && !jsonStoriesResponse.getBody().getObject().has("exception")) {
+            Gson gson = MyGson.create();
+            StoriesResponse storiesResponse = gson.fromJson(jsonStoriesResponse.getBody().toString(), StoriesResponse.class);
+            request.setAttribute("results", storiesResponse);
+            request.getRequestDispatcher("/search_result.jsp").forward(request, response);
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong getting all the stories, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
 }

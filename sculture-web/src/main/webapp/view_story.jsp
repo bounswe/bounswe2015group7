@@ -54,22 +54,23 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory" data-modal-id="modal-create-story">Add Story</a>
-                    </div>
-                </li>
-                <% Boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-                <% if (isLoggedIn.booleanValue()) { %>
-                <li>
-                    <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout" data-modal-id="modal-logout">Log Out</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
                     </div>
                 </li>
                 <li>
-                    <%String refUrl = contextPath +"get/user/" + request.getSession().getAttribute("userid");%>
                     <div class="top-big-link">
-                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My Profile</a>
+                        <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
+                    </div>
+                </li>
+                <li>
+                    <%String refUrl = contextPath + "/get/user/" + request.getSession().getAttribute("userid");%>
+                    <div class="top-big-link">
+                        <a class="btn btn-link-2" href="<%out.print(refUrl);%>" data-modal-id="modal-logout">My
+                            Profile</a>
                     </div>
                 </li>
                 <% } else { %>
@@ -158,18 +159,21 @@
 
             <!-- Post Content -->
                 <span class="center-block">
-                    <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"> <%out.print(story.getPositive_vote());%></span>
-                    <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"><%out.print(story.getNegative_vote());%></span>
+                    <img src="<%out.print(contextPath);%>/public/images/ic_arrow_upward_black_24dp_2x.png" width="24" height="24">  <%out.print(story.getPositive_vote());%>
+                    <img src="<%out.print(contextPath);%>/public/images/ic_arrow_downward_black_24dp_2x.png" width="24" height="24"> <%out.print(story.getNegative_vote());%>
+                    <img src="<%out.print(contextPath);%>/public/images/ic_close_black_24dp_2x.png" width="24" height="24"> <%out.print(story.getReport_count());%>
                 </span>
 
             <hr>
 
             <!-- Blog Comments -->
             <!-- Comments Form -->
+            <%if(request.getSession().getAttribute("userid") != null)  { %>
+
             <div class="well">
                 <h4>Leave a Comment:</h4>
 
-                <form action=<%out.print(contextPath);%>"/addcomment" method="POST" role="form">
+                <form action="<%out.print(contextPath);%>/addcomment" method="POST" role="form">
                     <div class="form-group">
                         <input type="text" name="form-commentbody" id="form-commentbody" class="form-control" rows="3"></textarea>
                     </div>
@@ -177,7 +181,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
-
+            <%}%>
             <hr>
 
             <!-- Posted Comments -->
@@ -207,6 +211,16 @@
 
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
+            <%if(request.getSession().getAttribute("userid") != null)  { %>
+
+            <div class="well">
+                <h4>Vote this story:</h4>
+                <%String likeUrl = contextPath+ "/voteup/" + story.getId();%>
+                <a href="<%out.print(likeUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Like </a>
+                <%String dislikeUrl = contextPath+ "/votedown/" + story.getId();%>
+                <a href="<%out.print(dislikeUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Dislike </a>
+            </div>
+            <%}%>
 
             <div class="well">
                 <h4>Created by:</h4>
@@ -288,9 +302,8 @@
 
                 <form role="form" action="<%out.print(contextPath);%>/login" method="post" class="login-form">
                     <div class="form-group">
-                        <label class="sr-only" for="form-username">E-mail</label>
-                        <input type="text" name="form-username" placeholder="Username..."
-                               class="form-email form-control" id="form-username">
+                        <label class="sr-only" for="form-email">E-mail</label>
+                        <input type="text" name="form-email" placeholder="Email..." class="form-email form-control" id="form-email">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>
@@ -395,34 +408,6 @@
                 var winTop = $(window).scrollTop();
                 if (pos < winTop + 600) {
                     $(this).addClass("slide");
-                }
-            });
-        });
-        $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
-            var $this = $(this);
-            var story_id = "<%=story.getId()%>";
-            var definitelynottheaccesstoken = "<%=request.getSession().getAttribute("access_token")%>";
-            var vote;
-            if(this.id == "like1") vote = 1;
-            else if(this.id == "dislike1") vote = -1;
-            if(definitelynottheaccesstoken == null) vote = 0;
-            $.ajax({
-                type: 'POST',
-                crossDomain: true,
-                beforeSend: function (request)                {
-                    request.setRequestHeader("access-token", definitelynottheaccesstoken);
-                },
-                url: "<%=Const.REST_BASE_URL + Const.Api.STORY_VOTE %>",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "story_id": story_id,
-                    "vote" : vote
-                }),
-                success: function (myData) {
-                    location.reload();
-                },
-                error:function (errorData) {
-                    alert("error!");
                 }
             });
         });

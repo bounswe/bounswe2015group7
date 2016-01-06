@@ -43,11 +43,17 @@ public class Search extends HttpServlet {
         }
 
 
-        Gson gson = MyGson.create();
-        StoriesResponse storiesResponse = gson.fromJson(searchJsonResponse.getBody().toString(), StoriesResponse.class);
-
-        request.setAttribute("results", storiesResponse);
-        request.getRequestDispatcher("/search_result.jsp").forward(request, response);
+        if (searchJsonResponse != null && !searchJsonResponse.getBody().getObject().has("error")) {
+            Gson gson = MyGson.create();
+            StoriesResponse storiesResponse = gson.fromJson(searchJsonResponse.getBody().toString(), StoriesResponse.class);
+            request.setAttribute("results", storiesResponse);
+            request.getRequestDispatcher("/search_result.jsp").forward(request, response);
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -72,12 +78,17 @@ public class Search extends HttpServlet {
             e.printStackTrace();
         }
 
-
-        Gson gson = MyGson.create();
-        StoriesResponse storiesResponse = gson.fromJson(searchJsonResponse.getBody().toString(), StoriesResponse.class);
-
-        request.setAttribute("results", storiesResponse);
-        request.getRequestDispatcher("/search_result.jsp").forward(request, response);
+        if (searchJsonResponse != null && !searchJsonResponse.getBody().getObject().has("exception")) {
+            Gson gson = MyGson.create();
+            StoriesResponse storiesResponse = gson.fromJson(searchJsonResponse.getBody().toString(), StoriesResponse.class);
+            request.setAttribute("results", storiesResponse);
+            request.getRequestDispatcher("/search_result.jsp").forward(request, response);
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong getting the results of your query, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
 }

@@ -75,11 +75,16 @@ public class GetUser extends HttpServlet {
         }
 
         StoriesResponse userStoriesResponse = new StoriesResponse();
-        if (jsonResponse != null) {
+        if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = MyGson.create();
             userStoriesResponse = gson.fromJson(object.toString(), StoriesResponse.class);
             System.out.println(object.toString());
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong getting this user's profile, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
         request.setAttribute("relatedUser", user);
         request.setAttribute("user_stories", userStoriesResponse);

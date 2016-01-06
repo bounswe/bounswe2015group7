@@ -44,15 +44,12 @@ public class SaveStory extends HttpServlet {
                     String fieldValue = item.getString();
                     if(i == 0) { // title
                         fields[0] = fieldValue;
-                        System.out.println("fields[0]: " + fields[0]);
                     }
                     else if(i == 1) { // content
                         fields[1] = fieldValue;
-                        System.out.println("fields[1]: " + fields[1]);
                     }
                     else if (i == 2){ // tags
                         fields[3] = fieldValue;
-                        System.out.println("fields[3]: " + fields[3]);
                     }
                     i++;
                 } else { // photo
@@ -62,10 +59,13 @@ public class SaveStory extends HttpServlet {
                             .header("Content-Type", "application/json")
                             .body(bytes)
                             .asJson();
-                    // ... (do your job here)
-                    if(jsonResponse != null && jsonResponse.getBody().getObject().getString("id") != null){
+                    if(jsonResponse != null && !jsonResponse.getBody().getObject().has("exception") && jsonResponse.getBody().getObject().getString("id") != null){
                         fields[2] += jsonResponse.getBody().getObject().getString("id") + " ";
-                        System.out.println("fields[2]: " + fields[2]);
+                    } else {
+                        request.setAttribute("isLoggedIn", false);
+                        request.setAttribute("username", "");
+                        request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
+                        request.getRequestDispatcher("/error.jsp").forward(request, response);
                     }
                 }
             }
@@ -91,8 +91,13 @@ public class SaveStory extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if(jsonResponse != null){
+        if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
             System.out.println(jsonResponse.getBody().toString());
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
         response.sendRedirect("/sculture/index");
     }

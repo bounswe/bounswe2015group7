@@ -46,13 +46,13 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
+                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(contextPath);%>/addstory">Add Story</a>
                     </div>
                 </li>
-                <% boolean isLoggedIn = (Boolean) request.getAttribute("isLoggedIn"); %>
-                <% if (isLoggedIn) { %>
                 <li>
                     <div class="top-big-link">
                         <a class="btn btn-link-2" href="<%out.print(contextPath);%>/logout">Log Out</a>
@@ -258,9 +258,8 @@
 
                     <form role="form" action="<%out.print(contextPath);%>/login" method="post" class="login-form">
                         <div class="form-group">
-                            <label class="sr-only" for="form-username">E-mail</label>
-                            <input type="text" name="form-username" placeholder="Username..."
-                                   class="form-email form-control" id="form-username">
+                            <label class="sr-only" for="form-email">E-mail</label>
+                            <input type="text" name="form-email" placeholder="Email..." class="form-email form-control" id="form-email">
                         </div>
                         <div class="form-group">
                             <label class="sr-only" for="form-password">Password</label>

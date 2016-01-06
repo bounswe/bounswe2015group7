@@ -14,10 +14,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -42,6 +39,7 @@ public class SearchEngine {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.gc();
     }
 
     public static void addDoc(long id, String title, String content, String tags) {
@@ -90,9 +88,9 @@ public class SearchEngine {
         NounSynset nounSynset;
         NounSynset[] hyponyms;
         NounSynset[] hypernyms;
-
+        Synset[] synsets;
         for (String s : searches) {
-            Synset[] synsets = database.getSynsets(s, SynsetType.NOUN);
+            synsets = database.getSynsets(s, SynsetType.NOUN);
             for (Synset synset : synsets) {
                 nounSynset = (NounSynset) (synset);
                 hyponyms = nounSynset.getHyponyms();
@@ -109,23 +107,22 @@ public class SearchEngine {
                 }
             }
         }
-
+        System.gc();
         List<Long> story_ids = new ArrayList<>();
         MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{"id", "title", "content", "tags"}, analyzer);
-        Query query = null;
+        Query query;
         try {
-            int startIndex = (page - 1) * size;
             int endIndex = page * size;
             query = parser.parse(search_term + " " + wordnet);
             IndexReader reader = DirectoryReader.open(index);
             IndexSearcher searcher = new IndexSearcher(reader);
             TopScoreDocCollector collector = TopScoreDocCollector.create(endIndex + 1);
             searcher.search(query, collector);
-            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+            ScoreDoc[] hits = collector.topDocs((page - 1) * size, size).scoreDocs;
 
-            for (int i = startIndex; i < hits.length; i++) {
-                int docId = hits[i].doc;
-                Document d = searcher.doc(docId);
+            Document d;
+            for (ScoreDoc hit : hits) {
+                d = searcher.doc(hit.doc);
                 story_ids.add(Long.valueOf(d.get("id")));
             }
 
@@ -133,7 +130,7 @@ public class SearchEngine {
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
-
+        System.gc();
         return story_ids;
     }
 

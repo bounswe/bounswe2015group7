@@ -159,8 +159,9 @@
 
             <!-- Post Content -->
                 <span class="center-block">
-                    <i id="like1" class="glyphicon glyphicon-thumbs-up"></i> <span id="like1-bs3"> <%out.print(story.getPositive_vote());%></span>
-                    <i id="dislike1" class="glyphicon glyphicon-thumbs-down"></i> <span id="dislike1-bs3"><%out.print(story.getNegative_vote());%></span>
+                    <img src="<%out.print(contextPath);%>/public/images/ic_arrow_upward_black_24dp_2x.png" width="24" height="24">  <%out.print(story.getPositive_vote());%>
+                    <img src="<%out.print(contextPath);%>/public/images/ic_arrow_downward_black_24dp_2x.png" width="24" height="24"> <%out.print(story.getNegative_vote());%>
+                    <img src="<%out.print(contextPath);%>/public/images/ic_close_black_24dp_2x.png" width="24" height="24"> <%out.print(story.getReport_count());%>
                 </span>
 
             <hr>

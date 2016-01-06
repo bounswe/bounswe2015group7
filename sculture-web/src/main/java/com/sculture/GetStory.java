@@ -74,10 +74,15 @@ public class GetStory extends HttpServlet {
         }
         ArrayList<Comment> comments = new ArrayList<Comment>();
         CommentListResponse commentListResponse = new CommentListResponse();
-        if (jsonResponse != null) {
+        if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = MyGson.create();
             commentListResponse = gson.fromJson(object.toString(), CommentListResponse.class);
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong getting this story, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
         request.setAttribute("story", story);
         request.setAttribute("comments", commentListResponse.getResult());

@@ -71,7 +71,7 @@ public class EditStory extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if (jsonResponse != null) {
+        if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new MyGson().create();
 //            ((JSONObject)object).remove("tags");
@@ -79,6 +79,11 @@ public class EditStory extends HttpServlet {
             request.setAttribute("story", story);
             request.getRequestDispatcher("/edit_story.jsp").forward(request, response);
 
+        } else {
+            request.setAttribute("isLoggedIn", false);
+            request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
 

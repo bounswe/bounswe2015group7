@@ -210,6 +210,16 @@
 
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
+            <%if(request.getSession().getAttribute("userid") != null)  { %>
+
+            <div class="well">
+                <h4>Vote this story:</h4>
+                <%String likeUrl = contextPath+ "/voteup/" + story.getId();%>
+                <a href="<%out.print(likeUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Like </a>
+                <%String dislikeUrl = contextPath+ "/votedown/" + story.getId();%>
+                <a href="<%out.print(dislikeUrl);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Dislike </a>
+            </div>
+            <%}%>
 
             <div class="well">
                 <h4>Created by:</h4>
@@ -398,34 +408,6 @@
                 var winTop = $(window).scrollTop();
                 if (pos < winTop + 600) {
                     $(this).addClass("slide");
-                }
-            });
-        });
-        $('.glyphicon-thumbs-up, .glyphicon-thumbs-down').click(function(){
-            var $this = $(this);
-            var story_id = "<%=story.getId()%>";
-            var definitelynottheaccesstoken = "<%=request.getSession().getAttribute("access_token")%>";
-            var vote;
-            if(this.id == "like1") vote = 1;
-            else if(this.id == "dislike1") vote = -1;
-            if(definitelynottheaccesstoken == null) vote = 0;
-            $.ajax({
-                type: 'POST',
-                crossDomain: true,
-                beforeSend: function (request)                {
-                    request.setRequestHeader("access-token", definitelynottheaccesstoken);
-                },
-                url: "<%=Const.REST_BASE_URL + Const.Api.STORY_VOTE %>",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "story_id": story_id,
-                    "vote" : vote
-                }),
-                success: function (myData) {
-                    location.reload();
-                },
-                error:function (errorData) {
-                    alert("error!");
                 }
             });
         });

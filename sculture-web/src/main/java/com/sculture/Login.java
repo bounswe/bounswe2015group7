@@ -33,7 +33,8 @@ public class Login extends HttpServlet {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if (jsonResponse != null) {
+        if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
+            System.out.println(jsonResponse.getBody().toString());
             request.setAttribute("isLoggedIn", true);
             request.setAttribute("username", jsonResponse.getBody().getObject().get("username"));
             request.getSession().setAttribute("username", jsonResponse.getBody().getObject().get("username"));
@@ -43,6 +44,9 @@ public class Login extends HttpServlet {
         } else {
             request.setAttribute("isLoggedIn", false);
             request.setAttribute("username", "");
+            request.setAttribute("errormsg", "Something went wrong while logging you in, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+
         }
 
         response.sendRedirect("/sculture/index");

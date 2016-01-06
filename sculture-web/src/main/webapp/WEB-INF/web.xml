@@ -38,6 +38,14 @@
         <servlet-class>com.sculture.Logout</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>voteup</servlet-name>
+        <servlet-class>com.sculture.VoteUp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>votedown</servlet-name>
+        <servlet-class>com.sculture.VoteDown</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>savestory</servlet-name>
         <servlet-class>com.sculture.SaveStory</servlet-class>
     </servlet>
@@ -65,7 +73,14 @@
         <servlet-name>signup</servlet-name>
         <url-pattern>/signup</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>voteup</servlet-name>
+        <url-pattern>/voteup/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>votedown</servlet-name>
+        <url-pattern>/votedown/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>addcomment</servlet-name>
         <url-pattern>/addcomment</url-pattern>

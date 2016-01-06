@@ -39,8 +39,6 @@ public class VoteUp extends HttpServlet{
             e.printStackTrace();
         }
         if (jsonResponse == null || jsonResponse.getBody().getObject().has("exception")) {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong voting up this story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

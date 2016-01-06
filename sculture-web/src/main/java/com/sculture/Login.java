@@ -40,8 +40,6 @@ public class Login extends HttpServlet {
             request.getSession().setAttribute("userid", jsonResponse.getBody().getObject().get("id"));
             request.getSession().setAttribute("access_token", jsonResponse.getBody().getObject().get("access_token").toString());
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong while logging you in, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
 

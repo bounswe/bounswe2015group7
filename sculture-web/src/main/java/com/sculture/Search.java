@@ -49,8 +49,6 @@ public class Search extends HttpServlet {
             request.setAttribute("results", storiesResponse);
             request.getRequestDispatcher("/search_result.jsp").forward(request, response);
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
@@ -84,8 +82,6 @@ public class Search extends HttpServlet {
             request.setAttribute("results", storiesResponse);
             request.getRequestDispatcher("/search_result.jsp").forward(request, response);
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong getting the results of your query, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

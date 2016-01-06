@@ -62,8 +62,6 @@ public class SaveStory extends HttpServlet {
                     if(jsonResponse != null && !jsonResponse.getBody().getObject().has("exception") && jsonResponse.getBody().getObject().getString("id") != null){
                         fields[2] += jsonResponse.getBody().getObject().getString("id") + " ";
                     } else {
-                        request.setAttribute("isLoggedIn", false);
-                        request.setAttribute("username", "");
                         request.setAttribute("errormsg", "Something went wrong while adding your story, please try again.");
                         request.getRequestDispatcher("/error.jsp").forward(request, response);
                     }
@@ -94,8 +92,6 @@ public class SaveStory extends HttpServlet {
         if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
             redirectUrl+=jsonResponse.getBody().getObject().get("id");
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

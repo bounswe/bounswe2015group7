@@ -64,7 +64,7 @@ public class EditStory extends HttpServlet {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", story_id);
             JsonNode jsonNode = new JsonNode(jsonObject.toString());
-            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.STORY_EDIT)
+            jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.STORY_GET)
                     .header("Content-Type", "application/json")
                     .body(jsonNode)
                     .asJson();
@@ -80,8 +80,7 @@ public class EditStory extends HttpServlet {
             request.getRequestDispatcher("/edit_story.jsp").forward(request, response);
 
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
+            System.out.println(jsonResponse.getBody().getObject().toString());
             request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

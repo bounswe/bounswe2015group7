@@ -164,11 +164,26 @@
 
 
                     <% } %>
-
+                    <div class="col-md-1">
+                        <%String requrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
+                            System.out.println("sdfasdfasdf : " + requrl);
+                            int pageNum = Integer.parseInt(requrl.substring(requrl.lastIndexOf('/')+1));
+                            int left = pageNum - 1;
+                            int right = pageNum + 1;
+                            String leftUrl = contextPath + "/search/all/" + left;
+                            String rightUrl = contextPath + "/search/all/" + right;
+                        %>
+                        <%if(left != 0) {%>
+                        <a href="<%out.print(leftUrl);%>" class="btn btn-primary pull-right btnNext"><i
+                                class="glyphicon glyphicon-chevron-left" style="align-self: flex-start"></i></a>
+                        <%}%>
+                    </div>
 
                     <!--/stories-->
-                    <a href="#" class="btn btn-primary pull-right btnNext">More <i
+                    <%if(results.size() != 0 && results.size() >= 10) {%>
+                    <a href="<%out.print(rightUrl);%>" class="btn btn-primary pull-right btnNext"> <i
                             class="glyphicon glyphicon-chevron-right"></i></a>
+                    <%}%>
                 </div>
             </div>
         </div>

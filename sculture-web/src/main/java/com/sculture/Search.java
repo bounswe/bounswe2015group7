@@ -31,7 +31,7 @@ public class Search extends HttpServlet {
         String query = requestURL.substring(requestURL.lastIndexOf('/') + 1);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("query", query);
-
+        jsonObject.put("size", 20);
         HttpResponse<JsonNode> searchJsonResponse = null;
         try {
             searchJsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.SEARCH)

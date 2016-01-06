@@ -71,7 +71,7 @@
             <artifactId>wordnet</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/jaws-bin.jar</systemPath>
+            <systemPath>${basedir}/WEB-INF/lib/jaws-bin.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

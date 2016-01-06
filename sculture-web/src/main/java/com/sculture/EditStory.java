@@ -80,7 +80,6 @@ public class EditStory extends HttpServlet {
             request.getRequestDispatcher("/edit_story.jsp").forward(request, response);
 
         } else {
-            System.out.println(jsonResponse.getBody().getObject().toString());
             request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

@@ -166,7 +166,6 @@
                     <% } %>
                     <div class="col-md-1">
                         <%String requrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
-                            System.out.println("sdfasdfasdf : " + requrl);
                             int pageNum = Integer.parseInt(requrl.substring(requrl.lastIndexOf('/')+1));
                             int left = pageNum - 1;
                             int right = pageNum + 1;

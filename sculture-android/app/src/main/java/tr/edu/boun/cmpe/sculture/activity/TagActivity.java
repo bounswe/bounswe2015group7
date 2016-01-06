@@ -7,11 +7,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,6 +24,7 @@ import org.json.JSONObject;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
+import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
 import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
 import tr.edu.boun.cmpe.sculture.models.response.TagResponse;
@@ -35,6 +38,11 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * Tag viewing screen
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_TAG_TITLE}: String, tag title
+ */
 public class TagActivity extends AppCompatActivity {
     private static final int SIZE = 10;
     private TextView tagDescription;
@@ -102,6 +110,9 @@ public class TagActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = new ErrorResponse(error);
+                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                Log.e("TAG GET", errorResponse.toString());
                 set_visibilities();
             }
         }, null);
@@ -185,7 +196,9 @@ public class TagActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    ErrorResponse errorResponse = new ErrorResponse(error);
+                    Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    Log.e("TAG SEARCH", errorResponse.toString());
                 }
             }, REQUEST_TAG_SEARCH);
         }

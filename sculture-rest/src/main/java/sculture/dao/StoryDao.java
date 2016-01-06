@@ -134,15 +134,8 @@ public class StoryDao {
      * @return List of stories
      */
     public List<Story> getTrendingStories(int page, int size) {
-        Query q = entityManager.createNativeQuery("SELECT s.* FROM STORY s LEFT JOIN (" +
-                "    SELECT vs.story_id, COUNT(*) AS total  " +
-                "    FROM VOTE_STORY vs " +
-                "    WHERE vs.vote = 1 " +
-                "    GROUP BY vs.story_id ) " +
-                "  AS jj " +
-                "  on jj.story_id = s.story_id " +
-                "  ORDER BY (total-1 )/POW(:now - create_date/3600000 + 2, 1.5)  DESC, create_date DESC", Story.class);
-        q.setParameter("now", new Date().getTime());
+        Query q = entityManager.createNativeQuery("SELECT * FROM `STORY` ORDER BY (`positive_vote` ) / POW((NOW() - `create_date`) + 2 ,2) DESC", Story.class);
+
         q.setFirstResult((page - 1) * size);
         q.setMaxResults(size);
 

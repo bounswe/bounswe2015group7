@@ -19,8 +19,8 @@ import org.json.JSONObject;
 import tr.edu.boun.cmpe.sculture.R;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
-import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.UserFollowResponse;
 import tr.edu.boun.cmpe.sculture.models.response.UserGetResponse;
 
@@ -34,6 +34,11 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * User profile viewing screen
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_VISITED_USER_ID}: User ID of the visited user.
+ */
 public class ProfilePageActivity extends AppCompatActivity {
 
     RecyclerView story_list_recycler;

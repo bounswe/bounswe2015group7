@@ -38,6 +38,11 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * Tag viewing screen
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_TAG_TITLE}: String, tag title
+ */
 public class TagActivity extends AppCompatActivity {
     private static final int SIZE = 10;
     private TextView tagDescription;

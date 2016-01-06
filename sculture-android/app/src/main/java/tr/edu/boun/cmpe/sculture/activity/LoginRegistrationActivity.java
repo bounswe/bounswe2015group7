@@ -42,6 +42,9 @@ import static tr.edu.boun.cmpe.sculture.Utils.isPasswordValid;
 import static tr.edu.boun.cmpe.sculture.Utils.isUserNameValid;
 import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
+/**
+ * Login and registration screens
+ */
 public class LoginRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int STATUS_LOGIN = 1;

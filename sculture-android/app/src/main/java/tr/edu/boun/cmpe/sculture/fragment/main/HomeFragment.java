@@ -30,16 +30,38 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * A {@link tr.edu.boun.cmpe.sculture.activity.MainActivity} fragment which shows trending and recommended stories
+ */
 public class HomeFragment extends Fragment {
     private RecyclerView story_list_recycler;
     LinearLayoutManager mLayoutManager;
     StoryListViewAdapter mStoryListViewAdapter;
 
     @SuppressWarnings("FieldCanBeLocal")
+    /**
+     * Size of paged requests
+     */
     private static int SIZE = 5;
+
+    /**
+     * Page for trending API
+     */
     private int TRENDING_PAGE = 1;
+
+    /**
+     * Page for similar to liked API
+     */
     private int SIMILAR_PAGE = 1;
+
+    /**
+     * If it is %2 == 0,  loads trending stories, else similar to liked stories
+     */
     private int QUEUE = 0;
+
+    /**
+     * Is there any pending request to retrieve more stories
+     */
     private boolean is_loading_more = false;
 
     public HomeFragment() {

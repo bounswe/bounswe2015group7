@@ -21,6 +21,9 @@ import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_STORY_ID;
 
+/**
+ * Recycler view adapter which store list of stories
+ */
 public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdapter.ViewHolder> {
     private final Activity mActivity;
     private final ArrayList<StoryResponse> stories = new ArrayList<>();
@@ -54,11 +57,19 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
     }
 
 
+    /**
+     * Story count on the list
+     * @return Story count
+     */
     @Override
     public int getItemCount() {
         return stories.size();
     }
 
+    /**
+     * Adds a story to the list
+     * @param story Story
+     */
     public void addElement(StoryResponse story) {
         if (stories.contains(story))
             return;
@@ -66,11 +77,19 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
         this.notifyDataSetChanged();
     }
 
+    /**
+     * Removes a story from the list
+     * @param story The story
+     */
     private void removeElement(StoryResponse story) {
         stories.remove(story);
         removeElement(stories.indexOf(story));
     }
 
+    /**
+     * Removes a story from the list
+     * @param index index of the story
+     */
     private void removeElement(int index) {
         stories.remove(index);
         this.notifyItemRemoved(index);
@@ -81,6 +100,9 @@ public class StoryListViewAdapter extends RecyclerView.Adapter<StoryListViewAdap
         this.notifyDataSetChanged();
     }
 
+    /**
+     * Story view holder with preview image, title etc.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView story_title;
         public final TextView story_update_date;

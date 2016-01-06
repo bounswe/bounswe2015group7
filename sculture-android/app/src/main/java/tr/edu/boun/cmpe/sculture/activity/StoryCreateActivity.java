@@ -42,6 +42,13 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_TITLE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 import static tr.edu.boun.cmpe.sculture.Utils.saveImage;
 
+/**
+ * Story creation and editing screen. Default is creating
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_IS_EDIT}: Boolean, if true, editing screen. Default false
+ *  <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_STORY_ID}: long: the id of the edited story
+ */
 public class StoryCreateActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;

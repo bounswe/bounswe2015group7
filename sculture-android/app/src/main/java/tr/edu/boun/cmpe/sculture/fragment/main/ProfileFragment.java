@@ -36,7 +36,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link tr.edu.boun.cmpe.sculture.activity.MainActivity} fragment which shows
+ * profile of current user with his/her stories. If there is no logged in user,
+ * registration and login buttons visible
  */
 public class ProfileFragment extends Fragment {
     private static ProfileFragment profileFragment;
@@ -119,6 +121,9 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    /**
+     * After a story is uploaded, clears the story list
+     */
     public static void reset() {
         //TODO Find a better way to refresh this fragment
         if (profileFragment != null) {

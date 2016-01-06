@@ -51,6 +51,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 import static tr.edu.boun.cmpe.sculture.Utils.removeRequests;
 
+/**
+ * Main activity which is started when icon clicked on app drawer.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int SIZE = 10;

@@ -29,6 +29,10 @@ import static tr.edu.boun.cmpe.sculture.Constants.FIELD_PAGE;
 import static tr.edu.boun.cmpe.sculture.Constants.FIELD_SIZE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * A {@link tr.edu.boun.cmpe.sculture.activity.MainActivity} fragment which shows recent stories of
+ * followed users.
+ */
 public class SubscriptionFragment extends Fragment {
 
 

@@ -40,6 +40,11 @@ import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_SEARCH;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_STORY_GET;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * Story viewing screen
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_STORY_ID}: long, ID of the story
+ */
 public class StoryShowActivity extends AppCompatActivity {
 
     private static final int SIZE = 10;

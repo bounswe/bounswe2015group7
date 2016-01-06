@@ -27,6 +27,11 @@ import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_TAG_TITLE;
 import static tr.edu.boun.cmpe.sculture.Constants.REQUEST_TAG_DESC_CREATE;
 import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 
+/**
+ * Tag desription editing screen
+ * <pre></pre>
+ * {@link tr.edu.boun.cmpe.sculture.Constants#BUNDLE_TAG_TITLE}: String, tag title
+ */
 public class TagDescCreateActivity extends AppCompatActivity {
     private EditText contentText;
     private Activity mActivity;

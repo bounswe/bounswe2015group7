@@ -13,6 +13,9 @@ import com.tokenautocomplete.TokenCompleteTextView;
 
 import tr.edu.boun.cmpe.sculture.R;
 
+/**
+ * A tokenized text view for shoing tags
+ */
 public class TagView extends TokenCompleteTextView<String> {
     public TagView(Context context, AttributeSet attrs) {
         super(context, attrs);

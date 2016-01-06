@@ -24,6 +24,9 @@ import static tr.edu.boun.cmpe.sculture.Constants.API_IMAGE_GET;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_INDEX;
 import static tr.edu.boun.cmpe.sculture.Constants.BUNDLE_MEDIA_IDS;
 
+/**
+ * Recycler view adapter which stores thumbnails of media images
+ */
 public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAdapter.ViewHolder> {
     private ArrayList<ImageLocation> imageLocations = new ArrayList<>();
 
@@ -122,6 +125,9 @@ public class StoryImageViewAdapter extends RecyclerView.Adapter<StoryImageViewAd
         return imageLocations;
     }
 
+    /**
+     * View holder of a image with delete button
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final NetworkImageView imageView;
         public final ImageView local_imageView;

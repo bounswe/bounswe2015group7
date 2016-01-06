@@ -58,7 +58,6 @@ public class GetUser extends HttpServlet {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = new Gson();
             user = gson.fromJson(object.toString(), User.class);
-            System.out.println(user.toString());
         }
         jsonResponse = null;
         try {
@@ -79,10 +78,7 @@ public class GetUser extends HttpServlet {
             Object object = jsonResponse.getBody().getObject();
             Gson gson = MyGson.create();
             userStoriesResponse = gson.fromJson(object.toString(), StoriesResponse.class);
-            System.out.println(object.toString());
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong getting this user's profile, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

@@ -251,7 +251,10 @@
             <div class="well">
 
             <%String asd2 = contextPath+"/edit/story/" + story.getId();%>
+            <%String asd3 = contextPath+"/delete/story/" + story.getId();%>
                 <a href="<%out.print(asd2);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Edit Story </a>
+                <a href="<%out.print(asd3);%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Delete Story </a>
+
             </div>
                 <%} else if (request.getSession().getAttribute("userid") != null &&
                         story.getOwner().getId() != Long.parseLong(request.getSession().getAttribute("userid").toString())) {%>

@@ -56,8 +56,6 @@ public class SearchAll extends HttpServlet {
             request.setAttribute("results", storiesResponse);
             request.getRequestDispatcher("/search_result.jsp").forward(request, response);
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong getting all the stories, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

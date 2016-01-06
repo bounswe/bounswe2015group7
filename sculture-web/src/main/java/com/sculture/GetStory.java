@@ -79,8 +79,6 @@ public class GetStory extends HttpServlet {
             Gson gson = MyGson.create();
             commentListResponse = gson.fromJson(object.toString(), CommentListResponse.class);
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong getting this story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }

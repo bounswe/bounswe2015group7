@@ -38,9 +38,10 @@ public class VoteUp extends HttpServlet{
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if(jsonResponse != null){
-            System.out.println(jsonResponse.getBody().toString());
+        if (jsonResponse == null || jsonResponse.getBody().getObject().has("exception")) {
+            request.setAttribute("errormsg", "Something went wrong voting up this story, please try again.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        response.sendRedirect("/sculture/get/story/" + story_id);
+            response.sendRedirect("/sculture/get/story/" + story_id);
     }
 }

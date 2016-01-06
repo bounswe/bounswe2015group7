@@ -38,7 +38,6 @@ public class SaveStory extends HttpServlet {
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             int i = 0;
             for (FileItem item : items) {
-                System.out.println("2");
                 if (item.isFormField()) { // regular field (text, checkbox etc.)
                     String fieldName = item.getFieldName();
                     String fieldValue = item.getString();
@@ -52,8 +51,9 @@ public class SaveStory extends HttpServlet {
                         fields[3] = fieldValue;
                     }
                     i++;
-                } else { // photo
+                } else if(item.getString().length() > 0) { // photo
                     InputStream fileContent = item.getInputStream();
+                    String fieldName = item.getString();
                     byte[] bytes = IOUtils.toByteArray(fileContent);
                     jsonResponse = Unirest.post(Const.REST_BASE_URL + Const.Api.IMAGE_UPLOAD)
                             .header("Content-Type", "application/json")
@@ -62,9 +62,7 @@ public class SaveStory extends HttpServlet {
                     if(jsonResponse != null && !jsonResponse.getBody().getObject().has("exception") && jsonResponse.getBody().getObject().getString("id") != null){
                         fields[2] += jsonResponse.getBody().getObject().getString("id") + " ";
                     } else {
-                        request.setAttribute("isLoggedIn", false);
-                        request.setAttribute("username", "");
-                        request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
+                        request.setAttribute("errormsg", "Something went wrong while adding your story, please try again.");
                         request.getRequestDispatcher("/error.jsp").forward(request, response);
                     }
                 }
@@ -72,7 +70,7 @@ public class SaveStory extends HttpServlet {
         }catch (Exception e) {
             e.printStackTrace();
         }
-
+        String redirectUrl = "/sculture/get/story/";
         try {
             JSONObject jsonObject = new JSONObject();
             ArrayList<String> tags = new ArrayList<String>(Arrays.asList(fields[3].trim().split(" ")));
@@ -92,14 +90,12 @@ public class SaveStory extends HttpServlet {
             e.printStackTrace();
         }
         if (jsonResponse != null && !jsonResponse.getBody().getObject().has("exception")) {
-            System.out.println(jsonResponse.getBody().toString());
+            redirectUrl+=jsonResponse.getBody().getObject().get("id");
         } else {
-            request.setAttribute("isLoggedIn", false);
-            request.setAttribute("username", "");
             request.setAttribute("errormsg", "Something went wrong editing your story, please try again.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        response.sendRedirect("/sculture/index");
+        response.sendRedirect(redirectUrl);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

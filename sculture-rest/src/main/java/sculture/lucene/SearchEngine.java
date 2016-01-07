@@ -31,10 +31,10 @@ public class SearchEngine {
     private static final float ID_BOOST = 0;
     private static final float TITLE_BOOST = 1f;
     private static final float CONTENT_BOOST = 0.75f;
-    private static final float TAG_BOOST = 1.5f;
+    private static final float TAG_BOOST = 1.2f;
 
-    private static final float HYPONYM_BOOST = 0.7f;
-    private static final float HYPERNYM_BOOST = 0.3f;
+    private static final float HYPONYM_BOOST = 0.1f;
+    private static final float HYPERNYM_BOOST = 0.005f;
 
     public static void initialize() {
         String u = SearchEngine.class.getClassLoader().getResource("WordNet-3.0").getPath();
@@ -135,6 +135,7 @@ public class SearchEngine {
         Query query;
         try {
             int endIndex = page * size;
+            System.out.println(search_term + " " + wordnet);
             query = parser.parse(search_term + " " + wordnet);
             IndexReader reader = DirectoryReader.open(index);
             IndexSearcher searcher = new IndexSearcher(reader);

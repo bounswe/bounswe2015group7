@@ -106,8 +106,6 @@
     List<StoryResponse> results = ((StoriesResponse) request.getAttribute("results")).getResult();
 
 %>
-<h1>We found <%out.print(results.size()); %> results for your search</h1>
-<br>
 
 <div class="container">
     <div class="row">

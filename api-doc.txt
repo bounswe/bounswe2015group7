@@ -1,0 +1,537 @@
+﻿###############################
+/user/register
+
+##Request##
+	email: String
+	username: String
+	password: String
+	fullname: String, OPTIONAL
+	
+##Response##
+	id: long
+	username: String
+	email: String
+	fullname: String
+	access_token: String
+	
+###############################
+/user/login
+
+##Request##
+	email: String
+	password: String
+	
+##Response##
+	id: long
+	username: String
+	email: String
+	fullname: String
+	access_token: String
+
+###############################
+/user/update
+
+##Request##
+	<header: access_token>
+	old_password: String
+	new_password: String
+	email: String
+	username: String
+	fullname: String
+	
+##Response##
+	id: long
+	username: String
+	email: String
+	fullname: String
+	access_token: String
+
+###############################
+/user/get
+
+##Request##
+	<header: access_token> OPTIONAL
+	userId: long
+	
+##Response##
+	user_id: long
+	username: String
+	email: String
+	_following: boolean
+
+###############################
+/user/stories
+
+##Request##
+	<header: access_token> OPTIONAL
+	id: long
+	page: int, OPTIONAL default 1
+	size: int, OPTIONAL default 10
+	
+##Response##
+	result: [ 
+			{
+				id: long
+				title: String
+				creation_date: Date
+				update_date: Date
+				last_editor: {
+								id: int
+								username: String
+							}
+				owner: {
+						id: int
+						username: String
+					}
+				positive_vote: int
+				negative_vote: int
+				report_count: int
+				content: String
+				media : [ String ]
+				tags :  [ String ]
+			}
+		]
+
+###############################
+/user/follow
+
+##Request##
+	<header: access_token>
+	user_id: long
+	_follow: boolean
+	
+##Response##
+	_follow: boolean
+
+###############################
+/tag/get
+
+##Request##
+	tag_title: String
+	
+##Response##
+	tag_title: String
+	description: String
+	_location: boolean
+	last_editor_id: long
+	last_editor_name: String
+	last_edit_date: Date
+
+###############################
+/tag/edit
+
+##Request##
+	<header: access_token>
+	tag_title: String
+	tag_description: String
+	
+##Response##
+	tag_title: String
+	description: String
+	_location: boolean
+	last_editor_id: long
+	last_editor_name: String
+	last_edit_date: Date
+
+
+###############################
+/story/create
+
+##Request##
+	<header: access_token>
+	title: String
+	content: String
+	media : [ String ]
+	tags :  [ String ]
+	
+##Response##
+	id: long
+	title: String
+	creation_date: Date
+	update_date: Date
+	last_editor: {
+					id: int
+					username: String
+				}
+	owner: {
+			id: int
+			username: String
+		}
+	positive_vote: int
+	negative_vote: int
+	report_count: int
+	content: String
+	media : [ String ]
+	tags :  [ String ]
+
+###############################
+/story/edit
+
+##Request##
+	<header: access_token>
+	story_id: long
+	title: String
+	content: String
+	media : [ String ]
+	tags :  [ String ]
+##Response##
+	id: long
+	title: String
+	creation_date: Date
+	update_date: Date
+	last_editor: {
+					id: int
+					username: String
+				}
+	owner: {
+			id: int
+			username: String
+		}
+	positive_vote: int
+	negative_vote: int
+	report_count: int
+	content: String
+	media : [ String ]
+	tags :  [ String ]
+
+###############################
+/story/delete
+
+##Request##
+	<header: access_token> 
+	id: long
+	
+##Response##
+	status: "DELETED"
+	
+###############################
+/story/get
+
+##Request##
+	<header: access_token> OPTIONAL
+	id: long
+	
+##Response##
+	id: long
+	title: String
+	creation_date: Date
+	update_date: Date
+	last_editor: {
+					id: int
+					username: String
+				}
+	owner: {
+			id: int
+			username: String
+		}
+	positive_vote: int
+	negative_vote: int
+	report_count: int
+	content: String
+	media : [ String ]
+	tags :  [ String ]
+	
+###############################
+/story/report
+
+##Request##
+	<header: access_token> OPTIONAL
+	story_id: long
+	
+##Response##
+	report_count: long
+
+###############################
+/story/vote
+
+##Request##
+	<header: access_token> OPTIONAL
+	story_id: long
+	vote: int , 1 positive_vote, -1 negative_vote, 0 remove vote
+	
+##Response##
+	positive_vote: long
+	negative_vote: long
+	vote: int
+	
+###############################
+/story/similar
+
+##Request##
+	<header: access_token> OPTIONAL
+	story_id: long
+	size: int, OPTIONAL default 10
+	page: int, OPTIONAL default 10
+	
+##Response##
+result: [ 
+		{
+			id: long
+			title: String
+			creation_date: Date
+			update_date: Date
+			last_editor: {
+							id: int
+							username: String
+						}
+			owner: {
+					id: int
+					username: String
+				}
+			positive_vote: int
+			negative_vote: int
+			report_count: int
+			content: String
+			media : [ String ]
+			tags :  [ String ]
+		}
+	]
+	
+
+###############################
+/search
+
+##Request##
+	<header: access_token> OPTIONAL
+	query: String
+	size: int, OPTIONAL default 10
+	page: int, OPTIONAL default 10
+	
+##Response##
+result: [ 
+		{
+			id: long
+			title: String
+			creation_date: Date
+			update_date: Date
+			last_editor: {
+							id: int
+							username: String
+						}
+			owner: {
+					id: int
+					username: String
+				}
+			positive_vote: int
+			negative_vote: int
+			report_count: int
+			content: String
+			media : [ String ]
+			tags :  [ String ]
+		}
+	]
+	
+###############################
+/search/all
+
+##Request##
+	<header: access_token> OPTIONAL
+	size: int, OPTIONAL default 10
+	page: int, OPTIONAL default 10
+	
+##Response##
+result: [ 
+		{
+			id: long
+			title: String
+			creation_date: Date
+			update_date: Date
+			last_editor: {
+							id: int
+							username: String
+						}
+			owner: {
+					id: int
+					username: String
+				}
+			positive_vote: int
+			negative_vote: int
+			report_count: int
+			content: String
+			media : [ String ]
+			tags :  [ String ]
+		}
+	]
+
+###############################
+/comment/get
+
+##Request##
+	commentId: long
+	
+##Response##
+	comment_id: long
+	story_id: long
+	owner_id: long
+	owner_username: String
+	creation_date: Date
+	content: String
+	last_edit_date: Date
+
+###############################
+/comment/new
+
+##Request##
+	<header: access_token> 
+	storyId: long
+	content: String
+	
+##Response##
+	comment_id: long
+	story_id: long
+	owner_id: long
+	owner_username: String
+	creation_date: Date
+	content: String
+	last_edit_date: Date
+
+###############################
+/comment/edit
+
+##Request##
+<	header: access_token>
+	content: String
+	comment_id: long
+
+##Response##
+	comment_id: long
+	story_id: long
+	owner_id: long
+	owner_username: String
+	creation_date: Date
+	content: String
+	last_edit_date: Date
+
+###############################
+/comment/list
+
+##Request##
+	story_id: long
+	page: int, OPTIONAL default 10
+	size: int, OPTIONAL default 1
+	
+##Response##
+	result: [
+			{
+				comment_id: long
+				story_id: long
+				owner_id: long
+				owner_username: String
+				creation_date: Date
+				content: String
+				last_edit_date: Date
+			}
+		]
+
+###############################
+/recommendation/similarToLiked
+
+##Request##
+	<header: access_token>
+	size: int, OPTIONAL default 10
+	page: int, OPTIONAL default 10
+	
+##Response##
+result: [ 
+		{
+			id: long
+			title: String
+			creation_date: Date
+			update_date: Date
+			last_editor: {
+							id: int
+							username: String
+						}
+			owner: {
+					id: int
+					username: String
+				}
+			positive_vote: int
+			negative_vote: int
+			report_count: int
+			content: String
+			media : [ String ]
+			tags :  [ String ]
+		}
+	]
+	
+###############################
+/recommendation/trending
+
+##Request##
+	<header: access_token> OPTIONAL
+	size: int, OPTIONAL default 10
+	page: int, OPTIONAL default 10
+	
+##Response##
+result: [ 
+		{
+			id: long
+			title: String
+			creation_date: Date
+			update_date: Date
+			last_editor: {
+							id: int
+							username: String
+						}
+			owner: {
+					id: int
+					username: String
+				}
+			positive_vote: int
+			negative_vote: int
+			report_count: int
+			content: String
+			media : [ String ]
+			tags :  [ String ]
+		}
+	]
+	
+###############################
+/recommendation/fromFollowedUser
+
+##Request##
+	<header: access_token>
+	size: int, OPTIONAL default 10
+	page: int, OPTIONAL default 10
+	
+##Response##
+result: [ 
+		{
+			id: long
+			title: String
+			creation_date: Date
+			update_date: Date
+			last_editor: {
+							id: int
+							username: String
+						}
+			owner: {
+					id: int
+					username: String
+				}
+			positive_vote: int
+			negative_vote: int
+			report_count: int
+			content: String
+			media : [ String ]
+			tags :  [ String ]
+		}
+	]
+
+
+###############################
+/image/upload
+
+##Request##
+	<<body is binary image>>
+##Response##
+	id: String
+
+###############################
+/image/get/{id}
+
+##Request##
+	<<empty>>
+##Response##
+	<<image>>

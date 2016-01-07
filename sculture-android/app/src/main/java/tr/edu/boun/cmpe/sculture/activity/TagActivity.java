@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,11 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tr.edu.boun.cmpe.sculture.R;
-import tr.edu.boun.cmpe.sculture.Utils;
 import tr.edu.boun.cmpe.sculture.adapter.StoryListViewAdapter;
 import tr.edu.boun.cmpe.sculture.models.response.ErrorResponse;
-import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.SearchResponse;
+import tr.edu.boun.cmpe.sculture.models.response.StoryResponse;
 import tr.edu.boun.cmpe.sculture.models.response.TagResponse;
 
 import static tr.edu.boun.cmpe.sculture.Constants.API_SEARCH;
@@ -46,7 +44,6 @@ import static tr.edu.boun.cmpe.sculture.Utils.addRequest;
 public class TagActivity extends AppCompatActivity {
     private static final int SIZE = 10;
     private TextView tagDescription;
-    private TextView update_time;
     private ActionBar actionBar;
     private RecyclerView story_list_recycler;
 
@@ -76,7 +73,6 @@ public class TagActivity extends AppCompatActivity {
         setActionBarTitle(tag_title);
 
         tagDescription = (TextView) findViewById(R.id.tag_description);
-        update_time = (TextView) findViewById(R.id.tag_update);
 
         story_list_recycler = (RecyclerView) findViewById(R.id.tag_story_list);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -104,29 +100,15 @@ public class TagActivity extends AppCompatActivity {
                 TagResponse tagResponse = new TagResponse(response);
                 tagDescription.setText(tagResponse.description);
                 setActionBarTitle(tagResponse.tag_title);
-                update_time.setText(mActivity.getString(R.string.updated_time, Utils.timestampToPrettyString(tagResponse.last_edit_date), tagResponse.last_editor_id));
-                set_visibilities();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 ErrorResponse errorResponse = new ErrorResponse(error);
-                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 Log.e("TAG GET", errorResponse.toString());
-                set_visibilities();
+                tagDescription.setText(String.format(getString(R.string.no_desc), tag_title));
             }
         }, null);
-    }
-
-    private void set_visibilities() {
-        String s = tagDescription.getText().toString();
-        if (s.equals("")) {
-            update_time.setVisibility(View.GONE);
-            tagDescription.setVisibility(View.GONE);
-        } else {
-            update_time.setVisibility(View.VISIBLE);
-            tagDescription.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

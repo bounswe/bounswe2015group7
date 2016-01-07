@@ -107,6 +107,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/wantRegister" />
+
         </LinearLayout>
 
     </ScrollView>

@@ -52,6 +52,8 @@ public class TestRest {
 
     @Test
     public void integrationTests() throws Exception {
+        userget();
+        searchall();
         userupdate();
         uploadStory();
         storyEdit();
@@ -60,8 +62,110 @@ public class TestRest {
 
     }
 
+    public void searchall() throws Exception{
+        Map map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        jsonObject = new JSONObject();
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/search/all")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(200, jsonResponse.getStatus());
+
+    }
+
+    public void userget() throws Exception{
+
+       Map map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token", access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("userId", "1");
+
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/get")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(200, jsonResponse.getStatus());
+
+    }
+
     public void userupdate() throws Exception{
         Map map = new HashMap<String, String>();
+
+
+        map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token", access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("new_password", "new-password");
+        jsonObject.put("old_password", "test");
+        jsonObject.put("username", "test-user");
+        jsonObject.put("email", "test-password@test.com");
+
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/update")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(400, jsonResponse.getStatus());
+
+
+        map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token", access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("new_password", "new");
+        jsonObject.put("old_password", "test-password");
+        jsonObject.put("username", "test-user");
+        jsonObject.put("email", "test-password@test.com");
+
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/update")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(400, jsonResponse.getStatus());
+
+
+        map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token", access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("new_password", "new");
+        jsonObject.put("old_password", "test-password");
+        jsonObject.put("username", "test-user");
+        jsonObject.put("email", "test-password@test.com");
+
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/update")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(400, jsonResponse.getStatus());
+
+
+        map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token", access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("new_password", "new");
+        jsonObject.put("old_password", "test-password");
+        jsonObject.put("username", "test-user");
+        jsonObject.put("email", "test-passwo");
+
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/update")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(400, jsonResponse.getStatus());
+
+
+
+        map = new HashMap<String, String>();
         map.put("Content-Type", "application/json");
         map.put("access-token", access_token);
         jsonObject = new JSONObject();
@@ -76,7 +180,10 @@ public class TestRest {
                 .body(jsonNode)
                 .asJson();
         assertEquals(200, jsonResponse.getStatus());
-        
+
+
+
+
     }
 
     public void uploadStory() throws Exception {

@@ -77,7 +77,6 @@ public class TagDescCreateActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 ErrorResponse errorResponse = new ErrorResponse(error);
-                Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 Log.e("TAG GET", errorResponse.toString());
             }
         }, null);

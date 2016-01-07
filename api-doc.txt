@@ -5,7 +5,7 @@
 	email: String
 	username: String
 	password: String
-	fullname: String, OPTIONAL
+	fullname: String // OPTIONAL
 	
 ##Response##
 	id: long
@@ -32,7 +32,7 @@
 /user/update
 
 ##Request##
-	<header: access_token>
+	<header: access-token>
 	old_password: String
 	new_password: String
 	email: String
@@ -50,23 +50,23 @@
 /user/get
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	userId: long
 	
 ##Response##
 	user_id: long
 	username: String
 	email: String
-	_following: boolean
+	_following: boolean //true: the user follow, that user. returns false if access-token is not provided
 
 ###############################
 /user/stories
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	id: long
-	page: int, OPTIONAL default 1
-	size: int, OPTIONAL default 10
+	page: int // OPTIONAL default 1
+	size: int // OPTIONAL default 10
 	
 ##Response##
 	result: [ 
@@ -89,6 +89,7 @@
 				content: String
 				media : [ String ]
 				tags :  [ String ]
+				vote: int // 1: user liked, -1: user disliked, return 0 if access-token is not provided
 			}
 		]
 
@@ -96,7 +97,7 @@
 /user/follow
 
 ##Request##
-	<header: access_token>
+	<header: access-token>
 	user_id: long
 	_follow: boolean
 	
@@ -121,7 +122,7 @@
 /tag/edit
 
 ##Request##
-	<header: access_token>
+	<header: access-token>
 	tag_title: String
 	tag_description: String
 	
@@ -138,7 +139,7 @@
 /story/create
 
 ##Request##
-	<header: access_token>
+	<header: access-token>
 	title: String
 	content: String
 	media : [ String ]
@@ -163,12 +164,13 @@
 	content: String
 	media : [ String ]
 	tags :  [ String ]
+	vote: int // 1: user liked, -1: user disliked
 
 ###############################
 /story/edit
 
 ##Request##
-	<header: access_token>
+	<header: access-token>
 	story_id: long
 	title: String
 	content: String
@@ -193,12 +195,13 @@
 	content: String
 	media : [ String ]
 	tags :  [ String ]
+	vote: int // 1: user liked, -1: user disliked
 
 ###############################
 /story/delete
 
 ##Request##
-	<header: access_token> 
+	<header: access-token> 
 	id: long
 	
 ##Response##
@@ -208,7 +211,7 @@
 /story/get
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	id: long
 	
 ##Response##
@@ -230,12 +233,13 @@
 	content: String
 	media : [ String ]
 	tags :  [ String ]
+	vote: int // 1: user liked, -1: user disliked, return 0 if access-token is not provided
 	
 ###############################
 /story/report
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	story_id: long
 	
 ##Response##
@@ -245,23 +249,23 @@
 /story/vote
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	story_id: long
-	vote: int , 1 positive_vote, -1 negative_vote, 0 remove vote
+	vote: int // 1 like, -1 dislike, 0 remove vote
 	
 ##Response##
 	positive_vote: long
 	negative_vote: long
-	vote: int
+	vote: int // 1: user liked, -1: user disliked
 	
 ###############################
 /story/similar
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	story_id: long
-	size: int, OPTIONAL default 10
-	page: int, OPTIONAL default 10
+	size: int // OPTIONAL default 10
+	page: int // OPTIONAL default 10
 	
 ##Response##
 result: [ 
@@ -284,6 +288,7 @@ result: [
 			content: String
 			media : [ String ]
 			tags :  [ String ]
+			vote: int // 1: user liked, -1: user disliked, return 0 if access-token is not provided
 		}
 	]
 	
@@ -292,10 +297,10 @@ result: [
 /search
 
 ##Request##
-	<header: access_token> OPTIONAL
+	<header: access-token> // OPTIONAL
 	query: String
-	size: int, OPTIONAL default 10
-	page: int, OPTIONAL default 10
+	size: int // OPTIONAL default 10
+	page: int // OPTIONAL default 10
 	
 ##Response##
 result: [ 
@@ -318,6 +323,7 @@ result: [
 			content: String
 			media : [ String ]
 			tags :  [ String ]
+			vote: int // 1: user liked, -1: user disliked, return 0 if access-token is not provided
 		}
 	]
 	
@@ -325,9 +331,9 @@ result: [
 /search/all
 
 ##Request##
-	<header: access_token> OPTIONAL
-	size: int, OPTIONAL default 10
-	page: int, OPTIONAL default 10
+	<header: access-token> // OPTIONAL
+	size: int // OPTIONAL default 10
+	page: int // OPTIONAL default 10
 	
 ##Response##
 result: [ 
@@ -350,6 +356,7 @@ result: [
 			content: String
 			media : [ String ]
 			tags :  [ String ]
+			vote: int // 1: user liked, -1: user disliked, return 0 if access-token is not provided
 		}
 	]
 
@@ -372,7 +379,7 @@ result: [
 /comment/new
 
 ##Request##
-	<header: access_token> 
+	<header: access-token> 
 	storyId: long
 	content: String
 	
@@ -407,8 +414,8 @@ result: [
 
 ##Request##
 	story_id: long
-	page: int, OPTIONAL default 10
-	size: int, OPTIONAL default 1
+	page: int // OPTIONAL default 10
+	size: int // OPTIONAL default 1
 	
 ##Response##
 	result: [
@@ -427,9 +434,9 @@ result: [
 /recommendation/similarToLiked
 
 ##Request##
-	<header: access_token>
-	size: int, OPTIONAL default 10
-	page: int, OPTIONAL default 10
+	<header: access-token>
+	size: int // OPTIONAL default 10
+	page: int // OPTIONAL default 10
 	
 ##Response##
 result: [ 
@@ -452,6 +459,7 @@ result: [
 			content: String
 			media : [ String ]
 			tags :  [ String ]
+			vote: int // 1: user liked, -1: user disliked
 		}
 	]
 	
@@ -459,9 +467,9 @@ result: [
 /recommendation/trending
 
 ##Request##
-	<header: access_token> OPTIONAL
-	size: int, OPTIONAL default 10
-	page: int, OPTIONAL default 10
+	<header: access-token> // OPTIONAL
+	size: int // OPTIONAL default 10
+	page: int // OPTIONAL default 10
 	
 ##Response##
 result: [ 
@@ -484,6 +492,7 @@ result: [
 			content: String
 			media : [ String ]
 			tags :  [ String ]
+			vote: int // 1: user liked, -1: user disliked, return 0 if access-token is not provided
 		}
 	]
 	
@@ -491,9 +500,9 @@ result: [
 /recommendation/fromFollowedUser
 
 ##Request##
-	<header: access_token>
-	size: int, OPTIONAL default 10
-	page: int, OPTIONAL default 10
+	<header: access-token>
+	size: int // OPTIONAL default 10
+	page: int // OPTIONAL default 10
 	
 ##Response##
 result: [ 
@@ -516,6 +525,7 @@ result: [
 			content: String
 			media : [ String ]
 			tags :  [ String ]
+			vote: int // 1: user liked, -1: user disliked, return
 		}
 	]
 

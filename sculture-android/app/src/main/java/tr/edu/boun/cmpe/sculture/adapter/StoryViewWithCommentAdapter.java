@@ -341,7 +341,8 @@ public class StoryViewWithCommentAdapter extends RecyclerView.Adapter<ViewHolder
                 viewHolder.title.setText(story.title);
                 viewHolder.content.setText(story.content);
 
-                SpannableString spannable_username = new SpannableString("Written by "+story.owner.username);
+                SpannableString spannable_username = new SpannableString(mActivity.getApplicationContext().getString(R.string.written_by) + " " + story.owner.username);
+
                 spannable_username.setSpan(new UserSpan(story.owner.id), 11, story.owner.username.length()+11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 viewHolder.writer.setText(spannable_username);
                 viewHolder.writer.setMovementMethod(LinkMovementMethod.getInstance());

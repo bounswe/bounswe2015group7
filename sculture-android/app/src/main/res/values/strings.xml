@@ -57,4 +57,5 @@
     <string name="invalid_title">Title cannot be empty</string>
     <string name="invalid_content">Content cannot be empty</string>
     <string name="no_desc">No description about %s</string>
+    <string name="written_by">Written by</string>
 </resources>

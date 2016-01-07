@@ -15,7 +15,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.facebook.CallbackManager;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
@@ -78,7 +77,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         super.onPause();
 
         // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
+        //AppEventsLogger.deactivateApp(this);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

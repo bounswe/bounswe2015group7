@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.facebook.CallbackManager;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,18 +64,31 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
     private LoginRegistrationActivity mActivity;
+    private CallbackManager callbackManager;
+    private LoginButton facebookLoginButton;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events.
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login_registration);
         mActivity = this;
-        if (baseApplication.checkLogin()) {
-            Toast.makeText(this, R.string.already_logged, Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-            return;
-        }
+
+
+        //init_facebook_login();
 
         passwordConfirmationInputLayout = (TextInputLayout) findViewById(R.id.passwordConfirmInputLayout);
         emailInputLayout = (TextInputLayout) findViewById(R.id.emailInputLayout);
@@ -91,10 +107,61 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
         setVisibilities();
     }
 
+    /*private void init_facebook_login() {
+        //Facebook Login
+        facebookLoginButton = (LoginButton)findViewById(R.id.login_button);
+        facebookLoginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_friends"));
+
+        callbackManager = CallbackManager.Factory.create();
+
+        // Callback registration
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                // Application code
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(LoginRegistrationActivity.this, "User cancelled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Toast.makeText(LoginRegistrationActivity.this, "Error on Login, check your facebook app_id", Toast.LENGTH_LONG).show();
+            }
+        });
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+    }
+    */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         requestQueue.cancelAll(REQUEST_TAG_REGISTER);
         requestQueue.cancelAll(REQUEST_TAG_LOGIN);
+
     }
 
     private void setVisibilities() {
@@ -188,7 +255,7 @@ public class LoginRegistrationActivity extends AppCompatActivity implements View
                         public void onResponse(JSONObject response) {
                             LoginResponse loginResponse = new LoginResponse(response);
                             baseApplication.setUserInfo(loginResponse.access_token, loginResponse.username, loginResponse.email, loginResponse.id);
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent i = new Intent(mActivity.getApplicationContext(), MainActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         }

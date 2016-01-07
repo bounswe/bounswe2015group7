@@ -15,91 +15,91 @@
         card_view:contentPadding="10dp">
 
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/story_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:text="TITLE"
                 android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/storyContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/story_creation"
-                android:text="CONTENT" />
-
-            <TextView
-                android:id="@+id/storyTags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/story_update"
-                android:layout_toLeftOf="@+id/story_update"
-                android:layout_toStartOf="@+id/story_update"
-                android:text="TAGS" />
 
             <TextView
 
                 android:id="@+id/story_creation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/story_title"
+                android:layout_gravity="right"
                 android:text="@string/written_by_username"
                 android:textSize="12sp" />
 
-
             <TextView
-                android:id="@+id/story_update"
-                android:layout_width="wrap_content"
+                android:id="@+id/storyContent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/storyContent"
-                android:gravity="right"
-                android:text="@string/updated_time"
-                android:textSize="12sp" />
+                android:text="CONTENT" />
 
-            <ImageButton
-                android:id="@+id/likeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/story_update"
-                android:layout_alignRight="@+id/story_update"
-                android:layout_below="@+id/story_media_recycler"
-                android:layout_gravity="right"
-                android:background="@drawable/thumb_up_inactive" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/story_media_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/story_media_height"
-                android:layout_below="@id/story_update" />
+                android:layout_height="@dimen/story_media_height" />
 
-            <ImageButton
-                android:id="@+id/dislikeButton"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/storyTags"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:padding="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="TAGS" />
+
+                <TextView
+                    android:id="@+id/story_update"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="right"
+                    android:text="@string/updated_time"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/story_media_recycler"
                 android:layout_gravity="right"
-                android:layout_toLeftOf="@+id/likeButton"
-                android:layout_toStartOf="@+id/likeButton"
-                android:background="@drawable/thumb_down_inactive" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/likeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/thumb_up_inactive" />
+
+                <ImageButton
+                    android:id="@+id/dislikeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/thumb_down_inactive" />
+
+            </LinearLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 

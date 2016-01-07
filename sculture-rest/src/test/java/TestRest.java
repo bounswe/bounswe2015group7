@@ -52,11 +52,31 @@ public class TestRest {
 
     @Test
     public void integrationTests() throws Exception {
+        userupdate();
         uploadStory();
         storyEdit();
         storyVote();
         storyReport();
 
+    }
+
+    public void userupdate() throws Exception{
+        Map map = new HashMap<String, String>();
+        map.put("Content-Type", "application/json");
+        map.put("access-token", access_token);
+        jsonObject = new JSONObject();
+        jsonObject.put("new_password", "new-password");
+        jsonObject.put("old_password", "test-password");
+        jsonObject.put("username", "test-user");
+        jsonObject.put("email", "test-password@test.com");
+        
+        jsonNode = new JsonNode(jsonObject.toString());
+        jsonResponse = Unirest.post("http://127.0.0.1:8080/user/update")
+                .headers(map)
+                .body(jsonNode)
+                .asJson();
+        assertEquals(200, jsonResponse.getStatus());
+        
     }
 
     public void uploadStory() throws Exception {

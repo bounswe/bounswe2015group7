@@ -107,7 +107,8 @@
         <h1 class=""><% out.print(user.getUsername());%></h1>
         <%if(user.is_following()) {%>
           You are following this user.
-        <%}else {%>
+        <%} else if(request.getSession().getAttribute("userid") != null &&
+                user.getId() != Long.parseLong(request.getSession().getAttribute("userid").toString())) {%>
         <a href="<%out.print(contextPath);%>/follow/user/<%out.print(user.getId());%>" type="button" class="btn btn-link-1" style="height:50px;width:300px"> Follow User </a>
         <%}%>
         <br><br>
